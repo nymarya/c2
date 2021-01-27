@@ -1,22 +1,63 @@
+digit[0-9]
+letter[a-zA-Z]
+ID[a-zA-Z][a-zA-Z0-9]*
+WHITESPACE[ ]
+quebra[\n]
+TAB[\t]
+
 %{
-
-
-#include "exemplo.tab.h"
-
+    #define YY_DECL extern "C" int yylex()
+    #include<string>
+    #include<iostream>
+    using namespace std;
+    FILE *out ;
+	int linha;
 %}
-
-digit [0-9]
-alpha [a-zA-z]
-id [a-z][ alpha _ ]*
-
-number digit+
-float digit+.digit+
-
+%option yylineno
+%x COMMENT
 
 %%
-[ ] { /* Salta espacos em branco */ }
 
-{number} { sscanf(yytext,"%d",&yylval);
-return NUMBER;}
-\n|. {return yytext[0];}
+{quebra}
 
+"/*" { linha=yylineno; BEGIN(COMMENT); }
+
+<COMMENT>"*/" { BEGIN(INITIAL); }
+
+<COMMENT>(.|\n);
+
+<COMMENT><<EOF>> {fprintf(out,"(%d,ERROR,\"/*\")\n",linha); return 0;}
+
+else|if|int|return|void|while {fprintf(out,"(%d,KEY,\"%s\")\n",yylineno ,yytext);} 
+
+"+"|"-"|"*"|"/"|"<"|"<="|">"|">="|"=="|"!="|"="|";"|","|"("|")"|"["|"]"|"{"|"}" {fprintf(out,"(%d,SYM,\"%s\")\n",yylineno,yytext);}
+
+{WHITESPACE}+|{quebra}|{TAB}+
+ 
+{digit}+ {fprintf(out,"(%d,NUM,\"%s\")\n",yylineno,yytext);}
+
+{digit}+{ID}+ {fprintf(out,"(%d,ERROR,\"%s\")\n",yylineno,yytext); return 0;}
+
+{ID}+ {fprintf(out,"(%d,ID,\"%s\")\n",yylineno,yytext);}
+
+. {fprintf(out,"(%d,ERROR,\"%s\")\n",yylineno,yytext); return 0;}
+
+%%
+
+int yywrap();
+
+int main(int argc, char *argv[]){
+    FILE *arquivo = fopen(argv[1],"r");
+    if (!arquivo) {
+      cout << "Arquivo inexistente" << endl;
+      return -1;
+    }
+    yyin = arquivo;
+    out = fopen(argv[2],"w");
+    yylex();
+    return 0;
+}
+
+int yywrap(){
+    return 1;
+}
