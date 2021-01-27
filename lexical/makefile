@@ -1,17 +1,16 @@
-FILES = lex.yy.c exemplo.tab.c
-CC = gcc
+FILES = lex.yy.c
+CC = g++
 CFLAGS = -lfl
 
-test: input.l exemplo.y
+test:
 	@make Lexer.c
-	@make Parser.c
 	$(CC) $(CFLAGS) $(FILES) -o test
 
 Lexer.c: lexer.l
 	flex lexer.l
 
-Parser.c: exemplo.y 
-	bison -d exemplo.y
+run:
+	@./test main.c main.lex
 
 clean:
 	rm -f *.h test
