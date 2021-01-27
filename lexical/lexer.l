@@ -12,15 +12,17 @@ TAB[\t]
     using namespace std;
     FILE *out ;
 	int linha;
+
+    int coluna = 1;
 %}
 %option yylineno
 %x COMMENT
 
 %%
 
-{quebra}
+{quebra} {coluna = 1;}
 
-"/*" { linha=yylineno; BEGIN(COMMENT); }
+"/*" { linha=yylineno; BEGIN(COMMENT);}
 
 <COMMENT>"*/" { BEGIN(INITIAL); }
 
@@ -28,19 +30,33 @@ TAB[\t]
 
 <COMMENT><<EOF>> {fprintf(out,"(%d,ERROR,\"/*\")\n",linha); return 0;}
 
-else|if|int|return|void|while {fprintf(out,"(%d,KEY,\"%s\")\n",yylineno ,yytext);} 
 
-"+"|"-"|"*"|"/"|"<"|"<="|">"|">="|"=="|"!="|"="|";"|","|"("|")"|"["|"]"|"{"|"}" {fprintf(out,"(%d,SYM,\"%s\")\n",yylineno,yytext);}
 
-{WHITESPACE}+|{quebra}|{TAB}+
+
+else|if|return|loop|break|when|struct {fprintf(out,"(%d,%d,KEY,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;} 
+
+int|float|char|void|bool {fprintf(out,"(%d,%d,TYPE,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}
+
+"+"|"-"|"*"|"/"|"<"|"<="|">"|">="|"=="|"!="|"=" {fprintf(out,"(%d,%d,OP,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}
+
+";"|","|"."|"("|")"|"["|"]"|"{"|"}" {fprintf(out,"(%d,%d,SYM,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}
+
+{WHITESPACE}+|{quebra}|{TAB}+ {coluna+=yyleng;}
  
-{digit}+ {fprintf(out,"(%d,NUM,\"%s\")\n",yylineno,yytext);}
+{digit}+ {fprintf(out,"(%d,%d,NUM,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}
 
-{digit}+{ID}+ {fprintf(out,"(%d,ERROR,\"%s\")\n",yylineno,yytext); return 0;}
+{digit}+{ID}+ {fprintf(out,"(%d,%d,ERROR,\"%s\")\n",yylineno,coluna,yytext); return 0;
+coluna+=yyleng;}
 
-{ID}+ {fprintf(out,"(%d,ID,\"%s\")\n",yylineno,yytext);}
+{ID}+ {fprintf(out,"(%d,%d,ID,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}
 
-. {fprintf(out,"(%d,ERROR,\"%s\")\n",yylineno,yytext); return 0;}
+. {fprintf(out,"(%d,%d,ERROR,\"%s\")\n",yylineno,coluna,yytext); return 0;}
 
 %%
 

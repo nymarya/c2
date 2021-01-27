@@ -8,4 +8,11 @@ void main(void){
   if(a > 9){
     a = (4 + 5) * 3;
   }
+
+  loop{
+
+  	printf(a);
+  	break when (a < 2);
+
+  }
 }

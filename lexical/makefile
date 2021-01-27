@@ -2,15 +2,15 @@ FILES = lex.yy.c
 CC = g++
 CFLAGS = -lfl
 
-test:
+test: lexer.l
 	@make Lexer.c
-	$(CC) $(CFLAGS) $(FILES) -o test
+	$(CC) $(CFLAGS) $(FILES) -o test.bin
 
 Lexer.c: lexer.l
 	flex lexer.l
 
 run:
-	@./test main.c main.lex
+	@./test.bin main.c2 main.lex
 
 clean:
-	rm -f *.h test
+	rm -f *.h test.bin
