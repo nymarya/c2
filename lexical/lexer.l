@@ -39,7 +39,37 @@ coluna+=yyleng;}
 int|float|char|void|bool {fprintf(out,"(%d,%d,TYPE,\"%s\")\n",yylineno,coluna,yytext);
 coluna+=yyleng;}
 
-"+"|"-"|"*"|"/"|"<"|"<="|">"|">="|"=="|"!="|"=" {fprintf(out,"(%d,%d,OP,\"%s\")\n",yylineno,coluna,yytext);
+"+" {fprintf(out,"(%d,%d,SUM_OP,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}
+
+"-" {fprintf(out,"(%d,%d,DIF_OP,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}
+
+"*" {fprintf(out,"(%d,%d,MULTI_OP,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}
+
+"/" {fprintf(out,"(%d,%d,DIV_OP,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}
+
+"<" {fprintf(out,"(%d,%d,LESSER_OP,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}
+
+"<=" {fprintf(out,"(%d,%d,LEQ_OP,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}
+
+">" {fprintf(out,"(%d,%d,GREATER_OP,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}
+
+">=" {fprintf(out,"(%d,%d,GEQ_OP,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}
+
+"==" {fprintf(out,"(%d,%d,EQUAL_OP,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}
+
+"!=" {fprintf(out,"(%d,%d,DIFF_OP,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}
+
+"=" {fprintf(out,"(%d,%d,ASSIGN_OP,\"%s\")\n",yylineno,coluna,yytext);
 coluna+=yyleng;}
 
 ";"|","|"."|"("|")"|"["|"]"|"{"|"}" {fprintf(out,"(%d,%d,SYM,\"%s\")\n",yylineno,coluna,yytext);
