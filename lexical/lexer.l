@@ -72,7 +72,31 @@ coluna+=yyleng;}
 "=" {fprintf(out,"(%d,%d,ASSIGN_OP,\"%s\")\n",yylineno,coluna,yytext);
 coluna+=yyleng;}
 
-";"|","|"."|"("|")"|"["|"]"|"{"|"}" {fprintf(out,"(%d,%d,SYM,\"%s\")\n",yylineno,coluna,yytext);
+";" {fprintf(out,"(%d,%d,SEMICOLON_TOKEN,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}
+
+"," {fprintf(out,"(%d,%d,COLON_TOKEN,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}
+
+"." {fprintf(out,"(%d,%d,DOT_TOKEN,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}
+
+"(" {fprintf(out,"(%d,%d,LEFT_PARENTHESIS_TOKEN,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}
+
+")" {fprintf(out,"(%d,%d,RIGHT_PARENTHESIS_TOKEN,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}
+
+"[" {fprintf(out,"(%d,%d,LEFT_BRACKET_TOKEN,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}
+
+"]" {fprintf(out,"(%d,%d,RIGHT_BRACKET_TOKEN,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}
+
+"{" {fprintf(out,"(%d,%d,LEFT_BRACE_TOKEN,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}
+
+"}" {fprintf(out,"(%d,%d,RIGHT_BRACE_TOKEN,\"%s\")\n",yylineno,coluna,yytext);
 coluna+=yyleng;}
 
 {WHITESPACE}+|{quebra}|{TAB}+ {coluna+=yyleng;}
