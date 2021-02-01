@@ -1,0 +1,40 @@
+/* main.c */
+
+int divide(int v[], int p, int r){
+  int pivot = v[r];
+  int i = p;
+  int j = p;
+  int k = p;
+
+  /* separa vetor de forma que v[p..j-1] <= v[j] < v[j+1..r] */
+  loop {
+    break when ( k < r);
+    if (v[k] <= c) {
+      /* troca elementos */
+      i = v[j];
+      v[j] = v[k];
+      v[k] = i;
+      ++j; 
+    }
+    ++k;
+  }
+  t = v[j];
+  v[j] = v[r];
+  v[r] = t;
+  return j;
+}
+
+void quicksort (int v[], int p, int r) {
+   if (p < r) {                   
+      int j = divide(v, p, r);   
+      quicksort (v, p, j-1);      
+      quicksort (v, j+1, r);      
+   }
+}
+
+
+void main(void){
+  int v[] = {2, 4, 5, 9 ,1 6, 8, 7};
+  quicksort(v, 0, 7);
+  print(v)
+}
