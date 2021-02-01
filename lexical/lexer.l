@@ -72,6 +72,12 @@ coluna+=yyleng;}
 "=" {fprintf(out,"(%d,%d,ASSIGN_OP,\"%s\")\n",yylineno,coluna,yytext);
 coluna+=yyleng;}
 
+"&&" {fprintf(out,"(%d,%d,AND_OP,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}
+
+"||" {fprintf(out,"(%d,%d,OR_OP,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}
+
 ";" {fprintf(out,"(%d,%d,SEMICOLON_TOKEN,\"%s\")\n",yylineno,coluna,yytext);
 coluna+=yyleng;}
 

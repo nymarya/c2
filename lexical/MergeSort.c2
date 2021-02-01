@@ -1,0 +1,59 @@
+static void intercala1 (int p, int q, int r, int v[]) 
+{
+   int *w; /*A regra de ponteiros deveria ser feita agora no léxico ou só no sintático?*/                                 
+   w = malloc ((r-p) * sizeof (int)); 
+   /* Temos que substituir por algo equivalente ou adicionar essa instrução...*/  
+   int i = p, j = q;                       
+   int k = 0;                              
+
+   loop
+   {
+      if(v[i] <= v[j])
+      {
+         w[k++] = v[i++];
+      }
+      else
+      {
+         w[k++] = v[j++];
+      }
+
+      break when(i < q && j < r);
+      /*Lembrar de discutir e adicionar o operador AND e OR na linguagem*/
+   }
+
+   loop
+   {
+      w[k++] = v[i++];
+
+      break when(i < q);
+   }
+
+   loop
+   {
+       w[k++] = v[j++];
+   
+       break when(j < r);
+   }
+
+   i = p;
+
+   loop
+   {
+      v[i] = w[i-p];
+      i = i + 1;
+
+      break when(i < r);
+   }
+
+   free (w);                               
+}
+
+void mergesort (int p, int r, int v[])
+{
+   if (p < r-1) {                 
+      int q = (p + r)/2;          
+      mergesort (p, q, v);        
+      mergesort (q, r, v);        
+      intercala (p, q, r, v);     
+   }
+}
