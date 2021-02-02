@@ -33,7 +33,7 @@ TAB[\t]
 
 
 
-else|if|return|loop|break|when|struct {fprintf(out,"(%d,%d,KEY,\"%s\")\n",yylineno,coluna,yytext);
+else|if|return|loop|break|when|struct|printf {fprintf(out,"(%d,%d,KEY,\"%s\")\n",yylineno,coluna,yytext);
 coluna+=yyleng;} 
 
 int|float|char|void|bool {fprintf(out,"(%d,%d,TYPE,\"%s\")\n",yylineno,coluna,yytext);
