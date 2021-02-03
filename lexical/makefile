@@ -10,7 +10,7 @@ Lexer.c: lexer.l
 	flex lexer.l
 
 run:
-	@./test.bin main.c2 main.lex
+	@./test.bin $(file) main.lex
 
 clean:
 	rm -f *.h test.bin
