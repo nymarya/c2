@@ -15,4 +15,10 @@ void main(void){
   	break when (a < 2);
 
   }
+
+  float b;
+  b = 1.0;
+
+  bool c;
+  c = false;
 }

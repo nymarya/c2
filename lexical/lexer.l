@@ -5,6 +5,8 @@ WHITESPACE[ ]
 quebra[\n]
 TAB[\t]
 
+bool (true)|(false)
+
 %{
     #define YY_DECL extern "C" int yylex()
     #include<string>
@@ -107,8 +109,13 @@ coluna+=yyleng;}
 
 {WHITESPACE}+|{quebra}|{TAB}+ {coluna+=yyleng;}
  
-{digit}+ {fprintf(out,"(%d,%d,NUM,\"%s\")\n",yylineno,coluna,yytext);
+{digit}+ {fprintf(out,"(%d,%d,INT,\"%s\")\n",yylineno,coluna,yytext);
 coluna+=yyleng;}
+
+{digit}+.{digit}+ {fprintf(out,"(%d,%d,FLOAT,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}
+
+{bool} {fprintf(out,"(%d,%d,BOOL,\"%s\")\n",yylineno,coluna,yytext); coluna+=yyleng;}
 
 {digit}+{ID}+ {fprintf(out,"(%d,%d,ERROR,\"%s\")\n",yylineno,coluna,yytext); return 0;
 coluna+=yyleng;}
