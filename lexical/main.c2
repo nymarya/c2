@@ -9,9 +9,11 @@ void main(void){
     a = (4 + 5) * 3;
   }
 
+  int a = input(a);
+
   loop{
 
-  	printf(a);
+  	print(a);
   	break when (a < 2);
 
   }

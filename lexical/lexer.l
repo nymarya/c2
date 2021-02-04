@@ -35,10 +35,52 @@ bool (true)|(false)
 
 
 
-else|if|return|loop|break|when|struct|printf {fprintf(out,"(%d,%d,KEY,\"%s\")\n",yylineno,coluna,yytext);
+else {fprintf(out,"(%d,%d,ELSE,\"%s\")\n",yylineno,coluna,yytext);
 coluna+=yyleng;} 
 
-int|float|char|void|bool {fprintf(out,"(%d,%d,TYPE,\"%s\")\n",yylineno,coluna,yytext);
+if {fprintf(out,"(%d,%d,IF,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;} 
+
+return {fprintf(out,"(%d,%d,RETURN,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;} 
+
+loop {fprintf(out,"(%d,%d,LOOP,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;} 
+
+break {fprintf(out,"(%d,%d,BREAK,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;} 
+
+when {fprintf(out,"(%d,%d,WHEN,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;} 
+
+struct {fprintf(out,"(%d,%d,STRUCT,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;} 
+
+print {fprintf(out,"(%d,%d,PRINT_FUNCTION,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;} 
+
+input {fprintf(out,"(%d,%d,INPUT_FUNCTION,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}
+
+malloc {fprintf(out,"(%d,%d,MALLOC_FUNCION,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}  
+
+free {fprintf(out,"(%d,%d,FREE_FUNCION,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}  
+
+int {fprintf(out,"(%d,%d,INT_TYPE,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}
+
+float {fprintf(out,"(%d,%d,FLOAT_TYPE,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}
+
+char {fprintf(out,"(%d,%d,CHAR_TYPE\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}
+
+void {fprintf(out,"(%d,%d,VOID_TYPE,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}
+
+bool {fprintf(out,"(%d,%d,BOOL_TYPE,\"%s\")\n",yylineno,coluna,yytext);
 coluna+=yyleng;}
 
 "+" {fprintf(out,"(%d,%d,SUM_OP,\"%s\")\n",yylineno,coluna,yytext);
@@ -51,6 +93,9 @@ coluna+=yyleng;}
 coluna+=yyleng;}
 
 "/" {fprintf(out,"(%d,%d,DIV_OP,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}
+
+"%" {fprintf(out,"(%d,%d,MOD_OP,\"%s\")\n",yylineno,coluna,yytext);
 coluna+=yyleng;}
 
 "<" {fprintf(out,"(%d,%d,LESSER_OP,\"%s\")\n",yylineno,coluna,yytext);
@@ -80,31 +125,34 @@ coluna+=yyleng;}
 "||" {fprintf(out,"(%d,%d,OR_OP,\"%s\")\n",yylineno,coluna,yytext);
 coluna+=yyleng;}
 
-";" {fprintf(out,"(%d,%d,SEMICOLON_TOKEN,\"%s\")\n",yylineno,coluna,yytext);
+"!" {fprintf(out,"(%d,%d,OR_OP,\"%s\")\n",yylineno,coluna,yytext);
 coluna+=yyleng;}
 
-"," {fprintf(out,"(%d,%d,COLON_TOKEN,\"%s\")\n",yylineno,coluna,yytext);
+";" {fprintf(out,"(%d,%d,SEMICOLON,\"%s\")\n",yylineno,coluna,yytext);
 coluna+=yyleng;}
 
-"." {fprintf(out,"(%d,%d,DOT_TOKEN,\"%s\")\n",yylineno,coluna,yytext);
+"," {fprintf(out,"(%d,%d,COLON,\"%s\")\n",yylineno,coluna,yytext);
 coluna+=yyleng;}
 
-"(" {fprintf(out,"(%d,%d,LEFT_PARENTHESIS_TOKEN,\"%s\")\n",yylineno,coluna,yytext);
+"." {fprintf(out,"(%d,%d,DOT,\"%s\")\n",yylineno,coluna,yytext);
 coluna+=yyleng;}
 
-")" {fprintf(out,"(%d,%d,RIGHT_PARENTHESIS_TOKEN,\"%s\")\n",yylineno,coluna,yytext);
+"(" {fprintf(out,"(%d,%d,LEFT_PARENTHESIS,\"%s\")\n",yylineno,coluna,yytext);
 coluna+=yyleng;}
 
-"[" {fprintf(out,"(%d,%d,LEFT_BRACKET_TOKEN,\"%s\")\n",yylineno,coluna,yytext);
+")" {fprintf(out,"(%d,%d,RIGHT_PARENTHESIS,\"%s\")\n",yylineno,coluna,yytext);
 coluna+=yyleng;}
 
-"]" {fprintf(out,"(%d,%d,RIGHT_BRACKET_TOKEN,\"%s\")\n",yylineno,coluna,yytext);
+"[" {fprintf(out,"(%d,%d,LEFT_BRACKET,\"%s\")\n",yylineno,coluna,yytext);
 coluna+=yyleng;}
 
-"{" {fprintf(out,"(%d,%d,LEFT_BRACE_TOKEN,\"%s\")\n",yylineno,coluna,yytext);
+"]" {fprintf(out,"(%d,%d,RIGHT_BRACKET,\"%s\")\n",yylineno,coluna,yytext);
 coluna+=yyleng;}
 
-"}" {fprintf(out,"(%d,%d,RIGHT_BRACE_TOKEN,\"%s\")\n",yylineno,coluna,yytext);
+"{" {fprintf(out,"(%d,%d,LEFT_BRACE,\"%s\")\n",yylineno,coluna,yytext);
+coluna+=yyleng;}
+
+"}" {fprintf(out,"(%d,%d,RIGHT_BRACE,\"%s\")\n",yylineno,coluna,yytext);
 coluna+=yyleng;}
 
 {WHITESPACE}+|{quebra}|{TAB}+ {coluna+=yyleng;}
