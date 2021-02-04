@@ -1,0 +1,26 @@
+/* main.c */
+void main(void){
+  int a;
+
+  a = 10;  /* Testando
+              comentário
+              em bloco. */
+  if(a > 9){
+    a = (4 + 5) * 3;
+  }
+
+  int a = input(a);
+
+  loop{
+
+  	print(a);
+  	break when (a < 2);
+
+  }
+
+  float b;
+  b = 1.0;
+
+  bool c;
+  c = false;
+}
