@@ -1,11 +1,16 @@
-digit[0-9]
-letter[a-zA-Z]
-ID[a-zA-Z][a-zA-Z0-9]*
-WHITESPACE[ ]
-quebra[\n]
-TAB[\t]
+/**
+* Código baseado em: https://eqdrs.github.io/compilers/2019/09/08/implementando-um-analisador-lexico-usando-o-flex.html
+*/
 
-bool (true)|(false)
+digit      [0-9]
+letter     [a-zA-Z]
+ID         [a-zA-Z][a-zA-Z0-9]*
+WHITESPACE [ ]
+newline    [\n]
+TAB        [\t]
+
+bool       (true)|(false)
+float      {digit}+"."{digit}+
 
 %{
     #define YY_DECL extern "C" int yylex()
@@ -22,7 +27,12 @@ bool (true)|(false)
 
 %%
 
-{quebra} {coluna = 1;}
+{newline} {coluna = 1;}
+
+    /* COMENTÁRIO
+     * Inicia estado "COMMENT" no início do bloco de comentario
+     * Sai do estado no final do bloco de comentario
+     */
 
 "/*" { linha=yylineno; BEGIN(COMMENT);}
 
@@ -32,8 +42,7 @@ bool (true)|(false)
 
 <COMMENT><<EOF>> {fprintf(out,"(%d,ERROR,\"/*\")\n",linha); return 0;}
 
-
-
+    /* COMANDOS */
 
 else {fprintf(out,"(%d,%d,ELSE,\"%s\")\n",yylineno,coluna,yytext);
 coluna+=yyleng;} 
@@ -68,6 +77,8 @@ coluna+=yyleng;}
 free {fprintf(out,"(%d,%d,FREE_FUNCION,\"%s\")\n",yylineno,coluna,yytext);
 coluna+=yyleng;}  
 
+    /* TIPOS PRIMITIVOS */
+
 int {fprintf(out,"(%d,%d,INT_TYPE,\"%s\")\n",yylineno,coluna,yytext);
 coluna+=yyleng;}
 
@@ -82,6 +93,8 @@ coluna+=yyleng;}
 
 bool {fprintf(out,"(%d,%d,BOOL_TYPE,\"%s\")\n",yylineno,coluna,yytext);
 coluna+=yyleng;}
+
+    /* OPERADORES */
 
 "+" {fprintf(out,"(%d,%d,SUM_OP,\"%s\")\n",yylineno,coluna,yytext);
 coluna+=yyleng;}
@@ -125,8 +138,10 @@ coluna+=yyleng;}
 "||" {fprintf(out,"(%d,%d,OR_OP,\"%s\")\n",yylineno,coluna,yytext);
 coluna+=yyleng;}
 
-"!" {fprintf(out,"(%d,%d,OR_OP,\"%s\")\n",yylineno,coluna,yytext);
+"!" {fprintf(out,"(%d,%d,NOT_OP,\"%s\")\n",yylineno,coluna,yytext);
 coluna+=yyleng;}
+
+    /* SÍMBOLOS */
 
 ";" {fprintf(out,"(%d,%d,SEMICOLON,\"%s\")\n",yylineno,coluna,yytext);
 coluna+=yyleng;}
@@ -155,12 +170,14 @@ coluna+=yyleng;}
 "}" {fprintf(out,"(%d,%d,RIGHT_BRACE,\"%s\")\n",yylineno,coluna,yytext);
 coluna+=yyleng;}
 
-{WHITESPACE}+|{quebra}|{TAB}+ {coluna+=yyleng;}
+    /* REGEX */
+
+{WHITESPACE}+|{newline}|{TAB}+ {coluna+=yyleng;}
  
 {digit}+ {fprintf(out,"(%d,%d,INT,\"%s\")\n",yylineno,coluna,yytext);
 coluna+=yyleng;}
 
-{digit}+.{digit}+ {fprintf(out,"(%d,%d,FLOAT,\"%s\")\n",yylineno,coluna,yytext);
+{float} {fprintf(out,"(%d,%d,FLOAT,\"%s\")\n",yylineno,coluna,yytext);
 coluna+=yyleng;}
 
 {bool} {fprintf(out,"(%d,%d,BOOL,\"%s\")\n",yylineno,coluna,yytext); coluna+=yyleng;}
