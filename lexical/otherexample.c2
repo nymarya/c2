@@ -1,0 +1,25 @@
+struct realNumber{
+    int numerator;
+    int denominator;
+}
+
+int main(){
+
+    realNumber n;
+    
+    loop{
+        print("Digite um numerador:");
+        n.numerator = read();
+        print("Digite um denominador:");
+        n.denominator = read();
+        
+        break when (n.denominator == 0);
+        float x = n.numerator/n.denominator;
+        print("Numero digitado: ");
+        print(x);
+    }
+    
+    print("Numero inválido");
+    
+    return 0;
+}
