@@ -14,9 +14,9 @@ int divide(int v[], int p, int r){
       i = v[j];
       v[j] = v[k];
       v[k] = i;
-      ++j; 
+      j = j+1; 
     }
-    ++k;
+    k = k+1;
   }
   t = v[j];
   v[j] = v[r];

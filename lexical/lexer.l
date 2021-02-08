@@ -182,10 +182,7 @@ coluna+=yyleng;}
 
 {bool} {fprintf(out,"(%d,%d,BOOL,\"%s\")\n",yylineno,coluna,yytext); coluna+=yyleng;}
 
-{digit}+{ID}+ {fprintf(out,"(%d,%d,ERROR,\"%s\")\n",yylineno,coluna,yytext); return 0;
-coluna+=yyleng;}
-
-{ID}+ {fprintf(out,"(%d,%d,ID,\"%s\")\n",yylineno,coluna,yytext);
+{ID} {fprintf(out,"(%d,%d,ID,\"%s\")\n",yylineno,coluna,yytext);
 coluna+=yyleng;}
 
 . {fprintf(out,"(%d,%d,ERROR,\"%s\")\n",yylineno,coluna,yytext); return 0;}
