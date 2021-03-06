@@ -17,10 +17,79 @@ float      {digit}+"."{digit}+
     #include<string>
     #include<iostream>
     using namespace std;
-    FILE *out ;
-	int linha;
 
+    enum terminal{
+        ELSE = 0,
+        IF,
+        RETURN,
+        LOOP,
+        BREAK,
+        WHEN,
+        STRUCT,
+        PRINT_FUNCTION,
+        INPUT_FUNCTION,
+        MALLOC_FUNCION,
+        FREE_FUNCION,
+        INT_TYPE,
+        FLOAT_TYPE,
+        CHAR_TYPE,
+        VOID_TYPE,
+        BOOL_TYPE,
+        SUM_OP,
+        DIF_OP,
+        MULTI_OP,
+        DIV_OP,
+        MOD_OP,
+        LESSER_OP,
+        LEQ_OP,
+        GREATER_OP,
+        GEQ_OP,
+        EQUAL_OP,
+        DIFF_OP,
+        ASSIGN_OP,
+        AND_OP,
+        OR_OP,
+        NOT_OP,
+        SEMICOLON,
+        COLON,
+        DOT,
+        LEFT_PARENTHESIS,
+        RIGHT_PARENTHESIS,
+        LEFT_BRACKET,
+        RIGHT_BRACKET,
+        LEFT_BRACE,
+        RIGHT_BRACE,
+        INT,
+        FLOAT,
+        BOOL,
+        ID
+    } TERMINAL;
+
+    typedef struct{
+        int lin;
+        int col;
+        terminal t;
+        char *value; 
+    }Token;
+
+    FILE *out ;
+    int linha;
     int coluna = 1;
+    Token cur_token;
+
+    void create_token(int l, int c, terminal t, char *v){
+        Token token;
+        token.lin = l;
+        token.col = c;
+        token.t = t;
+        token.value = v;
+
+        cur_token = token;
+
+        fprintf(out, "(%d,%d,%d,%s)\n",l,c,t,v);
+    }
+
+    
 %}
 %option yylineno
 %x COMMENT
@@ -42,148 +111,196 @@ float      {digit}+"."{digit}+
 
 <COMMENT><<EOF>> {fprintf(out,"(%d,ERROR,\"/*\")\n",linha); return 0;}
 
+
+
     /* COMANDOS */
+else {create_token(yylineno, coluna, ELSE,yytext);
+coluna+=yyleng;
+return 50;} 
 
-else {fprintf(out,"(%d,%d,ELSE,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;} 
+if {create_token(yylineno, coluna, IF,yytext);
+coluna+=yyleng;
+return 50;} 
 
-if {fprintf(out,"(%d,%d,IF,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;} 
+return {create_token(yylineno, coluna, RETURN,yytext);
+coluna+=yyleng;
+return 50;} 
 
-return {fprintf(out,"(%d,%d,RETURN,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;} 
+loop {create_token(yylineno, coluna, LOOP,yytext);
+coluna+=yyleng;
+return 50;} 
 
-loop {fprintf(out,"(%d,%d,LOOP,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;} 
+break {create_token(yylineno, coluna, BREAK,yytext);
+coluna+=yyleng;
+return 50;} 
 
-break {fprintf(out,"(%d,%d,BREAK,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;} 
+when {create_token(yylineno, coluna, WHEN,yytext);
+coluna+=yyleng;
+return 50;} 
 
-when {fprintf(out,"(%d,%d,WHEN,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;} 
+struct {create_token(yylineno, coluna, STRUCT,yytext);
+coluna+=yyleng;
+return 50;}
 
-struct {fprintf(out,"(%d,%d,STRUCT,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;} 
+print {create_token(yylineno, coluna, PRINT_FUNCTION,yytext);
+coluna+=yyleng;
+return 50;}
 
-print {fprintf(out,"(%d,%d,PRINT_FUNCTION,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;} 
+input {create_token(yylineno, coluna, INPUT_FUNCTION,yytext);
+coluna+=yyleng;
+return 50;}
 
-input {fprintf(out,"(%d,%d,INPUT_FUNCTION,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}
+malloc {create_token(yylineno, coluna, MALLOC_FUNCION,yytext);
+coluna+=yyleng;
+return 50;} 
 
-malloc {fprintf(out,"(%d,%d,MALLOC_FUNCION,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}  
 
-free {fprintf(out,"(%d,%d,FREE_FUNCION,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}  
+free {create_token(yylineno, coluna, FREE_FUNCION,yytext);
+coluna+=yyleng;
+return 50;} 
+
 
     /* TIPOS PRIMITIVOS */
 
-int {fprintf(out,"(%d,%d,INT_TYPE,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}
+int {create_token(yylineno, coluna, INT_TYPE,yytext);
+coluna+=yyleng;
+return 50;}
 
-float {fprintf(out,"(%d,%d,FLOAT_TYPE,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}
+float {create_token(yylineno, coluna, FLOAT_TYPE,yytext);
+coluna+=yyleng;
+return 50;}
 
-char {fprintf(out,"(%d,%d,CHAR_TYPE\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}
+char {create_token(yylineno, coluna, CHAR_TYPE,yytext);
+coluna+=yyleng;
+return 50;}
 
-void {fprintf(out,"(%d,%d,VOID_TYPE,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}
+void {create_token(yylineno, coluna, VOID_TYPE,yytext);
+coluna+=yyleng;
+return 50;}
 
-bool {fprintf(out,"(%d,%d,BOOL_TYPE,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}
+bool {create_token(yylineno, coluna, BOOL_TYPE,yytext);
+coluna+=yyleng;
+return 50;}
 
     /* OPERADORES */
 
-"+" {fprintf(out,"(%d,%d,SUM_OP,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}
+"+" {create_token(yylineno, coluna, SUM_OP,yytext);
+coluna+=yyleng;
+return 50;}
 
-"-" {fprintf(out,"(%d,%d,DIF_OP,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}
+"-" {create_token(yylineno, coluna, DIF_OP,yytext);
+coluna+=yyleng;
+return 50;}
 
-"*" {fprintf(out,"(%d,%d,MULTI_OP,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}
+"*" {create_token(yylineno, coluna, MULTI_OP,yytext);
+coluna+=yyleng;
+return 50;}
 
-"/" {fprintf(out,"(%d,%d,DIV_OP,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}
+"/" {create_token(yylineno, coluna, DIV_OP,yytext);
+coluna+=yyleng;
+return 50;}
 
-"%" {fprintf(out,"(%d,%d,MOD_OP,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}
+"%" {create_token(yylineno, coluna, MOD_OP,yytext);
+coluna+=yyleng;
+return 50;}
 
-"<" {fprintf(out,"(%d,%d,LESSER_OP,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}
+"<" {create_token(yylineno, coluna, LESSER_OP,yytext);
+coluna+=yyleng;
+return 50;}
 
-"<=" {fprintf(out,"(%d,%d,LEQ_OP,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}
+"<=" {create_token(yylineno, coluna, LEQ_OP,yytext);
+coluna+=yyleng;
+return 50;}
 
-">" {fprintf(out,"(%d,%d,GREATER_OP,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}
+">" {create_token(yylineno, coluna, GREATER_OP,yytext);
+coluna+=yyleng;
+return 50;}
 
-">=" {fprintf(out,"(%d,%d,GEQ_OP,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}
+">=" {create_token(yylineno, coluna, GEQ_OP,yytext);
+coluna+=yyleng;
+return 50;}
 
-"==" {fprintf(out,"(%d,%d,EQUAL_OP,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}
+"==" {create_token(yylineno, coluna, EQUAL_OP,yytext);
+coluna+=yyleng;
+return 50;}
 
-"!=" {fprintf(out,"(%d,%d,DIFF_OP,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}
+"!=" {create_token(yylineno, coluna, DIFF_OP,yytext);
+coluna+=yyleng;
+return 50;}
 
-"=" {fprintf(out,"(%d,%d,ASSIGN_OP,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}
+"=" {create_token(yylineno, coluna, ASSIGN_OP,yytext);
+coluna+=yyleng;
+return 50;}
 
-"&&" {fprintf(out,"(%d,%d,AND_OP,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}
+"&&" {create_token(yylineno, coluna, AND_OP,yytext);
+coluna+=yyleng;
+return 50;}
 
-"||" {fprintf(out,"(%d,%d,OR_OP,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}
+"||" {create_token(yylineno, coluna, OR_OP,yytext);
+coluna+=yyleng;
+return 50;}
 
-"!" {fprintf(out,"(%d,%d,NOT_OP,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}
+"!" {create_token(yylineno, coluna, NOT_OP,yytext);
+coluna+=yyleng;
+return 50;}
 
     /* SÍMBOLOS */
 
-";" {fprintf(out,"(%d,%d,SEMICOLON,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}
+";" {create_token(yylineno, coluna, SEMICOLON,yytext);
+coluna+=yyleng;
+return 50;}
 
-"," {fprintf(out,"(%d,%d,COLON,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}
+"," {create_token(yylineno, coluna, COLON,yytext);
+coluna+=yyleng;
+return 50;}
 
-"." {fprintf(out,"(%d,%d,DOT,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}
+"." {create_token(yylineno, coluna, DOT,yytext);
+coluna+=yyleng;
+return 50;}
 
-"(" {fprintf(out,"(%d,%d,LEFT_PARENTHESIS,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}
+"(" {create_token(yylineno, coluna, LEFT_PARENTHESIS,yytext);
+coluna+=yyleng;
+return 50;}
 
-")" {fprintf(out,"(%d,%d,RIGHT_PARENTHESIS,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}
+")" {create_token(yylineno, coluna, RIGHT_PARENTHESIS,yytext);
+coluna+=yyleng;
+return 50;}
 
-"[" {fprintf(out,"(%d,%d,LEFT_BRACKET,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}
+"[" {create_token(yylineno, coluna, LEFT_BRACKET,yytext);
+coluna+=yyleng;
+return 50;}
 
-"]" {fprintf(out,"(%d,%d,RIGHT_BRACKET,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}
+"]" {create_token(yylineno, coluna, RIGHT_BRACKET,yytext);
+coluna+=yyleng;
+return 50;}
 
-"{" {fprintf(out,"(%d,%d,LEFT_BRACE,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}
+"{" {create_token(yylineno, coluna, LEFT_BRACE,yytext);
+coluna+=yyleng;
+return 50;}
 
-"}" {fprintf(out,"(%d,%d,RIGHT_BRACE,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}
+"}" {create_token(yylineno, coluna, RIGHT_BRACE,yytext);
+coluna+=yyleng;
+return 50;}
 
     /* REGEX */
 
 {WHITESPACE}+|{newline}|{TAB}+ {coluna+=yyleng;}
  
-{digit}+ {fprintf(out,"(%d,%d,INT,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}
+{digit}+ {create_token(yylineno, coluna, INT,yytext);
+coluna+=yyleng;
+return 50;}
 
-{float} {fprintf(out,"(%d,%d,FLOAT,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}
+{float} {create_token(yylineno, coluna, FLOAT,yytext);
+coluna+=yyleng;
+return 50;}
 
-{bool} {fprintf(out,"(%d,%d,BOOL,\"%s\")\n",yylineno,coluna,yytext); coluna+=yyleng;}
+{bool} {create_token(yylineno, coluna, BOOL,yytext);
+coluna+=yyleng;
+return 50;}
 
-{ID} {fprintf(out,"(%d,%d,ID,\"%s\")\n",yylineno,coluna,yytext);
-coluna+=yyleng;}
+{ID} {create_token(yylineno, coluna, ID,yytext);
+coluna+=yyleng;
+return 50;}
 
 . {fprintf(out,"(%d,%d,ERROR,\"%s\")\n",yylineno,coluna,yytext); return 0;}
 
@@ -191,6 +308,11 @@ coluna+=yyleng;}
 
 int yywrap();
 
+void next_token(){
+    yylex();
+    //printf("Current token is: %s\n",cur_token.value);
+}
+/*
 int main(int argc, char *argv[]){
     FILE *arquivo = fopen(argv[1],"r");
     if (!arquivo) {
@@ -199,10 +321,18 @@ int main(int argc, char *argv[]){
     }
     yyin = arquivo;
     out = fopen(argv[2],"w");
-    yylex();
+
+    int x = 0;
+    
+    while(x != -1){
+
+        next_token();
+        scanf("%d", &x);
+    }
+    
     return 0;
 }
-
+*/
 int yywrap(){
     return 1;
 }
