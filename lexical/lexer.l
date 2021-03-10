@@ -28,8 +28,8 @@ float      {digit}+"."{digit}+
         STRUCT,
         PRINT_FUNCTION,
         INPUT_FUNCTION,
-        MALLOC_FUNCION,
-        FREE_FUNCION,
+        MALLOC_FUNCTION,
+        FREE_FUNCTION,
         INT_TYPE,
         FLOAT_TYPE,
         CHAR_TYPE,
@@ -65,29 +65,13 @@ float      {digit}+"."{digit}+
         ID
     } TERMINAL;
 
-    typedef struct{
-        int lin;
-        int col;
-        terminal t;
-        char *value; 
-    }Token;
 
     FILE *out ;
-    int linha;
+    //int linha;
     int coluna = 1;
-    Token cur_token;
+    int yycol = 0;
+    terminal ct;
 
-    void create_token(int l, int c, terminal t, char *v){
-        Token token;
-        token.lin = l;
-        token.col = c;
-        token.t = t;
-        token.value = v;
-
-        cur_token = token;
-
-        fprintf(out, "(%d,%d,%d,%s)\n",l,c,t,v);
-    }
 
     
 %}
@@ -103,204 +87,204 @@ float      {digit}+"."{digit}+
      * Sai do estado no final do bloco de comentario
      */
 
-"/*" { linha=yylineno; BEGIN(COMMENT);}
+"/*" { BEGIN(COMMENT);}
 
 <COMMENT>"*/" { BEGIN(INITIAL); }
 
 <COMMENT>(.|\n);
 
-<COMMENT><<EOF>> {fprintf(out,"(%d,ERROR,\"/*\")\n",linha); return 0;}
+<COMMENT><<EOF>> {fprintf(out,"(%d,ERROR,\"/*\")\n",yylineno); return 0;}
 
 
 
     /* COMANDOS */
-else {create_token(yylineno, coluna, ELSE,yytext);
+else {yycol = coluna;
 coluna+=yyleng;
-return 50;} 
+return ELSE;} 
 
-if {create_token(yylineno, coluna, IF,yytext);
+if {yycol = coluna;
 coluna+=yyleng;
-return 50;} 
+return IF;} 
 
-return {create_token(yylineno, coluna, RETURN,yytext);
+return {yycol = coluna;
 coluna+=yyleng;
-return 50;} 
+return RETURN;} 
 
-loop {create_token(yylineno, coluna, LOOP,yytext);
+loop {yycol = coluna;
 coluna+=yyleng;
-return 50;} 
+return LOOP;} 
 
-break {create_token(yylineno, coluna, BREAK,yytext);
+break {yycol = coluna;
 coluna+=yyleng;
-return 50;} 
+return BREAK;} 
 
-when {create_token(yylineno, coluna, WHEN,yytext);
+when {yycol = coluna;
 coluna+=yyleng;
-return 50;} 
+return WHEN;} 
 
-struct {create_token(yylineno, coluna, STRUCT,yytext);
+struct {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return STRUCT;}
 
-print {create_token(yylineno, coluna, PRINT_FUNCTION,yytext);
+print {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return PRINT_FUNCTION;}
 
-input {create_token(yylineno, coluna, INPUT_FUNCTION,yytext);
+input {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return INPUT_FUNCTION;}
 
-malloc {create_token(yylineno, coluna, MALLOC_FUNCION,yytext);
+malloc {yycol = coluna;
 coluna+=yyleng;
-return 50;} 
+return MALLOC_FUNCTION;} 
 
 
-free {create_token(yylineno, coluna, FREE_FUNCION,yytext);
+free {yycol = coluna;
 coluna+=yyleng;
-return 50;} 
+return FREE_FUNCTION;} 
 
 
     /* TIPOS PRIMITIVOS */
 
-int {create_token(yylineno, coluna, INT_TYPE,yytext);
+int {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return INT_TYPE;}
 
-float {create_token(yylineno, coluna, FLOAT_TYPE,yytext);
+float {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return FLOAT_TYPE;}
 
-char {create_token(yylineno, coluna, CHAR_TYPE,yytext);
+char {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return CHAR_TYPE;}
 
-void {create_token(yylineno, coluna, VOID_TYPE,yytext);
+void {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return VOID_TYPE;}
 
-bool {create_token(yylineno, coluna, BOOL_TYPE,yytext);
+bool {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return BOOL_TYPE;}
 
     /* OPERADORES */
 
-"+" {create_token(yylineno, coluna, SUM_OP,yytext);
+"+" {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return SUM_OP;}
 
-"-" {create_token(yylineno, coluna, DIF_OP,yytext);
+"-" {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return DIF_OP;}
 
-"*" {create_token(yylineno, coluna, MULTI_OP,yytext);
+"*" {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return MULTI_OP;}
 
-"/" {create_token(yylineno, coluna, DIV_OP,yytext);
+"/" {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return DIV_OP;}
 
-"%" {create_token(yylineno, coluna, MOD_OP,yytext);
+"%" {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return MOD_OP;}
 
-"<" {create_token(yylineno, coluna, LESSER_OP,yytext);
+"<" {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return LESSER_OP;}
 
-"<=" {create_token(yylineno, coluna, LEQ_OP,yytext);
+"<=" {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return LEQ_OP;}
 
-">" {create_token(yylineno, coluna, GREATER_OP,yytext);
+">" {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return GREATER_OP;}
 
-">=" {create_token(yylineno, coluna, GEQ_OP,yytext);
+">=" {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return GEQ_OP;}
 
-"==" {create_token(yylineno, coluna, EQUAL_OP,yytext);
+"==" {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return EQUAL_OP;}
 
-"!=" {create_token(yylineno, coluna, DIFF_OP,yytext);
+"!=" {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return DIFF_OP;}
 
-"=" {create_token(yylineno, coluna, ASSIGN_OP,yytext);
+"=" {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return ASSIGN_OP;}
 
-"&&" {create_token(yylineno, coluna, AND_OP,yytext);
+"&&" {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return AND_OP;}
 
-"||" {create_token(yylineno, coluna, OR_OP,yytext);
+"||" {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return OR_OP;}
 
-"!" {create_token(yylineno, coluna, NOT_OP,yytext);
+"!" {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return NOT_OP;}
 
     /* SÍMBOLOS */
 
-";" {create_token(yylineno, coluna, SEMICOLON,yytext);
+";" {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return SEMICOLON;}
 
-"," {create_token(yylineno, coluna, COLON,yytext);
+"," {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return COLON;}
 
-"." {create_token(yylineno, coluna, DOT,yytext);
+"." {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return DOT;}
 
-"(" {create_token(yylineno, coluna, LEFT_PARENTHESIS,yytext);
+"(" {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return LEFT_PARENTHESIS;}
 
-")" {create_token(yylineno, coluna, RIGHT_PARENTHESIS,yytext);
+")" {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return RIGHT_PARENTHESIS;}
 
-"[" {create_token(yylineno, coluna, LEFT_BRACKET,yytext);
+"[" {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return LEFT_BRACKET;}
 
-"]" {create_token(yylineno, coluna, RIGHT_BRACKET,yytext);
+"]" {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return RIGHT_BRACKET;}
 
-"{" {create_token(yylineno, coluna, LEFT_BRACE,yytext);
+"{" {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return LEFT_BRACE;}
 
-"}" {create_token(yylineno, coluna, RIGHT_BRACE,yytext);
+"}" {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return RIGHT_BRACE;}
 
     /* REGEX */
 
 {WHITESPACE}+|{newline}|{TAB}+ {coluna+=yyleng;}
  
-{digit}+ {create_token(yylineno, coluna, INT,yytext);
+{digit}+ {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return INT;}
 
-{float} {create_token(yylineno, coluna, FLOAT,yytext);
+{float} {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return FLOAT;}
 
-{bool} {create_token(yylineno, coluna, BOOL,yytext);
+{bool} {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return BOOL;}
 
-{ID} {create_token(yylineno, coluna, ID,yytext);
+{ID} {yycol = coluna;
 coluna+=yyleng;
-return 50;}
+return ID;}
 
 . {fprintf(out,"(%d,%d,ERROR,\"%s\")\n",yylineno,coluna,yytext); return 0;}
 
@@ -309,8 +293,7 @@ return 50;}
 int yywrap();
 
 void next_token(){
-    yylex();
-    //printf("Current token is: %s\n",cur_token.value);
+    ct = (terminal) yylex();
 }
 /*
 int main(int argc, char *argv[]){
