@@ -3,88 +3,92 @@
 
 
 #include "lex.yy.c"
-/*
-enum bool{
-    false=0,
-    true
-}BOOL;
-*/
-bool program();
-bool program_element();
-bool program2();
 
-bool program(){
-    bool a = program_element();
-    //bool b = program2();
+terminal cur_sym;
 
-    //return (a==true && b==true);
-    return (a==true);
+void next_symbol(){
+    cur_sym = (terminal) yylex();
 }
 
-bool program_element(){
-    next_token();
-    printf("cur_id %d  struct_id %d\n", cur_token.t, STRUCT);
-    switch(cur_token.t){
+void error(){
+    printf("Error at (%d,%d)", yylineno, yycol);   
+}
+
+void eat(terminal t){
+    if (cur_sym == t){
+        next_symbol();
+    } else {
+        error();
+    }
+}
+
+
+void program();
+void declarations();
+void declaration();
+void program_element_type();
+void function_or_assign();
+
+void program(){
+    switch(cur_sym){
+        case MULTI_OP:
+
+        case INT_TYPE:
+        case FLOAT_TYPE:
+        case BOOL_TYPE:
+
+        case ID:
+
         case STRUCT:
-            next_token();
-            printf("x_orig %d  id %d\n", cur_token.t, ID);
-            if (cur_token.t == ID){
-                return true;
-            } else {
-                return false;
-            }
+            declaration(); 
+            declarations();
             break;
         default:
-            return false;
+            error();
     }
 }
 
-bool program2(){
-    bool a = program();
-    if (a == false)
-        return true;
-    return true;
-}
-/*
-bool opt_parameters(){
-    bool r = parameters();
-    if (r == false){
-        if (cur_token.t == CLOSE_PARENTHESIS)
-            return true;
-        else
-            return false;
+void declarations(){
+    switch(cur_sym){
+        case EOFF:
+            break;
+
+        case MULTI_OP:
+        case INT_TYPE: 
+        case FLOAT_TYPE: 
+        case BOOL_TYPE:
+        case ID:
+        case STRUCT:
+            program();
+            break;
+
+        default:
+            error();
     }
 }
 
-bool parameters(){
-    bool a = parameter();
-    bool b = opt_parameter();
+void declaration(){
+    switch(cur_sym){
+        case MULTI_OP:
+            eat(MULTI_OP);
+            eat(ID);
+            // ...
+            eat(SEMICOLON);
+            break;
+        case INT_TYPE: 
+        case FLOAT_TYPE: 
+        case BOOL_TYPE:
+        case ID:
+        case STRUCT:
+            error();
+            break;
 
-    return (a==true && b==true);
-}
-
-bool parameter(){
-    next_token();
-    if (cur_token.t == PRIMITIVE_TYPE){
-        next_token();
-        if (cur_token.t == ID){
-            return true;
-        }
-    }
-    return false;
-}
-
-bool opt_parameter(){
-    next_token();
-    if (cur_token.t == COMMA){
-        return parameters();
-    } else if (cur_token.t == CLOSE_PARENTHESIS){
-        return true;
-    } else {
-        return false;
+        default:
+            error();
     }
 }
-*/
+
+
 int main(int argc, char *argv[]){
     FILE *arquivo = fopen(argv[1],"r");
     if (!arquivo) {
@@ -95,9 +99,10 @@ int main(int argc, char *argv[]){
     out = fopen(argv[2],"w");
 
     //next_token();
-    bool x = program();
+    next_symbol();
+    program();
 
-    printf("RESULT : %d \n",x);
+    //printf("RESULT : %d \n",x);
     
     
     return 0;

@@ -62,7 +62,8 @@ float      {digit}+"."{digit}+
         INT,
         FLOAT,
         BOOL,
-        ID
+        ID,
+        EOFF
     } TERMINAL;
 
 
@@ -96,8 +97,8 @@ float      {digit}+"."{digit}+
 <COMMENT><<EOF>> {fprintf(out,"(%d,ERROR,\"/*\")\n",yylineno); return 0;}
 
 
-
     /* COMANDOS */
+
 else {yycol = coluna;
 coluna+=yyleng;
 return ELSE;} 
@@ -188,21 +189,21 @@ return DIV_OP;}
 coluna+=yyleng;
 return MOD_OP;}
 
-"<" {yycol = coluna;
-coluna+=yyleng;
-return LESSER_OP;}
-
 "<=" {yycol = coluna;
 coluna+=yyleng;
 return LEQ_OP;}
 
-">" {yycol = coluna;
+"<" {yycol = coluna;
 coluna+=yyleng;
-return GREATER_OP;}
+return LESSER_OP;}
 
 ">=" {yycol = coluna;
 coluna+=yyleng;
 return GEQ_OP;}
+
+">" {yycol = coluna;
+coluna+=yyleng;
+return GREATER_OP;}
 
 "==" {yycol = coluna;
 coluna+=yyleng;
@@ -286,15 +287,17 @@ return BOOL;}
 coluna+=yyleng;
 return ID;}
 
+<<EOF>> {yycol = coluna;
+coluna+=yyleng;
+return EOFF;}
+
 . {fprintf(out,"(%d,%d,ERROR,\"%s\")\n",yylineno,coluna,yytext); return 0;}
 
 %%
 
 int yywrap();
 
-void next_token(){
-    ct = (terminal) yylex();
-}
+
 /*
 int main(int argc, char *argv[]){
     FILE *arquivo = fopen(argv[1],"r");
