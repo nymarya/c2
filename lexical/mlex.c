@@ -106,7 +106,7 @@ void declaration(){
             eat(MULTI_OP);
             eat(ID);
             lval();
-            eat(ASSIGN_OP)
+            eat(ASSIGN_OP);
             expr();
             eat(SEMICOLON);
             break;
