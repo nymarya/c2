@@ -584,7 +584,7 @@ char *yytext;
         OR_OP,
         NOT_OP,
         SEMICOLON,
-        COLON,
+        COMMA,
         DOT,
         LEFT_PARENTHESIS,
         RIGHT_PARENTHESIS,
@@ -1161,7 +1161,7 @@ YY_RULE_SETUP
 #line 238 "lexer.l"
 {yycol = coluna;
 coluna+=yyleng;
-return COLON;}
+return COMMA;}
 	YY_BREAK
 case 38:
 YY_RULE_SETUP

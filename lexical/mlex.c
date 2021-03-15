@@ -43,6 +43,7 @@ void statement();
 void id_stmt();
 void opt_arguments();
 void arguments();
+void opt_argument();
 void argument();
 void condition_stmt();
 void condition_stmt_opt();
@@ -358,7 +359,7 @@ void statements(){
         case POW_FUNCTION:
         case FREE_FUNCTION:
         case MALLOC_FUNCTION:
-        case READ_FUNCTION:
+        case INPUT_FUNCTION:
         case PRINT_FUNCTION:
         case ID:
         case RETURN:
@@ -396,7 +397,7 @@ void statement(){
             type();
             eat(ID);
             eat(SEMICOLON);
-            eat(MOD_DECLARATION); //todo: perguntar
+            eat(MOD_DECLARATION);
             break;
         case POW_FUNCTION:
             eat(POW_FUNCTION);
@@ -419,8 +420,8 @@ void statement(){
             eat(RIGHT_PARENTHESIS);
             eat(SEMICOLON);
             break;
-        case READ_FUNCTION:
-            eat(READ_FUNCTION);
+        case INPUT_FUNCTION:
+            eat(INPUT_FUNCTION);
             eat(LEFT_PARENTHESIS);
             opt_arguments();
             eat(RIGHT_PARENTHESIS);
@@ -505,13 +506,12 @@ void opt_arguments(){
         case POW_FUNCITON:
         case FREE_FUNCTION:
         case MALLOC_FUNCTION:
-        case READ_FUNCTION:
+        case INPUT_FUNCTION:
         case PRINT_FUNCTION:
         case ID:
         case INT:
         case BOOL:
         case FLOAT:
-        case CHAR:
         case NOT_OP:
             arguments();
             break;
@@ -531,13 +531,12 @@ void arguments(){
         case POW_FUNCITON:
         case FREE_FUNCTION:
         case MALLOC_FUNCTION:
-        case READ_FUNCTION:
+        case INPUT_FUNCTION:
         case PRINT_FUNCTION:
         case ID:
         case INT:
         case BOOL:
         case FLOAT:
-        case CHAR:
         case NOT_OP:
             argument();
             opt_argument();
@@ -571,7 +570,7 @@ void argument(){
         case POW_FUNCTION:
         case FREE_FUNCTION:
         case MALLOC_FUNCTION:
-        case READ_FUNCTION:
+        case INPUT_FUNCTION:
         case PRINT_FUNCTION:
         case ID:
         case INT:
@@ -624,7 +623,7 @@ void loop_stmt(){
     {
     case LOOP:
         eat(LOOP);
-        block()
+        block();
         break;
     
     default:
@@ -673,7 +672,7 @@ void expr()
         case POW_FUNCTION:
         case FREE_FUNCTION:
         case MALLOC_FUNCTION:
-        case READ_FUNCTION:
+        case INPUT_FUNCTION:
         case PRINT_FUNCTION:
         case ID:
         case INT:
@@ -719,7 +718,7 @@ void p1()
         case POW_FUNCTION:
         case FREE_FUNCTION:
         case MALLOC_FUNCTION:
-        case READ_FUNCTION:
+        case INPUT_FUNCTION:
         case PRINT_FUNCTION:
         case ID:
         case INT:
@@ -766,7 +765,7 @@ void p2()
         case POW_FUNCTION:
         case FREE_FUNCTION:
         case MALLOC_FUNCTION:
-        case READ_FUNCTION:
+        case INPUT_FUNCTION:
         case PRINT_FUNCTION:
         case ID:
         case INT:
@@ -789,7 +788,7 @@ void opt_parameter(){
         case RIGHT_PARENTHESIS: 
             break;
         case COMMA:
-            eat(COLON);
+            eat(COMMA);
             parameters();
             break;
         default:
@@ -807,7 +806,7 @@ void p3()
         case POW_FUNCTION:
         case FREE_FUNCTION:
         case MALLOC_FUNCTION:
-        case READ_FUNCTION:
+        case INPUT_FUNCTION:
         case PRINT_FUNCTION:
         case ID:
         case INT:
@@ -849,7 +848,7 @@ void p4()
         case POW_FUNCTION:
         case FREE_FUNCTION:
         case MALLOC_FUNCTION:
-        case READ_FUNCTION:
+        case INPUT_FUNCTION:
         case PRINT_FUNCTION:
         case ID:
         case INT:
@@ -915,7 +914,7 @@ void p5()
         case POW_FUNCTION:
         case FREE_FUNCTION:
         case MALLOC_FUNCTION:
-        case READ_FUNCTION:
+        case INPUT_FUNCTION:
         case PRINT_FUNCTION:
         case ID:
         case INT:
@@ -987,7 +986,7 @@ void p6()
         case POW_FUNCTION:
         case FREE_FUNCTION:
         case MALLOC_FUNCTION:
-        case READ_FUNCTION:
+        case INPUT_FUNCTION:
         case PRINT_FUNCTION:
         case ID:
         case INT:
@@ -1013,7 +1012,7 @@ void p7()
         case POW_FUNCTION:
         case FREE_FUNCTION:
         case MALLOC_FUNCTION:
-        case READ_FUNCTION:
+        case INPUT_FUNCTION:
         case PRINT_FUNCTION:
         case ID:
         case INT:
@@ -1059,7 +1058,7 @@ void lval()
             break;
         case DOT:
             eat(DOT);
-            eat(ID)
+            eat(ID);
             lval();
             break;
         default:
@@ -1098,8 +1097,8 @@ void simple_expression()
             eat(RIGHT_PARENTHESIS);
             eat(SEMICOLON);
             break;
-        case READ_FUNCTION:
-            eat(READ_FUNCTION);
+        case INPUT_FUNCTION:
+            eat(INPUT_FUNCTION);
             eat(LEFT_PARENTHESIS);
             opt_arguments();
             eat(RIGHT_PARENTHESIS);
