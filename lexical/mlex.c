@@ -28,6 +28,27 @@ void declarations();
 void declaration();
 void program_element_type();
 void function_or_assign();
+void function_args();
+void function_opt_block();
+void struct_block();
+void attributes();
+void attribute();
+void opt_parameters();
+void parameters();
+void opt_parameter();
+void parameter();
+void block();
+void statements();
+void statement();
+void id_stmt();
+void opt_arguments();
+void arguments();
+void argument();
+void condition_stmt();
+void condition_stmt_opt();
+void loop_stmt();
+void exit_stmt();
+void return_stmt();
 void expr();
 void expr_opt();
 void p1();
@@ -46,17 +67,9 @@ void p7();
 void lval();
 void simple_expression();
 void simple_expression_id();
-void opt_arguments();
-void function_args();
-void function_opt_block();
-void struct_block();
-void attributes();
-void attribute();
-void opt_parameters();
-void parameters();
-void opt_parameter();
-void parameter();
-void block();
+
+
+
 void type();
 void type_opt();
 
@@ -303,6 +316,354 @@ void parameters(){
     }
 }
 
+void parameter(){
+    switch(cur_sym){
+        case INT_TYPE: 
+        case FLOAT_TYPE: 
+        case BOOL_TYPE:
+            type();
+            eat(ID);
+            break;
+        case ID:
+            eat(ID);
+            type_opt();
+            eat(ID);
+            break;
+        default:
+            error();
+            break;
+    }
+}
+
+void block(){
+    switch(cur_sym){
+        case LEFT_BRACE: 
+            eat(LEFT_BRACE);
+            statements();
+            eat(LEFT_BRACE);
+            break;
+        default:
+            error();
+            break;
+    }
+}
+
+void statements(){
+    switch (cur_sym)
+    {
+        case MULTI_OP:
+        case INT_TYPE: 
+        case FLOAT_TYPE: 
+        case BOOL_TYPE:
+        case POW_FUNCTION:
+        case FREE_FUNCTION:
+        case MALLOC_FUNCTION:
+        case READ_FUNCTION:
+        case PRINT_FUNCTION:
+        case ID:
+        case RETURN:
+        case BREAK:
+        case LOOP:
+        case IF:
+        case LEFT_BRACKET:
+            statement();
+            eat(SEMICOLON);
+            statements();
+            break;
+        case RIGHT_BRACKET:
+            break;
+        default:
+            error();
+            break;
+    }
+
+}
+
+void statement(){
+    switch (cur_sym)
+    {
+        case MULTI_OP: // asterisk
+            eat(MULTI_OP);
+            eat(ID);
+            lval();
+            eat(ASSIGN_OP);
+            expr();
+            eat(SEMICOLON);
+            break;
+        case INT_TYPE: 
+        case FLOAT_TYPE: 
+        case BOOL_TYPE:
+            type();
+            eat(ID);
+            eat(SEMICOLON);
+            eat(MOD_DECLARATION); //todo: perguntar
+            break;
+        case POW_FUNCTION:
+            eat(POW_FUNCTION);
+            eat(LEFT_PARENTHESIS);
+            opt_arguments();
+            eat(RIGHT_PARENTHESIS);
+            eat(SEMICOLON);
+            break;
+        case FREE_FUNCTION:
+            eat(FREE_FUNCTION);
+            eat(LEFT_PARENTHESIS);
+            opt_arguments();
+            eat(RIGHT_PARENTHESIS);
+            eat(SEMICOLON);
+            break;
+        case MALLOC_FUNCTION:
+            eat(MALLOC_FUNCTION);
+            eat(LEFT_PARENTHESIS);
+            opt_arguments();
+            eat(RIGHT_PARENTHESIS);
+            eat(SEMICOLON);
+            break;
+        case READ_FUNCTION:
+            eat(READ_FUNCTION);
+            eat(LEFT_PARENTHESIS);
+            opt_arguments();
+            eat(RIGHT_PARENTHESIS);
+            eat(SEMICOLON);
+            break;
+        case PRINT_FUNCTION:
+            eat(PRINT_FUNCTION);
+            eat(LEFT_PARENTHESIS);
+            opt_arguments();
+            eat(RIGHT_PARENTHESIS);
+            eat(SEMICOLON);
+            break;
+        case ID:
+            eat(ID);
+            id_stmt();
+            break;
+        case RETURN:
+            returnt_stmt();
+            eat(SEMICOLON);
+            break;
+        case BREAK:
+            exit_stmt();
+            eat(SEMICOLON);
+            break;
+        case LOOP:
+            loop_stmt();
+            break;
+        case IF:
+            condition_stmt();
+            break;
+        case LEFT_BRACKET:
+            block();
+            break;
+        default:
+            error();
+            break;
+    }
+}
+
+void id_stmt(){
+    switch (cur_sym)
+    {
+    case LEFT_BRACE:
+        lval();
+        eat(ASSIGN_OP);
+        expr();
+        eat(SEMICOLON);
+        break;
+    case LEFT_PARENTHESIS:
+        eat(LEFT_PARENTHESIS);
+        opt_arguments();
+        eat(RIGHT_PARENTHESIS);
+        eat(SEMICOLON);
+        break;
+    case ID:
+        eat(ID);
+        eat(SEMICOLON);
+        break;
+    case DOT:
+        lval();
+        eat(ASSIGN_OP);
+        expr();
+        eat(SEMICOLON);
+        break;
+    case ASSIGN_OP:
+        lval();
+        eat(ASSIGN_OP);
+        expr();
+        eat(SEMICOLON);
+        break;
+    default:
+        error();
+        break;
+    }
+}
+
+void opt_arguments(){
+    switch (cur_sym)
+    {
+        case MULTI_OP:
+        case LEFT_PARENTHESIS:
+        case POW_FUNCITON:
+        case FREE_FUNCTION:
+        case MALLOC_FUNCTION:
+        case READ_FUNCTION:
+        case PRINT_FUNCTION:
+        case ID:
+        case INT:
+        case BOOL:
+        case FLOAT:
+        case CHAR:
+        case NOT_OP:
+            arguments();
+            break;
+        case RIGHT_PARENTHESIS:
+            break;
+        default:
+            error();
+            break;
+    }
+}
+
+void arguments(){
+    switch (cur_sym)
+    {
+        case MULTI_OP:
+        case LEFT_PARENTHESIS:
+        case POW_FUNCITON:
+        case FREE_FUNCTION:
+        case MALLOC_FUNCTION:
+        case READ_FUNCTION:
+        case PRINT_FUNCTION:
+        case ID:
+        case INT:
+        case BOOL:
+        case FLOAT:
+        case CHAR:
+        case NOT_OP:
+            argument();
+            opt_argument();
+            break;
+        default:
+            error();
+            break;
+    }
+}
+
+void opt_argument(){
+    switch (cur_sym)
+    {
+        case COMMA:
+            eat(COMMA);
+            arguments();
+            break;
+        case RIGHT_PARENTHESIS:
+            break;
+        default:
+            error();
+            break;
+    }
+}
+
+void argument(){
+    switch (cur_sym)
+    {
+        case MULTI_OP:
+        case LEFT_PARENTHESIS:
+        case POW_FUNCTION:
+        case FREE_FUNCTION:
+        case MALLOC_FUNCTION:
+        case READ_FUNCTION:
+        case PRINT_FUNCTION:
+        case ID:
+        case INT:
+        case BOOL:
+        case FLOAT:
+        case DIF_OP:
+        case NOT_OP:
+            expr();
+            break;
+        
+        default:
+            error();
+            break;
+    }
+}
+
+void condition_stmt(){
+    switch (cur_sym)
+    {
+    case IF:
+        eat(IF);
+        eat(LEFT_PARENTHESIS);
+        expr();
+        eat(RIGHT_PARENTHESIS);
+        block();
+        condition_stmt_opt();
+        break;
+    default:
+        error();
+        break;
+    }
+}
+
+void condition_stmt_opt(){
+    switch (cur_sym)
+    {
+    case SEMICOLON:
+        break;
+    case ELSE:
+        eat(ELSE);
+        block();
+    default:
+        error();
+        break;
+    }
+}
+
+void loop_stmt(){
+    switch (cur_sym)
+    {
+    case LOOP:
+        eat(LOOP);
+        block()
+        break;
+    
+    default:
+        error();
+        break;
+    }
+}
+
+void exit_stmt(){
+    switch (cur_sym)
+    {
+    case BREAK:
+        eat(BREAK);
+        eat(WHEN);
+        eat(LEFT_PARENTHESIS);
+        expr();
+        eat(RIGHT_PARENTHESIS);
+        break;
+    
+    default:
+        error();
+        break;
+    }
+}
+
+void return_stmt(){
+    switch (cur_sym)
+    {
+    case RETURN:
+        eat(RETURN);
+        expr();
+        break;
+    
+    default:
+        error();
+        break;
+    }
+}
+
 void expr()
 {
     switch(cur_sym)
@@ -336,7 +697,7 @@ void expr_opt()
         case RIGHT_BRACKET:
         case SEMICOLON:
         case RIGHT_PARENTHESIS:
-        case COLON:
+        case COMMA:
             break;
         case OR_OP:
             eat(OR_OP);
@@ -383,7 +744,7 @@ void p1_opt()
         case SEMICOLON:
         case RIGHT_PARENTHESIS:
         case OR_OP:
-        case COLON:
+        case COMMA:
             break;
         case AND_OP:
             eat(AND_OP);
@@ -427,7 +788,7 @@ void opt_parameter(){
     switch(cur_sym){
         case RIGHT_PARENTHESIS: 
             break;
-        case COLON:
+        case COMMA:
             eat(COLON);
             parameters();
             break;
@@ -515,7 +876,7 @@ void p4_opt()
         case EQUAL_OP:
         case AND_OP:
         case OR_OP:
-        case COLON:
+        case COMMA:
             break;
         case SUM_OP:
         case DIF_OP:
@@ -538,25 +899,6 @@ void op4()
             break;
         case DIF_OP:
             eat(DIF_OP);
-            break;
-        default:
-            error();
-            break;
-    }
-}
-
-void parameter(){
-    switch(cur_sym){
-        case INT_TYPE: 
-        case FLOAT_TYPE: 
-        case BOOL_TYPE:
-            type();
-            eat(ID);
-            break;
-        case ID:
-            eat(ID);
-            type_opt();
-            eat(ID);
             break;
         default:
             error();
@@ -602,7 +944,7 @@ void p5_opt()
         case EQUAL_OP:
         case AND_OP:
         case OR_OP:
-        case COLON:
+        case COMMA:
             break; 
         case MULTI_OP:
         case MOD_OP:
@@ -610,19 +952,6 @@ void p5_opt()
             op5();
             p6();
             p5_opt();
-            break;
-        default:
-            error();
-            break;
-    }
-}
-
-void block(){
-    switch(cur_sym){
-        case LEFT_BRACE: 
-            eat(LEFT_BRACE);
-            statements();
-            eat(LEFT_BRACE);
             break;
         default:
             error();
@@ -719,7 +1048,7 @@ void lval()
         case EQUAL_OP:
         case AND_OP:
         case OR_OP:
-        case COLON:
+        case COMMA:
         case ASSIGN_OP:
             break;
         case LEFT_BRACKET:
@@ -820,7 +1149,7 @@ void simple_expression_id()
         case EQUAL_OP:
         case AND_OP:
         case OR_OP:
-        case COLON:
+        case COMMA:
             lval();
             break;
         case LEFT_PARENTHESIS:
