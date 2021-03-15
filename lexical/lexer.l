@@ -51,7 +51,7 @@ float      {digit}+"."{digit}+
         OR_OP,
         NOT_OP,
         SEMICOLON,
-        COLON,
+        COMMA,
         DOT,
         LEFT_PARENTHESIS,
         RIGHT_PARENTHESIS,
@@ -237,7 +237,7 @@ return SEMICOLON;}
 
 "," {yycol = coluna;
 coluna+=yyleng;
-return COLON;}
+return COMMA;}
 
 "." {yycol = coluna;
 coluna+=yyleng;
