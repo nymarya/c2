@@ -29,6 +29,7 @@ float      {digit}+"."{digit}+
         PRINT_FUNCTION,
         INPUT_FUNCTION,
         MALLOC_FUNCTION,
+        POW_FUNCTION,
         FREE_FUNCTION,
         INT_TYPE,
         FLOAT_TYPE,
@@ -139,6 +140,9 @@ malloc {yycol = coluna;
 coluna+=yyleng;
 return MALLOC_FUNCTION;} 
 
+pow {yycol = coluna;
+coluna+=yyleng;
+return POW_FUNCTION}
 
 free {yycol = coluna;
 coluna+=yyleng;

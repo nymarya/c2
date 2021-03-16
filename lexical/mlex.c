@@ -827,6 +827,18 @@ void op3()
 {
     switch(cur_sym)
     {
+        case LESSER_OP:
+            eat(LESSER_OP);
+            break;
+        case GREATER_OP:
+            eat(GREATER_OP);
+            break;
+        case GEQ_OP:
+            eat(GEQ_OP);
+            break;
+        case LEQ_OP:
+            eat(LEQ_OP);
+            break;
         case DIFF_OP:
             eat(DIFF_OP);
             break;
