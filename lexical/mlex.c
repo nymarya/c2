@@ -439,7 +439,7 @@ void statement(){
             id_stmt();
             break;
         case RETURN:
-            returnt_stmt();
+            return_stmt();
             eat(SEMICOLON);
             break;
         case BREAK:
@@ -503,7 +503,7 @@ void opt_arguments(){
     {
         case MULTI_OP:
         case LEFT_PARENTHESIS:
-        case POW_FUNCITON:
+        case POW_FUNCTION:
         case FREE_FUNCTION:
         case MALLOC_FUNCTION:
         case INPUT_FUNCTION:
@@ -528,7 +528,7 @@ void arguments(){
     {
         case MULTI_OP:
         case LEFT_PARENTHESIS:
-        case POW_FUNCITON:
+        case POW_FUNCTION:
         case FREE_FUNCTION:
         case MALLOC_FUNCTION:
         case INPUT_FUNCTION:

@@ -142,7 +142,7 @@ return MALLOC_FUNCTION;}
 
 pow {yycol = coluna;
 coluna+=yyleng;
-return POW_FUNCTION}
+return POW_FUNCTION;}
 
 free {yycol = coluna;
 coluna+=yyleng;
