@@ -11,7 +11,11 @@ void next_symbol(){
 }
 
 void error(){
-    printf("Error at (%d,%d)", yylineno, yycol);   
+    printf("Error at (%d,%d)\n", yylineno, coluna-yyleng);   
+}
+
+void error(const char * message){
+    printf("Error at (%d,%d)[%s]\n", yylineno, coluna,message);   
 }
 
 void eat(terminal t){
@@ -56,6 +60,7 @@ void p1();
 void p1_opt();
 void p2();
 void p3();
+void p3_opt();
 void op3();
 void p4();
 void p4_opt();
@@ -81,6 +86,7 @@ void program(){
         case INT_TYPE:
         case FLOAT_TYPE:
         case BOOL_TYPE:
+        case VOID_TYPE:
 
         case ID:
 
@@ -89,7 +95,7 @@ void program(){
             declarations();
             break;
         default:
-            error();
+            error("program");
             break;
     }
 }
@@ -103,13 +109,14 @@ void declarations(){
         case INT_TYPE: 
         case FLOAT_TYPE: 
         case BOOL_TYPE:
+        case VOID_TYPE:
         case ID:
         case STRUCT:
             program();
             break;
 
         default:
-            error();
+            error("declarations");
             break;
     }
 }
@@ -127,6 +134,7 @@ void declaration(){
         case INT_TYPE: 
         case FLOAT_TYPE: 
         case BOOL_TYPE:
+        case VOID_TYPE:
             type();
             program_element_type();
             break;
@@ -141,7 +149,7 @@ void declaration(){
             break;
 
         default:
-            error();
+            error("declaration");
             break;
     }
 }
@@ -153,7 +161,7 @@ void program_element_type(){
             function_args();
             break;
         default:
-            error();
+            error("program_element_type");
             break;
 
     }
@@ -184,7 +192,7 @@ void function_or_assign(){
             eat(SEMICOLON);
             break;
         default:
-            error();
+            error("function_or_assign");
             break;
 
     }
@@ -215,7 +223,7 @@ void function_args(){
             eat(SEMICOLON);
             break;
         default:
-            error();
+            error("function_args");
             break;
 
     }
@@ -230,7 +238,7 @@ void function_opt_block(){
             block();
             break;
         default:
-            error();
+            error("function_opt_block");
             break;
 
     }
@@ -244,7 +252,7 @@ void struct_block(){
             eat(RIGHT_BRACE);
             break;
         default:
-            error();
+            error("struct_block");
             break;
 
     }
@@ -255,6 +263,7 @@ void attributes(){
         case INT_TYPE: 
         case FLOAT_TYPE: 
         case BOOL_TYPE:
+        case VOID_TYPE:
         case ID:
             attribute();
             eat(SEMICOLON);
@@ -263,7 +272,7 @@ void attributes(){
         case RIGHT_BRACE:
             break;
         default:
-            error();
+            error("attributes");
             break;
     }
 }
@@ -273,6 +282,7 @@ void attribute(){
         case INT_TYPE: 
         case FLOAT_TYPE: 
         case BOOL_TYPE:
+        case VOID_TYPE:
             type();
             eat(ID);
             break;
@@ -281,7 +291,7 @@ void attribute(){
             type_opt();
             break;
         default:
-            error();
+            error("attribute");
             break;
     }
 }
@@ -291,13 +301,14 @@ void opt_parameters(){
         case INT_TYPE: 
         case FLOAT_TYPE: 
         case BOOL_TYPE:
+        case VOID_TYPE:
         case ID:
             parameters();
             break;
         case RIGHT_PARENTHESIS:
             break;
         default:
-            error();
+            error("opt_parameters");
             break;
     }
 }
@@ -307,12 +318,13 @@ void parameters(){
         case INT_TYPE: 
         case FLOAT_TYPE: 
         case BOOL_TYPE:
+        case VOID_TYPE:
         case ID:
             parameter();
             opt_parameter();
             break;
         default:
-            error();
+            error("parameters");
             break;
     }
 }
@@ -322,6 +334,7 @@ void parameter(){
         case INT_TYPE: 
         case FLOAT_TYPE: 
         case BOOL_TYPE:
+        case VOID_TYPE:
             type();
             eat(ID);
             break;
@@ -331,7 +344,7 @@ void parameter(){
             eat(ID);
             break;
         default:
-            error();
+            error("parameter");
             break;
     }
 }
@@ -341,10 +354,10 @@ void block(){
         case LEFT_BRACE: 
             eat(LEFT_BRACE);
             statements();
-            eat(LEFT_BRACE);
+            eat(RIGHT_BRACE);
             break;
         default:
-            error();
+            error("block");
             break;
     }
 }
@@ -356,6 +369,7 @@ void statements(){
         case INT_TYPE: 
         case FLOAT_TYPE: 
         case BOOL_TYPE:
+        case VOID_TYPE:
         case POW_FUNCTION:
         case FREE_FUNCTION:
         case MALLOC_FUNCTION:
@@ -366,15 +380,14 @@ void statements(){
         case BREAK:
         case LOOP:
         case IF:
-        case LEFT_BRACKET:
+        case LEFT_BRACE:
             statement();
-            eat(SEMICOLON);
             statements();
             break;
-        case RIGHT_BRACKET:
+        case RIGHT_BRACE:
             break;
         default:
-            error();
+            error("statements");
             break;
     }
 
@@ -394,10 +407,10 @@ void statement(){
         case INT_TYPE: 
         case FLOAT_TYPE: 
         case BOOL_TYPE:
+        case VOID_TYPE:
             type();
             eat(ID);
             eat(SEMICOLON);
-            eat(MOD_DECLARATION);
             break;
         case POW_FUNCTION:
             eat(POW_FUNCTION);
@@ -456,7 +469,7 @@ void statement(){
             block();
             break;
         default:
-            error();
+            error("statement");
             break;
     }
 }
@@ -493,7 +506,7 @@ void id_stmt(){
         eat(SEMICOLON);
         break;
     default:
-        error();
+        error("id_stmt");
         break;
     }
 }
@@ -655,10 +668,11 @@ void return_stmt(){
     case RETURN:
         eat(RETURN);
         expr();
+        //simple_expression();
         break;
     
     default:
-        error();
+        error("return_stmt");
         break;
     }
 }
@@ -684,7 +698,7 @@ void expr()
             expr_opt(); 
             break; 
         default:
-            error();
+            error("expr");
             break;      
     }
 }
@@ -814,8 +828,33 @@ void p3()
         case BOOL:
         case DIF_OP:
             p4();
+            p3_opt();
+            break;
+        default:
+            error();
+            break;
+    }
+}
+
+void p3_opt()
+{
+    switch(cur_sym)
+    {
+        case LESSER_OP:
+        case GREATER_OP:
+        case GEQ_OP:
+        case LEQ_OP:
+        case DIFF_OP:
+        case EQUAL_OP:
             op3();
             p4();
+            break;
+        case RIGHT_BRACKET:
+        case SEMICOLON:
+        case RIGHT_PARENTHESIS:
+        case AND_OP:
+        case OR_OP:
+        case COMMA:
             break;
         default:
             error();
@@ -883,6 +922,10 @@ void p4_opt()
         case RIGHT_BRACKET:
         case SEMICOLON:
         case RIGHT_PARENTHESIS:
+        case LESSER_OP:
+        case GREATER_OP:
+        case GEQ_OP:
+        case LEQ_OP:
         case DIFF_OP:
         case EQUAL_OP:
         case AND_OP:
@@ -951,6 +994,10 @@ void p5_opt()
         case RIGHT_PARENTHESIS:
         case DIF_OP:
         case SUM_OP:
+        case LESSER_OP:
+        case GREATER_OP:
+        case GEQ_OP:
+        case LEQ_OP:
         case DIFF_OP:
         case EQUAL_OP:
         case AND_OP:
@@ -1055,6 +1102,10 @@ void lval()
         case MOD_OP:
         case DIV_OP:
         case SUM_OP:
+        case LESSER_OP:
+        case GREATER_OP:
+        case GEQ_OP:
+        case LEQ_OP:
         case DIFF_OP:
         case EQUAL_OP:
         case AND_OP:
@@ -1156,6 +1207,10 @@ void simple_expression_id()
         case MOD_OP:
         case DIV_OP:
         case SUM_OP:
+        case LESSER_OP:
+        case GREATER_OP:
+        case GEQ_OP:
+        case LEQ_OP:
         case DIFF_OP:
         case EQUAL_OP:
         case AND_OP:
@@ -1188,6 +1243,9 @@ void type(){
         case BOOL_TYPE:
             eat(BOOL_TYPE);
             type_opt();
+            break;
+        case VOID_TYPE:
+            eat(VOID_TYPE);
             break;
         default:
             error();

@@ -1,4 +1,5 @@
-* opa;
+int main(){
+	return (0 + (6 * 6))==(9+3);
+}
 
-* eae ;
-*oi;
+float x();

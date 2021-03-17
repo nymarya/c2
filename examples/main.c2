@@ -1,10 +1,7 @@
-/* main.c */
-void main(void){
+void main (void x){
   int a;
 
-  a = 10;  /* Testando
-              comentário
-              em bloco. */
+  a = 10;
   if(a > 9){
     a = (4 + 5) * 3;
   }
