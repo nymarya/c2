@@ -396,7 +396,7 @@ void statements(){
 void statement(){
     switch (cur_sym)
     {
-        case MULTI_OP: // asterisk
+        case MULTI_OP: 
             eat(MULTI_OP);
             eat(ID);
             lval();
@@ -477,7 +477,7 @@ void statement(){
 void id_stmt(){
     switch (cur_sym)
     {
-    case LEFT_BRACE:
+    case LEFT_BRACKET:
         lval();
         eat(ASSIGN_OP);
         expr();
@@ -531,7 +531,7 @@ void opt_arguments(){
         case RIGHT_PARENTHESIS:
             break;
         default:
-            error();
+            error("opt_arguments");
             break;
     }
 }
@@ -555,7 +555,7 @@ void arguments(){
             opt_argument();
             break;
         default:
-            error();
+            error("arguments");
             break;
     }
 }
@@ -570,7 +570,7 @@ void opt_argument(){
         case RIGHT_PARENTHESIS:
             break;
         default:
-            error();
+            error("opt_argument");
             break;
     }
 }
@@ -595,7 +595,7 @@ void argument(){
             break;
         
         default:
-            error();
+            error("argument");
             break;
     }
 }
@@ -612,7 +612,7 @@ void condition_stmt(){
         condition_stmt_opt();
         break;
     default:
-        error();
+        error("condition_stmt");
         break;
     }
 }
@@ -620,13 +620,29 @@ void condition_stmt(){
 void condition_stmt_opt(){
     switch (cur_sym)
     {
-    case SEMICOLON:
+    case MULTI_OP:
+    case INT_TYPE: 
+    case FLOAT_TYPE: 
+    case BOOL_TYPE:
+    case VOID_TYPE:
+    case POW_FUNCTION:
+    case FREE_FUNCTION:
+    case MALLOC_FUNCTION:
+    case INPUT_FUNCTION:
+    case PRINT_FUNCTION:
+    case ID:
+    case RETURN:
+    case BREAK:
+    case LOOP:
+    case IF:
+    case LEFT_BRACE:
+    case RIGHT_BRACE:
         break;
     case ELSE:
         eat(ELSE);
         block();
     default:
-        error();
+        error("condition_stmt_opt");
         break;
     }
 }
@@ -640,7 +656,7 @@ void loop_stmt(){
         break;
     
     default:
-        error();
+        error("loop_stmt");
         break;
     }
 }
@@ -657,7 +673,7 @@ void exit_stmt(){
         break;
     
     default:
-        error();
+        error("exit_stmt");
         break;
     }
 }
@@ -668,7 +684,6 @@ void return_stmt(){
     case RETURN:
         eat(RETURN);
         expr();
-        //simple_expression();
         break;
     
     default:
