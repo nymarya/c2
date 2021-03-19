@@ -733,7 +733,8 @@ void expr_opt()
             expr_opt();
             break;
         default:
-            error();
+            printf("Token atual: %d\n",cur_sym);
+            error("expr_opt");
             break;
     }
 }
@@ -759,7 +760,7 @@ void p1()
             p1_opt();
             break;
         default:
-            error();
+            error("p1");
             break;
     }
 }
@@ -780,7 +781,8 @@ void p1_opt()
             p1_opt();
             break;
         default:
-            error();
+            printf("Token atual: %d\n",cur_sym);
+            error("p1_opt");
             break;
     }
 }
@@ -804,10 +806,11 @@ void p2()
             p3();
             break;
         case NOT_OP:
-            eat(DIF_OP);
+            eat(NOT_OP);
+            p2();
             break;
         default:
-            error();
+            error("p2");
             break;
     }
 }
@@ -821,7 +824,7 @@ void opt_parameter(){
             parameters();
             break;
         default:
-            error();
+            error("opt_parameter");
             break;
     }
 }
@@ -846,7 +849,7 @@ void p3()
             p3_opt();
             break;
         default:
-            error();
+            error("p3");
             break;
     }
 }
@@ -872,7 +875,8 @@ void p3_opt()
         case COMMA:
             break;
         default:
-            error();
+            printf("Token atual: %d\n",cur_sym);
+            error("p3_opt");
             break;
     }
 }
@@ -900,7 +904,7 @@ void op3()
             eat(EQUAL_OP);
             break;
         default:
-            error();
+            error("op3");
             break;
     }
 }
@@ -925,7 +929,7 @@ void p4()
             p4_opt();
             break;
         default:
-            error();
+            error("p4");
             break;
     }
 }
@@ -954,7 +958,8 @@ void p4_opt()
             p4_opt();
             break;
         default:
-            error();
+            printf("Token atual: %d\n",cur_sym);
+            error("p4_opt");
             break;
     }
 }
@@ -970,7 +975,7 @@ void op4()
             eat(DIF_OP);
             break;
         default:
-            error();
+            error("op4");
             break;
     }
 }
@@ -995,7 +1000,7 @@ void p5()
             p5_opt();
             break;
         default:
-            error();
+            error("p5");
             break;
     }
 }
@@ -1027,7 +1032,8 @@ void p5_opt()
             p5_opt();
             break;
         default:
-            error();
+            printf("Token encontrado: %d\n", cur_sym);
+            error("p5_opt");
             break;
     }
 }
@@ -1046,7 +1052,7 @@ void op5()
             eat(DIV_OP);
             break;
         default:
-            error();
+            error("op5");
             break;
     }
 }
@@ -1073,7 +1079,7 @@ void p6()
             p6();
             break;
         default:
-            error();
+            error("p6");
             break;
     }
 }
@@ -1100,7 +1106,7 @@ void p7()
             eat(RIGHT_PARENTHESIS);
             break;
         default:
-            error();
+            error("p7");
             break;
     }
 }
@@ -1140,7 +1146,7 @@ void lval()
             lval();
             break;
         default:
-            error();
+            error("lval");
             break; 
     }
 }
@@ -1159,35 +1165,35 @@ void simple_expression()
             eat(LEFT_PARENTHESIS);
             opt_arguments();
             eat(RIGHT_PARENTHESIS);
-            eat(SEMICOLON);
+            //eat(SEMICOLON);
             break;
         case FREE_FUNCTION:
             eat(FREE_FUNCTION);
             eat(LEFT_PARENTHESIS);
             opt_arguments();
             eat(RIGHT_PARENTHESIS);
-            eat(SEMICOLON);
+            //eat(SEMICOLON);
             break;
         case MALLOC_FUNCTION:
             eat(MALLOC_FUNCTION);
             eat(LEFT_PARENTHESIS);
             opt_arguments();
             eat(RIGHT_PARENTHESIS);
-            eat(SEMICOLON);
+            //eat(SEMICOLON);
             break;
         case INPUT_FUNCTION:
             eat(INPUT_FUNCTION);
             eat(LEFT_PARENTHESIS);
             opt_arguments();
             eat(RIGHT_PARENTHESIS);
-            eat(SEMICOLON);
+            //eat(SEMICOLON);
             break;
         case PRINT_FUNCTION:
             eat(PRINT_FUNCTION); 
             eat(LEFT_PARENTHESIS);
             opt_arguments();
             eat(RIGHT_PARENTHESIS);
-            eat(SEMICOLON);
+            //eat(SEMICOLON);
             break;
         case ID:
             eat(ID);
@@ -1203,7 +1209,7 @@ void simple_expression()
             eat(BOOL);
             break;
         default:
-            error();
+            error("simple_expression");
             break;
     }
 }
@@ -1240,7 +1246,7 @@ void simple_expression_id()
             eat(SEMICOLON);
             break;
         default:
-            error();
+            error("simple_expression_id");
             break;
     }
 }
@@ -1263,7 +1269,7 @@ void type(){
             eat(VOID_TYPE);
             break;
         default:
-            error();
+            error("type");
             break;
     }
 }
@@ -1282,7 +1288,7 @@ void type_opt(){
         case ID:
             break;
         default:
-            error();
+            error("type_opt");
             break;
     }
 }

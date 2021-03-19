@@ -6,7 +6,9 @@ void main (void x){
     a = (4 + 5) * 3;
   }
 
-  int a = input(a);
+  int a;
+
+  a = input(a);
 
   loop{
 
