@@ -53,7 +53,9 @@ void intercala1 (int p, int q, int r, int *v)
       i = i + 1;
 
       break when(i < r);
-   }                               
+   }     
+
+   free(w);                          
 }
 
 void mergesort (int p, int r, int *v)
