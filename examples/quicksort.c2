@@ -1,10 +1,14 @@
 /* main.c */
 
-int divide(int v[], int p, int r){
-  int pivot = v[r];
-  int i = p;
-  int j = p;
-  int k = p;
+int divide(int[] v, int p, int r){
+  int pivot;
+  pivot = v[r];
+  int i;
+  i = p;
+  int j;
+  j = p;
+  int k;
+  k = p;
 
   /* separa vetor de forma que v[p..j-1] <= v[j] < v[j+1..r] */
   loop {
@@ -24,9 +28,10 @@ int divide(int v[], int p, int r){
   return j;
 }
 
-void quicksort (int v[], int p, int r) {
+void quicksort (int[] v, int p, int r) {
    if (p < r) {                   
-      int j = divide(v, p, r);   
+      int j;
+      j = divide(v, p, r);   
       quicksort (v, p, j-1);      
       quicksort (v, j+1, r);      
    }
@@ -34,7 +39,8 @@ void quicksort (int v[], int p, int r) {
 
 
 void main(void){
-  int v[] = {2, 4, 5, 9 ,1, 6, 8, 7};
+  int[] v;
+  v = {2, 4, 5, 9 ,1, 6, 8, 7};
   quicksort(v, 0, 7);
-  print(v)
+  print(v);
 }

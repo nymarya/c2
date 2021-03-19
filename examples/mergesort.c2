@@ -1,20 +1,28 @@
-void intercala1 (int p, int q, int r, int v[]) 
+void intercala1 (int p, int q, int r, int[] v) 
 {
    int *w; /*A regra de ponteiros deveria ser feita agora no léxico ou só no sintático?*/                                 
    w = malloc ((r-p) * 8); 
    /* Temos que substituir por algo equivalente ou adicionar essa instrução...*/  
-   int i = p; j = q;                       
-   int k = 0;                              
+   int i;
+   i = p; 
+   int j;
+   j = q;                       
+   int k;
+   k = 0;                              
 
    loop
    {
       if(v[i] <= v[j])
       {
-         w[k++] = v[i++];
+         w[k] = v[i];
+         k=k+1;
+         i=i+1;
       }
       else
       {
-         w[k++] = v[j++];
+         w[k] = v[j];
+         k=k+1;
+         j=j+1;
       }
 
       break when(i < q && j < r);
@@ -23,16 +31,18 @@ void intercala1 (int p, int q, int r, int v[])
 
    loop
    {
-      w[k++] = v[i++];
-
+      w[k] = v[i];
+      k=k+1;
+      i=i+1;
       break when(i < q);
    }
 
    loop
    {
-       w[k++] = v[j++];
-   
-       break when(j < r);
+      w[k] = v[j];
+      k=k+1;
+      i=i+1;
+      break when(j < r);
    }
 
    i = p;
@@ -43,15 +53,14 @@ void intercala1 (int p, int q, int r, int v[])
       i = i + 1;
 
       break when(i < r);
-   }
-
-   free (w);                               
+   }                               
 }
 
-void mergesort (int p, int r, int v[])
+void mergesort (int p, int r, int[] v)
 {
    if (p < r-1) {                 
-      int q = (p + r)/2;          
+      int q;
+      q = (p + r)/2;          
       mergesort (p, q, v);        
       mergesort (q, r, v);        
       intercala (p, q, r, v);     
