@@ -1,4 +1,4 @@
-void intercala1 (int p, int q, int r, int[] v) 
+void intercala1 (int p, int q, int r, int *v) 
 {
    int *w; /*A regra de ponteiros deveria ser feita agora no léxico ou só no sintático?*/                                 
    w = malloc ((r-p) * 8); 
@@ -56,7 +56,7 @@ void intercala1 (int p, int q, int r, int[] v)
    }                               
 }
 
-void mergesort (int p, int r, int[] v)
+void mergesort (int p, int r, int *v)
 {
    if (p < r-1) {                 
       int q;

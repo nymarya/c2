@@ -1243,7 +1243,7 @@ void simple_expression_id()
             eat(LEFT_PARENTHESIS);
             opt_arguments();
             eat(RIGHT_PARENTHESIS);
-            eat(SEMICOLON);
+            //eat(SEMICOLON);
             break;
         default:
             error("simple_expression_id");
