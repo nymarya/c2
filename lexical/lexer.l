@@ -8,6 +8,7 @@ ID         [a-zA-Z][a-zA-Z0-9]*
 WHITESPACE [ ]
 newline    [\n]
 TAB        [\t]
+STR        \"(\\.|[^"\\])*\"
 
 bool       (true)|(false)
 float      {digit}+"."{digit}+
@@ -36,6 +37,7 @@ float      {digit}+"."{digit}+
         CHAR_TYPE,
         VOID_TYPE,
         BOOL_TYPE,
+        STRING_TYPE,
         SUM_OP,
         DIF_OP,
         MULTI_OP,
@@ -63,6 +65,7 @@ float      {digit}+"."{digit}+
         INT,
         FLOAT,
         BOOL,
+        STRING,
         ID,
         EOFF
     } TERMINAL;
@@ -170,6 +173,10 @@ return VOID_TYPE;}
 bool {yycol = coluna;
 coluna+=yyleng;
 return BOOL_TYPE;}
+
+"string" {yycol = coluna;
+coluna+=yyleng;
+return STRING_TYPE;}
 
     /* OPERADORES */
 
@@ -286,6 +293,10 @@ return FLOAT;}
 {bool} {yycol = coluna;
 coluna+=yyleng;
 return BOOL;}
+
+{STR} {yycol = coluna;
+coluna+=yyleng;
+return STRING;}
 
 {ID} {yycol = coluna;
 coluna+=yyleng;

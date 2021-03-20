@@ -87,7 +87,7 @@ void program(){
         case FLOAT_TYPE:
         case BOOL_TYPE:
         case VOID_TYPE:
-
+        case STRING_TYPE:
         case ID:
 
         case STRUCT:
@@ -110,12 +110,14 @@ void declarations(){
         case FLOAT_TYPE: 
         case BOOL_TYPE:
         case VOID_TYPE:
+        case STRING_TYPE:
         case ID:
         case STRUCT:
             program();
             break;
 
         default:
+            printf("Token atual: %d\n", cur_sym);
             error("declarations");
             break;
     }
@@ -135,6 +137,7 @@ void declaration(){
         case FLOAT_TYPE: 
         case BOOL_TYPE:
         case VOID_TYPE:
+        case STRING_TYPE:
             type();
             program_element_type();
             break;
@@ -264,6 +267,7 @@ void attributes(){
         case FLOAT_TYPE: 
         case BOOL_TYPE:
         case VOID_TYPE:
+        case STRING_TYPE:
         case ID:
             attribute();
             eat(SEMICOLON);
@@ -283,6 +287,7 @@ void attribute(){
         case FLOAT_TYPE: 
         case BOOL_TYPE:
         case VOID_TYPE:
+        case STRING_TYPE:
             type();
             eat(ID);
             break;
@@ -302,6 +307,7 @@ void opt_parameters(){
         case FLOAT_TYPE: 
         case BOOL_TYPE:
         case VOID_TYPE:
+        case STRING_TYPE:
         case ID:
             parameters();
             break;
@@ -319,6 +325,7 @@ void parameters(){
         case FLOAT_TYPE: 
         case BOOL_TYPE:
         case VOID_TYPE:
+        case STRING_TYPE:
         case ID:
             parameter();
             opt_parameter();
@@ -335,6 +342,7 @@ void parameter(){
         case FLOAT_TYPE: 
         case BOOL_TYPE:
         case VOID_TYPE:
+        case STRING_TYPE:
             type();
             eat(ID);
             break;
@@ -370,6 +378,7 @@ void statements(){
         case FLOAT_TYPE: 
         case BOOL_TYPE:
         case VOID_TYPE:
+        case STRING_TYPE:
         case POW_FUNCTION:
         case FREE_FUNCTION:
         case MALLOC_FUNCTION:
@@ -387,6 +396,7 @@ void statements(){
         case RIGHT_BRACE:
             break;
         default:
+            printf("Token atual: %d\n", cur_sym);
             error("statements");
             break;
     }
@@ -408,6 +418,7 @@ void statement(){
         case FLOAT_TYPE: 
         case BOOL_TYPE:
         case VOID_TYPE:
+        case STRING_TYPE:
             type();
             eat(ID);
             eat(SEMICOLON);
@@ -525,6 +536,7 @@ void opt_arguments(){
         case INT:
         case BOOL:
         case FLOAT:
+        case STRING:
         case NOT_OP:
             arguments();
             break;
@@ -550,6 +562,7 @@ void arguments(){
         case INT:
         case BOOL:
         case FLOAT:
+        case STRING:
         case NOT_OP:
             argument();
             opt_argument();
@@ -589,6 +602,7 @@ void argument(){
         case INT:
         case BOOL:
         case FLOAT:
+        case STRING:
         case DIF_OP:
         case NOT_OP:
             expr();
@@ -625,6 +639,7 @@ void condition_stmt_opt(){
     case FLOAT_TYPE: 
     case BOOL_TYPE:
     case VOID_TYPE:
+    case STRING_TYPE:
     case POW_FUNCTION:
     case FREE_FUNCTION:
     case MALLOC_FUNCTION:
@@ -707,12 +722,14 @@ void expr()
         case INT:
         case FLOAT:
         case BOOL:
+        case STRING:
         case DIF_OP:
         case NOT_OP:
             p1();
             expr_opt(); 
             break; 
         default:
+            printf("Token atual: %d\n", cur_sym);
             error("expr");
             break;      
     }
@@ -754,6 +771,7 @@ void p1()
         case INT:
         case FLOAT:
         case BOOL:
+        case STRING:
         case DIF_OP:
         case NOT_OP:
             p2();
@@ -802,6 +820,7 @@ void p2()
         case INT:
         case BOOL:
         case FLOAT:
+        case STRING:
         case DIF_OP:
             p3();
             break;
@@ -844,6 +863,7 @@ void p3()
         case INT:
         case FLOAT:
         case BOOL:
+        case STRING:
         case DIF_OP:
             p4();
             p3_opt();
@@ -924,6 +944,7 @@ void p4()
         case INT:
         case FLOAT:
         case BOOL:
+        case STRING:
         case DIF_OP:
             p5();
             p4_opt();
@@ -995,6 +1016,7 @@ void p5()
         case INT:
         case FLOAT:
         case BOOL:
+        case STRING:
         case DIF_OP:
             p6();
             p5_opt();
@@ -1072,6 +1094,7 @@ void p6()
         case INT:
         case FLOAT:
         case BOOL:
+        case STRING:
             p7();
             break;
         case DIF_OP:
@@ -1098,6 +1121,7 @@ void p7()
         case INT:
         case FLOAT:
         case BOOL:
+        case STRING:
             simple_expression();
             break;
         case LEFT_PARENTHESIS:
@@ -1208,6 +1232,9 @@ void simple_expression()
         case BOOL:
             eat(BOOL);
             break;
+        case STRING:
+            eat(STRING);
+            break;
         default:
             error("simple_expression");
             break;
@@ -1268,7 +1295,12 @@ void type(){
         case VOID_TYPE:
             eat(VOID_TYPE);
             break;
+        case STRING_TYPE:
+            eat(STRING_TYPE);
+            type_opt();
+            break;
         default:
+            printf("Token atual: %d\n", cur_sym);
             error("type");
             break;
     }
