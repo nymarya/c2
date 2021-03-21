@@ -660,7 +660,9 @@ void condition_stmt_opt(){
     case ELSE:
         eat(ELSE);
         block();
+        break;
     default:
+        printf("Token atual: %d\n", cur_sym);
         error("condition_stmt_opt");
         break;
     }
@@ -1447,6 +1449,9 @@ void process_top(){
 
 void parse(){
     
+    #ifdef Tabela
+    printf("Utilizando o analizador sintático de tabela...\n");
+
     next_step();
 
     while(etop > 0){
@@ -1454,9 +1459,13 @@ void parse(){
         next_step();
 
     }
+    #endif
 
+    #ifdef Recursivo
+    printf("Utilizando o analizador sintático recursivo...\n");
+    program();
+    #endif
     //printf("end\n");
-
 }
 
 int main(int argc, char *argv[]){

@@ -1,8 +1,8 @@
 void intercala1 (int p, int q, int r, int *v) 
 {
-   int *w; /*A regra de ponteiros deveria ser feita agora no léxico ou só no sintático?*/                                 
+   int *w;                                
    w = malloc ((r-p) * 8); 
-   /* Temos que substituir por algo equivalente ou adicionar essa instrução...*/  
+
    int i;
    i = p; 
    int j;
@@ -26,7 +26,6 @@ void intercala1 (int p, int q, int r, int *v)
       }
 
       break when(i < q && j < r);
-      /*Lembrar de discutir e adicionar o operador AND e OR na linguagem*/
    }
 
    loop

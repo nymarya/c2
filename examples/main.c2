@@ -12,7 +12,10 @@ void main (void x){
 
   int a;
 
-  a = input(a);
+  a = pow(a);
+
+  if (a){}
+  else{int b;}
 
   loop{
 
