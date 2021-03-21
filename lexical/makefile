@@ -1,16 +1,20 @@
-FILES = lex.yy.c
+FILES = mlex.c
 CC = g++
 CFLAGS = -lfl
 
-test: lexer.l
+Recursivo: lexer.l
 	@make Lexer.c
-	$(CC) $(CFLAGS) $(FILES) -o test.bin
+	$(CC) $(CFLAGS) $(FILES) -D Recursivo -o test.bin
+
+Tabela: lexer.l
+	@make Lexer.c
+	$(CC) $(CFLAGS) $(FILES) -D Tabela -o test.bin
 
 Lexer.c: lexer.l
 	flex lexer.l
 
 run:
-	@./test.bin $(file) main.lex
+	@./test.bin $(file)
 
 clean:
 	rm -f *.h test.bin

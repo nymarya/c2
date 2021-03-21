@@ -1475,7 +1475,7 @@ int main(int argc, char *argv[]){
       return -1;
     }
     yyin = arquivo;
-    out = fopen(argv[2],"w");
+    //out = fopen(argv[2],"w");
 
     //next_token();
     next_symbol();
