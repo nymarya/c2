@@ -1,3 +1,7 @@
+struct a{
+  int a;
+}
+
 void main (void x){
   int a;
 
