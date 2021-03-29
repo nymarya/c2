@@ -2,7 +2,7 @@
 // ./test.bin ../examples/ex.c2 main.lex
 
 
-#include "lex.yy.c"
+#include "../lex.yy.c"
 
 terminal cur_sym;
 
