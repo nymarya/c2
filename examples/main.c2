@@ -2,17 +2,17 @@ struct a{
   int a;
 }
 
-void main (void x){
+void main (int x){
   int a;
 
-  a = 10;
+  a = "";
   if(a > 9){
     a = (4 + 5) * 3;
   }
 
   int a;
 
-  a = pow(a);
+  a = pow a,2;
 
   if (a){}
   else{int b;}
