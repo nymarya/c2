@@ -14,7 +14,7 @@ int base;
 %left MULTI_OP DIV_OP MOD_OP
 %left UMINUS  /*supplies precedence for unary minus */
 %%                   /* beginning of rules section */
-lines : lines expr '\n' { printf("%g\n", $2); }
+lines : lines expr '\n' { printf("%d\n", $2); }
 | lines '\n'
 | /* empty */
 ;
@@ -28,7 +28,7 @@ p1:     p2 | p1 AND_OP p2
            $$ = $1 & $3;
          }
          ;
-p2:     p3 | NOT_OP p2 {$$ = !$2;};
+p2:     p3 | NOT_OP p2 {$$ = ! $2;};
 
 p3:     p4 | p3 EQUAL_OP p4
         {
@@ -93,12 +93,7 @@ p7:      LEFT_PARENTHESIS expr RIGHT_PARENTHESIS
             $$ = $2;
           }
          |
-         STR
-         {
-           $$ = regs[$1];
-         }
-         |
-         INT | FLOAT
+         STR | INT {$$ = $1;}| FLOAT {$$ = $1;}| BOOL{$$ = $1;}
          ;
 %%
 main()

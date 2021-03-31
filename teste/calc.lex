@@ -31,6 +31,7 @@ return SUM_OP;}
 
 "-" {yycol = coluna;
 coluna+=yyleng;
+yylval='-';
 return DIF_OP;}
 
 "*" {yycol = coluna;
@@ -109,7 +110,7 @@ return RIGHT_PARENTHESIS;}
 
    /* REGEX */
 
-{WHITESPACE}+|{newline}|{TAB}+ {coluna+=yyleng;}
+{WHITESPACE}+|{newline}|{TAB}+ {coluna+=yyleng;return yytext[0];}
  
 {digit}+ {yycol = coluna;
 coluna+=yyleng;
@@ -136,6 +137,5 @@ return ID;}
 <<EOF>> {yycol = coluna;
 coluna+=yyleng;
 return EOFF;}
-
 
 %%
