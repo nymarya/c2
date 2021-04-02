@@ -5,7 +5,7 @@ ID         [a-zA-Z][a-zA-Z0-9]*
 WHITESPACE [ ]
 newline    [\n]
 TAB        [\t]
-STR        \"(\\.|[^"\\])*\"
+STR        (\"(\\.|[^"\\])*\")
 
 bool       (true)|(false)
 float      {digit}+"."{digit}+
@@ -13,6 +13,7 @@ float      {digit}+"."{digit}+
 %{
  
 #include <stdio.h>
+#include <stdlib.h>
 #include "y.tab.h"
 int c;
 extern int yylval;
@@ -114,24 +115,30 @@ return RIGHT_PARENTHESIS;}
  
 {digit}+ {yycol = coluna;
 coluna+=yyleng;
-c = yytext[0];
-yylval = c - '0';
+yylval = atoi(yytext);
 return INT;}
 
 {float} {yycol = coluna;
 coluna+=yyleng;
+yylval = atof(yytext);
+//printf("%s\n", yytext);
 return FLOAT;}
 
 {bool} {yycol = coluna;
 coluna+=yyleng;
+c = yytext[0];
+yylval = c;
 return BOOL;}
 
 {STR} {yycol = coluna;
 coluna+=yyleng;
+yylval = yytext[0] - 'a';
 return STRING;}
 
 {ID} {yycol = coluna;
 coluna+=yyleng;
+c = yytext[0];
+yylval = c;
 return ID;}
 
 <<EOF>> {yycol = coluna;

@@ -3,7 +3,7 @@
 int regs[26];
 int base;
 %}
-%token STR INT FLOAT LEFT_PARENTHESIS RIGHT_PARENTHESIS
+%token INT FLOAT LEFT_PARENTHESIS RIGHT_PARENTHESIS
 %token EQUAL_OP LEQ_OP LESSER_OP GEQ_OP GREATER_OP DIFF_OP ASSIGN_OP
 %token NOT_OP
 %token SEMICOLON COMMA DOT EOFF BOOL STRING ID
@@ -93,7 +93,8 @@ p7:      LEFT_PARENTHESIS expr RIGHT_PARENTHESIS
             $$ = $2;
           }
          |
-         STR | INT {$$ = $1;}| FLOAT {$$ = $1;}| BOOL{$$ = $1;}
+         STRING{$$ = $1;}
+         | INT {$$ = $1;}| FLOAT {$$ = $1;}| BOOL{$$ = $1;}
          ;
 %%
 main()
