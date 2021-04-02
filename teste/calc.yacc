@@ -3,7 +3,17 @@
 int regs[26];
 int base;
 %}
-%token STR INT FLOAT LEFT_PARENTHESIS RIGHT_PARENTHESIS
+
+/* https://cse.iitkgp.ac.in/~goutam/compiler/lect/lect8.pdf */
+
+%union {        /* type of ’yylval’ (stack type) */
+  int integer; /* type name is YYSTYPE */
+  float real;  /* default #define YYSTYPE int ple type */
+}
+
+%token INT FLOAT /* tokens and types */
+
+%token STR LEFT_PARENTHESIS RIGHT_PARENTHESIS
 %token EQUAL_OP LEQ_OP LESSER_OP GEQ_OP GREATER_OP DIFF_OP ASSIGN_OP
 %token NOT_OP
 %token SEMICOLON COMMA DOT EOFF BOOL STRING ID
@@ -14,87 +24,24 @@ int base;
 %left MULTI_OP DIV_OP MOD_OP
 %left UMINUS  /*supplies precedence for unary minus */
 %%                   /* beginning of rules section */
-lines : lines expr '\n' { printf("%d\n", $2); }
-| lines '\n'
+lines : lines expr ';'
+| lines ';'
 | /* empty */
 ;
-expr:   p1 | expr OR_OP p1
-        {
-          $$ = $1 | $3;
-        }
-        ;
-p1:     p2 | p1 AND_OP p2
-         {
-           $$ = $1 & $3;
-         }
-         ;
-p2:     p3 | NOT_OP p2 {$$ = ! $2;};
-
-p3:     p4 | p3 EQUAL_OP p4
-        {
-          $$ = $1 == $3; 
-        }
-        |
-         p3 DIFF_OP p4
-        {
-          $$ = $1 != $3; 
-        }
-        |
-        p3 LESSER_OP p4
-        {
-          $$ = $1 < $3; 
-        }
-        |
-        p3 LEQ_OP p4
-        {
-          $$ = $1 <= $3; 
-        }
-        |
-        p3 GREATER_OP p4
-        {
-          $$ = $1 > $3; 
-        }
-        |
-        p3 GEQ_OP p4
-        {
-          $$ = $1 >= $3; 
-        };
-
-p4:     p5 | p4 SUM_OP p5
-         {
-           $$ = $1 + $3;
-         }
-         |
-         p4 DIF_OP p5
-         {
-           $$ = $1 - $3;
-         };
-p5 :     p6 | p5 MULTI_OP p6
-         {
-           $$ = $1 * $3;
-         }
-         |
-         p5 DIV_OP p6
-         {
-           $$ = $1 / $3;
-         }
-          |
-         p5 MOD_OP p6
-         {
-           $$ = $1 % $3;
-         };
-p6:       p7 |  '-' p6 %prec UMINUS
-         {
-           $$ = -$2;
-         }
-         ;
-p7:      LEFT_PARENTHESIS expr RIGHT_PARENTHESIS
-          {
-            $$ = $2;
-          }
-         |
-         STR | INT {$$ = $1;}| FLOAT {$$ = $1;}| BOOL{$$ = $1;}
-         ;
+expr : '(' expr ')' { printf ("(%s)", $2); }
+     | expr MULTI_OP expr
+     | expr DIV_OP expr
+     | expr MOD_OP expr
+     | expr SUM_OP expr
+     | expr DIF_OP expr
+     | expr AND_OP expr
+     | expr OR_OP expr
+     | DIF_OP expr %prec UMINUS
+     | simple_expr
+     ;
+simple_expr : INT
+            | FLOAT 
+            ;
 %%
 main()
 {
@@ -109,3 +56,27 @@ yywrap()
 {
   return(1);
 }
+
+
+/*
+
+simple_expr : STR { $$ = regs[$1]; }
+            | INT {$$ = (float) $1;}
+            | FLOAT 
+            | BOOL {$$ = $1;}
+            ;
+
+expr : LEFT_PARENTHESIS expr RIGHT_PARENTHESIS { $$ = $2; }
+     | expr MULTI_OP expr { $$ = $1 * $3; }
+     | expr DIV_OP expr { $$ = $1 / $3; }
+     | expr MOD_OP expr { $$ = $1 % $3; }
+     | expr SUM_OP expr { $$ = $1 + $3; }
+     | expr DIF_OP expr { $$ = $1 - $3; }
+     | expr AND_OP expr { $$ = $1 & $3; }
+     | expr OR_OP expr { $$ = $1 | $3; }
+     | DIF_OP expr %prec UMINUS { $$ = -$2; }
+     | simple_expr
+
+*/
+
+

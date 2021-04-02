@@ -15,10 +15,10 @@ float      {digit}+"."{digit}+
 #include <stdio.h>
 #include "y.tab.h"
 int c;
-extern int yylval;
+//extern int yylval;
 
-    int coluna = 1;
-    int yycol = 0;
+int coluna = 1;
+int yycol = 0;
 %}
 %%
 " "       ;
@@ -26,12 +26,12 @@ extern int yylval;
 
 "+" {yycol = coluna;
 coluna+=yyleng;
-yylval='+';
+//yylval='+';
 return SUM_OP;}
 
 "-" {yycol = coluna;
 coluna+=yyleng;
-yylval='-';
+//yylval='-';
 return DIF_OP;}
 
 "*" {yycol = coluna;
@@ -90,7 +90,7 @@ return NOT_OP;}
 
 ";" {yycol = coluna;
 coluna+=yyleng;
-return SEMICOLON;}
+return ';';}
 
 "," {yycol = coluna;
 coluna+=yyleng;
@@ -102,24 +102,25 @@ return DOT;}
 
 "(" {yycol = coluna;
 coluna+=yyleng;
-return LEFT_PARENTHESIS;}
+return '(';}
 
 ")" {yycol = coluna;
 coluna+=yyleng;
-return RIGHT_PARENTHESIS;}
+return ')';}
 
    /* REGEX */
 
-{WHITESPACE}+|{newline}|{TAB}+ {coluna+=yyleng;return yytext[0];}
+{WHITESPACE}+|{newline}|{TAB}+ {coluna+=yyleng;}
  
 {digit}+ {yycol = coluna;
 coluna+=yyleng;
-c = yytext[0];
-yylval = c - '0';
+//c = yytext[0];
+yylval.integer = atoi(yytext);
 return INT;}
 
 {float} {yycol = coluna;
 coluna+=yyleng;
+yylval.real = (float) atof(yytext);
 return FLOAT;}
 
 {bool} {yycol = coluna;
