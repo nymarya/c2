@@ -6,44 +6,46 @@ int base;
 
 /* https://cse.iitkgp.ac.in/~goutam/compiler/lect/lect8.pdf */
 
-%union {        /* type of ’yylval’ (stack type) */
-  int integer; /* type name is YYSTYPE */
-  float real;  /* default #define YYSTYPE int ple type */
-}
+%token ELSE IF RETURN LOOP BREAK WHEN STRUCT
+%token PRINT_FUNCTION INPUT_FUNCTION MALLOC_FUNCTION POW_FUNCTION FREE_FUNCTION
+%token INT_TYPE FLOAT_TYPE CHAR_TYPE VOID_TYPE BOOL_TYPE STRING_TYPE
+%token GEQ LEQ EQUAL DIFF AND OR NOT
+%token INT FLOAT BOOL STRING ID EOFF
 
-%token INT FLOAT /* tokens and types */
+%left OR
+%left AND
+%left NOT  
+%left '+' '-'
+%left '*' '/' '%'
+%left UMINUS 
 
-%token STR LEFT_PARENTHESIS RIGHT_PARENTHESIS
-%token EQUAL_OP LEQ_OP LESSER_OP GEQ_OP GREATER_OP DIFF_OP ASSIGN_OP
-%token NOT_OP
-%token SEMICOLON COMMA DOT EOFF BOOL STRING ID
+%%     
 
-%left OR_OP
-%left AND_OP  
-%left SUM_OP DIF_OP
-%left MULTI_OP DIV_OP MOD_OP
-%left UMINUS  /*supplies precedence for unary minus */
-%%                   /* beginning of rules section */
 lines : lines expr ';'
-| lines ';'
-| /* empty */
-;
-expr : '(' expr ')' { printf ("(%s)", $2); }
-     | expr MULTI_OP expr
-     | expr DIV_OP expr
-     | expr MOD_OP expr
-     | expr SUM_OP expr
-     | expr DIF_OP expr
-     | expr AND_OP expr
-     | expr OR_OP expr
-     | DIF_OP expr %prec UMINUS
+      | lines ';'
+      | /* empty */
+      ;
+
+expr : '(' expr ')'
+     | expr '*' expr
+     | expr '/' expr
+     | expr '%' expr
+     | expr '+' expr
+     | expr '-' expr
+     | expr OR expr
+     | expr AND expr
+     | expr NOT expr
+     | '-' expr %prec UMINUS
      | simple_expr
      ;
+
 simple_expr : INT
             | FLOAT 
+            | STRING
+            | BOOL
             ;
 %%
-main()
+main() 
 {
  return(yyparse());
 }
@@ -58,25 +60,5 @@ yywrap()
 }
 
 
-/*
-
-simple_expr : STR { $$ = regs[$1]; }
-            | INT {$$ = (float) $1;}
-            | FLOAT 
-            | BOOL {$$ = $1;}
-            ;
-
-expr : LEFT_PARENTHESIS expr RIGHT_PARENTHESIS { $$ = $2; }
-     | expr MULTI_OP expr { $$ = $1 * $3; }
-     | expr DIV_OP expr { $$ = $1 / $3; }
-     | expr MOD_OP expr { $$ = $1 % $3; }
-     | expr SUM_OP expr { $$ = $1 + $3; }
-     | expr DIF_OP expr { $$ = $1 - $3; }
-     | expr AND_OP expr { $$ = $1 & $3; }
-     | expr OR_OP expr { $$ = $1 | $3; }
-     | DIF_OP expr %prec UMINUS { $$ = -$2; }
-     | simple_expr
-
-*/
 
 

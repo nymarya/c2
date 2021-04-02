@@ -49,79 +49,77 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    INT = 258,
-    FLOAT = 259,
-    STR = 260,
-    LEFT_PARENTHESIS = 261,
-    RIGHT_PARENTHESIS = 262,
-    EQUAL_OP = 263,
-    LEQ_OP = 264,
-    LESSER_OP = 265,
-    GEQ_OP = 266,
-    GREATER_OP = 267,
-    DIFF_OP = 268,
-    ASSIGN_OP = 269,
-    NOT_OP = 270,
-    SEMICOLON = 271,
-    COMMA = 272,
-    DOT = 273,
-    EOFF = 274,
-    BOOL = 275,
-    STRING = 276,
-    ID = 277,
-    OR_OP = 278,
-    AND_OP = 279,
-    SUM_OP = 280,
-    DIF_OP = 281,
-    MULTI_OP = 282,
-    DIV_OP = 283,
-    MOD_OP = 284,
-    UMINUS = 285
+    ELSE = 258,
+    IF = 259,
+    RETURN = 260,
+    LOOP = 261,
+    BREAK = 262,
+    WHEN = 263,
+    STRUCT = 264,
+    PRINT_FUNCTION = 265,
+    INPUT_FUNCTION = 266,
+    MALLOC_FUNCTION = 267,
+    POW_FUNCTION = 268,
+    FREE_FUNCTION = 269,
+    INT_TYPE = 270,
+    FLOAT_TYPE = 271,
+    CHAR_TYPE = 272,
+    VOID_TYPE = 273,
+    BOOL_TYPE = 274,
+    STRING_TYPE = 275,
+    GEQ = 276,
+    LEQ = 277,
+    EQUAL = 278,
+    DIFF = 279,
+    AND = 280,
+    OR = 281,
+    NOT = 282,
+    INT = 283,
+    FLOAT = 284,
+    BOOL = 285,
+    STRING = 286,
+    ID = 287,
+    EOFF = 288,
+    UMINUS = 289
   };
 #endif
 /* Tokens.  */
-#define INT 258
-#define FLOAT 259
-#define STR 260
-#define LEFT_PARENTHESIS 261
-#define RIGHT_PARENTHESIS 262
-#define EQUAL_OP 263
-#define LEQ_OP 264
-#define LESSER_OP 265
-#define GEQ_OP 266
-#define GREATER_OP 267
-#define DIFF_OP 268
-#define ASSIGN_OP 269
-#define NOT_OP 270
-#define SEMICOLON 271
-#define COMMA 272
-#define DOT 273
-#define EOFF 274
-#define BOOL 275
-#define STRING 276
-#define ID 277
-#define OR_OP 278
-#define AND_OP 279
-#define SUM_OP 280
-#define DIF_OP 281
-#define MULTI_OP 282
-#define DIV_OP 283
-#define MOD_OP 284
-#define UMINUS 285
+#define ELSE 258
+#define IF 259
+#define RETURN 260
+#define LOOP 261
+#define BREAK 262
+#define WHEN 263
+#define STRUCT 264
+#define PRINT_FUNCTION 265
+#define INPUT_FUNCTION 266
+#define MALLOC_FUNCTION 267
+#define POW_FUNCTION 268
+#define FREE_FUNCTION 269
+#define INT_TYPE 270
+#define FLOAT_TYPE 271
+#define CHAR_TYPE 272
+#define VOID_TYPE 273
+#define BOOL_TYPE 274
+#define STRING_TYPE 275
+#define GEQ 276
+#define LEQ 277
+#define EQUAL 278
+#define DIFF 279
+#define AND 280
+#define OR 281
+#define NOT 282
+#define INT 283
+#define FLOAT 284
+#define BOOL 285
+#define STRING 286
+#define ID 287
+#define EOFF 288
+#define UMINUS 289
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-union YYSTYPE
-{
-#line 9 "calc.yacc"
-        /* type of ’yylval’ (stack type) */
-  int integer; /* type name is YYSTYPE */
-  float real;  /* default #define YYSTYPE int ple type */
-
-#line 122 "y.tab.h"
-
-};
-typedef union YYSTYPE YYSTYPE;
+typedef int YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif
