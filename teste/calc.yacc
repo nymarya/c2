@@ -26,6 +26,35 @@ lines : lines expr ';'
       | /* empty */
       ;
 
+statements : statement statements | /* empty */ ;
+statement  : type ID ';'
+           | ID id_stmt
+           | '*' ID lval '=' expr ';'
+           | PRINT_FUNCTION '(' opt_arguments ')' ':'
+           | INPUT_FUNCTION '(' opt_arguments ')' ';'
+           | MALLOC_FUNCTION '(' opt_arguments ')' ';'
+           | FREE_FUNCTION '(' opt_arguments ')' ';'
+           | POW_FUNCTION '(' opt_arguments ')' ';'
+           | condition_stmt | loop_stmt | return_stmt ';' | exit_stmt ';' 
+           | block /* precisa? */
+           ;
+
+id_stmt : lval '=' expr ';' 
+        | '(' opt_arguments ')' ';'
+        | ID ';'
+        ;
+      
+opt_arguments : arguments | /* empty */ ;
+arguments : argument opt_argument;
+opt_argument : ',' argument | /* empty */ ;
+argument : expr ; /* precisa? */
+
+condition_stmt : IF '(' expr ')' block condition_stmt_opt ;
+condition_stmt_opt : ELSE block | /*empty*/ ;
+loop_stmt : LOOP block ;
+exit_stmt : BREAK WHEN '(' expr ')' ;
+return_stmt : RETURN expr;
+
 expr : '(' expr ')'
      | expr '*' expr
      | expr '/' expr
