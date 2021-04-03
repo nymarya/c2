@@ -21,18 +21,26 @@ int base;
 %left '*' '/' '%'
 %left UMINUS 
 
+
+%nonassoc LOWER_THAN_ELSE
+%nonassoc ELSE
+
+%nonassoc LOWER_THAN_X
+%nonassoc '['
+%nonassoc '.'
+
 %start program
 %%     
 
 
 program : declaration program
         | declaration
-        | EOFF
         ;
 
 declaration : struct
             | function
             | global_statement
+            | EOFF
             ;
 
 struct : STRUCT ID struct_block
@@ -64,7 +72,7 @@ parameter : type ID
 block : '{' statements '}'
       ;
 
-global_statement :  declaration_stmt ';'
+global_statement : declaration_stmt ';'
                  | assign_stmt ';'
                  ;
 
@@ -108,7 +116,7 @@ declaration_stmt : type ID
 assign_stmt : lval '=' expr 
             ;
 
-condition_stmt : IF '(' expr ')' statement 
+condition_stmt : IF '(' expr ')' statement %prec LOWER_THAN_ELSE
                | IF '(' expr ')' statement ELSE statement
                ;
 
@@ -141,8 +149,8 @@ expr : '(' expr ')'
      ;
 
 lval : ID
-     | lval '[' expr ']'
-     | lval '.' lval
+     | lval '[' expr ']' %prec LOWER_THAN_X
+     | lval '.' ID
      | '*' lval
      ;
 
@@ -160,8 +168,9 @@ literal : INT
 type : primitive_type
      | ID
      | type '*'
-     | type '[' ']'
      ;
+
+
 
 primitive_type : INT_TYPE
                | FLOAT_TYPE
