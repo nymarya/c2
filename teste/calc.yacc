@@ -14,7 +14,9 @@ int base;
 
 %left OR
 %left AND
-%left NOT  
+%left NOT
+%left EQUAL DIFF
+%left '<' '>' GEQ LEQ 
 %left '+' '-'
 %left '*' '/' '%'
 %left UMINUS 
@@ -64,14 +66,29 @@ expr : '(' expr ')'
      | expr OR expr
      | expr AND expr
      | expr NOT expr
+     | expr EQUAL expr
+     | expr DIFF expr
+     | expr '<' expr
+     | expr '>' expr
+     | expr LEQ expr
+     | expr GEQ expr
      | '-' expr %prec UMINUS
      | simple_expr
+     | 
+     ;
+
+lval : ID
+     | lval '[' expr ']'
+     | lval '.' lval
+     | '*' lval
      ;
 
 simple_expr : INT
             | FLOAT 
             | STRING
-            | BOOL
+            | BOOL /*Isso deveria ser trocado para type, n?*/
+            | lval
+            | function_call_stmt /*Deixar assim ou substituir pelos nomes das funções?*/
             ;
 %%
 main() 
