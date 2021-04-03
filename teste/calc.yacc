@@ -24,10 +24,6 @@ int base;
 %start program
 %%     
 
-lines : lines expr ';'
-      | lines ';'
-      | /* empty */
-      ;
 
 program : declaration program
         | declaration
@@ -91,7 +87,6 @@ function_id : ID
             | PRINT_FUNCTION 
             | INPUT_FUNCTION 
             | MALLOC_FUNCTION 
-            | FREE_FUNCTION 
             | FREE_FUNCTION 
             | POW_FUNCTION 
             ;

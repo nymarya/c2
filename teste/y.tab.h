@@ -1,9 +1,8 @@
 /* A Bison parser, made by GNU Bison 3.5.1.  */
 
-/* Bison interface for Yacc-like parsers in C
+/* Skeleton interface for Bison GLR parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2020 Free Software Foundation,
-   Inc.
+   Copyright (C) 2002-2015, 2018-2020 Free Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,9 +29,6 @@
 
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
-
-/* Undocumented macros, especially those whose name start with YY_,
-   are private implementation details.  Do not rely on them.  */
 
 #ifndef YY_YY_Y_TAB_H_INCLUDED
 # define YY_YY_Y_TAB_H_INCLUDED
@@ -83,39 +79,6 @@ extern int yydebug;
     UMINUS = 289
   };
 #endif
-/* Tokens.  */
-#define ELSE 258
-#define IF 259
-#define RETURN 260
-#define LOOP 261
-#define BREAK 262
-#define WHEN 263
-#define STRUCT 264
-#define PRINT_FUNCTION 265
-#define INPUT_FUNCTION 266
-#define MALLOC_FUNCTION 267
-#define POW_FUNCTION 268
-#define FREE_FUNCTION 269
-#define INT_TYPE 270
-#define FLOAT_TYPE 271
-#define CHAR_TYPE 272
-#define VOID_TYPE 273
-#define BOOL_TYPE 274
-#define STRING_TYPE 275
-#define GEQ 276
-#define LEQ 277
-#define EQUAL 278
-#define DIFF 279
-#define AND 280
-#define OR 281
-#define NOT 282
-#define INT 283
-#define FLOAT 284
-#define BOOL 285
-#define STRING 286
-#define ID 287
-#define EOFF 288
-#define UMINUS 289
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
