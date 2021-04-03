@@ -19,6 +19,9 @@ int c;
 
 int coluna = 1;
 int yycol = 0;
+
+extern int lin;
+extern int col;
 %}
 
 %option yylineno
@@ -46,50 +49,74 @@ int yycol = 0;
 
 else {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return ELSE;} 
 
 if {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return IF;} 
 
 return {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return RETURN;} 
 
 loop {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return LOOP;} 
 
 break {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return BREAK;} 
 
 when {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return WHEN;} 
 
 struct {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return STRUCT;}
 
 print {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return PRINT_FUNCTION;}
 
 input {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return INPUT_FUNCTION;}
 
 malloc {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return MALLOC_FUNCTION;} 
 
 pow {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return POW_FUNCTION;}
 
 free {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return FREE_FUNCTION;} 
 
 
@@ -97,158 +124,233 @@ return FREE_FUNCTION;}
 
 int {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return INT_TYPE;}
 
 float {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return FLOAT_TYPE;}
 
 char {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return CHAR_TYPE;}
 
 void {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return VOID_TYPE;}
 
 bool {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return BOOL_TYPE;}
 
 "string" {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return STRING_TYPE;}
 
      /* OPERADORES */
 
 "+" {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 //yylval='+';
 return '+';}
 
 "-" {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 //yylval='-';
 return '-';}
 
 "*" {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return '*';}
 
 "/" {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return '/';}
 
 "%" {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return '%';}
 
 "<=" {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return LEQ;}
 
 "<" {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return '<';}
 
 ">=" {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return GEQ;}
 
 ">" {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return '>';}
 
 "==" {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return EQUAL;}
 
 "!=" {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return DIFF;}
 
 "=" {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return '=';}
 
 "&&" {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return AND;}
 
 "||" {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return OR;}
 
 "!" {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return NOT;}
 
     /* SÍMBOLOS */
 
 ";" {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return ';';}
 
 "," {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return ',';}
 
 "." {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return '.';}
 
 "(" {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return '(';}
 
 ")" {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return ')';}
 
 "[" {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return '[';}
 
 "]" {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return ']';}
 
 "{" {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return '{';}
 
 "}" {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return '}';}
 
    /* REGEX */
 
-{WHITESPACE}+|{newline}|{TAB}+ {coluna+=yyleng;}
+{WHITESPACE}+|{newline}|{TAB}+ {coluna+=yyleng;
+lin = yylineno;
+col = coluna;}
  
 {digit}+ {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return INT;}
 
 {float} {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return FLOAT;}
 
 {bool} {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return BOOL;}
 
 {STR} {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return STRING;}
 
 {ID} {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return ID;}
 
 <<EOF>> {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return 0;}
 
 . {printf("(%d,%d,LEXICAL_ERROR,\"%s\")\n",yylineno,coluna,yytext); return 0;}
 
 %%
+

@@ -2,6 +2,9 @@
 #include <stdio.h>
 int regs[26];
 int base;
+
+int lin, col;
+
 %}
 
 /* https://cse.iitkgp.ac.in/~goutam/compiler/lect/lect8.pdf */
@@ -180,9 +183,10 @@ primitive_type : INT_TYPE
                ;
 
 %%
+
 extern FILE *yyin;
 
-main (int argc, char *argv[])
+int main (int argc, char *argv[])
 {
   int x = yyparse(); 
   if (x == 0)
@@ -191,12 +195,12 @@ main (int argc, char *argv[])
     printf("Error!\n");
 
 }
-yyerror(s)
+int yyerror(s)
 char *s;
 {
-  fprintf(stderr, "%s\n",s);
+  fprintf(stderr, "%s at (%d,%d)\n",s,lin,col);
 }
-yywrap()
+int yywrap()
 {
   return(1);
 }

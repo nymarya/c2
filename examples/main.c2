@@ -12,6 +12,7 @@ void main (int x){
 
   int a;
 
+
   a = pow(a,2);
 
   if (a){}

@@ -560,9 +560,12 @@ int c;
 
 int coluna = 1;
 int yycol = 0;
-#line 564 "lex.yy.c"
 
-#line 566 "lex.yy.c"
+extern int lin;
+extern int col;
+#line 567 "lex.yy.c"
+
+#line 569 "lex.yy.c"
 
 #define INITIAL 0
 #define COMMENT 1
@@ -780,10 +783,10 @@ YY_DECL
 		}
 
 	{
-#line 27 "calc.lex"
+#line 30 "calc.lex"
 
 
-#line 787 "lex.yy.c"
+#line 790 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -853,7 +856,7 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 29 "calc.lex"
+#line 32 "calc.lex"
 {coluna = 1;}
 	YY_BREAK
 /* COMENTÁRIO
@@ -862,384 +865,482 @@ YY_RULE_SETUP
      */
 case 2:
 YY_RULE_SETUP
-#line 36 "calc.lex"
+#line 39 "calc.lex"
 { BEGIN(COMMENT);}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 38 "calc.lex"
+#line 41 "calc.lex"
 { BEGIN(INITIAL); }
 	YY_BREAK
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
-#line 40 "calc.lex"
+#line 43 "calc.lex"
 
 	YY_BREAK
 case YY_STATE_EOF(COMMENT):
-#line 42 "calc.lex"
+#line 45 "calc.lex"
 { printf("(%d,ERROR,\"/*\")\n", yylineno); return 0; }
 	YY_BREAK
 /* COMANDOS */
 case 5:
 YY_RULE_SETUP
-#line 47 "calc.lex"
+#line 50 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return ELSE;} 
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 51 "calc.lex"
+#line 56 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return IF;} 
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 55 "calc.lex"
+#line 62 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return RETURN;} 
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 59 "calc.lex"
+#line 68 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return LOOP;} 
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 63 "calc.lex"
+#line 74 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return BREAK;} 
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 67 "calc.lex"
+#line 80 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return WHEN;} 
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 71 "calc.lex"
+#line 86 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return STRUCT;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 75 "calc.lex"
+#line 92 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return PRINT_FUNCTION;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 79 "calc.lex"
+#line 98 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return INPUT_FUNCTION;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 83 "calc.lex"
+#line 104 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return MALLOC_FUNCTION;} 
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 87 "calc.lex"
+#line 110 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return POW_FUNCTION;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 91 "calc.lex"
+#line 116 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return FREE_FUNCTION;} 
 	YY_BREAK
 /* TIPOS PRIMITIVOS */
 case 17:
 YY_RULE_SETUP
-#line 98 "calc.lex"
+#line 125 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return INT_TYPE;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 102 "calc.lex"
+#line 131 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return FLOAT_TYPE;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 106 "calc.lex"
+#line 137 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return CHAR_TYPE;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 110 "calc.lex"
+#line 143 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return VOID_TYPE;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 114 "calc.lex"
+#line 149 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return BOOL_TYPE;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 118 "calc.lex"
+#line 155 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return STRING_TYPE;}
 	YY_BREAK
 /* OPERADORES */
 case 23:
 YY_RULE_SETUP
-#line 124 "calc.lex"
+#line 163 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 //yylval='+';
 return '+';}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 129 "calc.lex"
+#line 170 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 //yylval='-';
 return '-';}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 134 "calc.lex"
+#line 177 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return '*';}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 138 "calc.lex"
+#line 183 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return '/';}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 142 "calc.lex"
+#line 189 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return '%';}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 146 "calc.lex"
+#line 195 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return LEQ;}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 150 "calc.lex"
+#line 201 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return '<';}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 154 "calc.lex"
+#line 207 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return GEQ;}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 158 "calc.lex"
+#line 213 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return '>';}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 162 "calc.lex"
+#line 219 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return EQUAL;}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 166 "calc.lex"
+#line 225 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return DIFF;}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 170 "calc.lex"
+#line 231 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return '=';}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 174 "calc.lex"
+#line 237 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return AND;}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 178 "calc.lex"
+#line 243 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return OR;}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 182 "calc.lex"
+#line 249 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return NOT;}
 	YY_BREAK
 /* SÍMBOLOS */
 case 38:
 YY_RULE_SETUP
-#line 188 "calc.lex"
+#line 257 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return ';';}
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 192 "calc.lex"
+#line 263 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return ',';}
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 196 "calc.lex"
+#line 269 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return '.';}
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 200 "calc.lex"
+#line 275 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return '(';}
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 204 "calc.lex"
+#line 281 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return ')';}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 208 "calc.lex"
+#line 287 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return '[';}
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 212 "calc.lex"
+#line 293 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return ']';}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 216 "calc.lex"
+#line 299 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return '{';}
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 220 "calc.lex"
+#line 305 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return '}';}
 	YY_BREAK
 /* REGEX */
 case 47:
 /* rule 47 can match eol */
 YY_RULE_SETUP
-#line 226 "calc.lex"
-{coluna+=yyleng;}
+#line 313 "calc.lex"
+{coluna+=yyleng;
+lin = yylineno;
+col = coluna;}
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 228 "calc.lex"
+#line 317 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return INT;}
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 232 "calc.lex"
+#line 323 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return FLOAT;}
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 236 "calc.lex"
+#line 329 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return BOOL;}
 	YY_BREAK
 case 51:
 /* rule 51 can match eol */
 YY_RULE_SETUP
-#line 240 "calc.lex"
+#line 335 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return STRING;}
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 244 "calc.lex"
+#line 341 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return ID;}
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 248 "calc.lex"
+#line 347 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
+lin = yylineno;
+col = coluna;
 return 0;}
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 252 "calc.lex"
+#line 353 "calc.lex"
 {printf("(%d,%d,LEXICAL_ERROR,\"%s\")\n",yylineno,coluna,yytext); return 0;}
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 254 "calc.lex"
+#line 355 "calc.lex"
 ECHO;
 	YY_BREAK
-#line 1243 "lex.yy.c"
+#line 1344 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2254,5 +2355,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 254 "calc.lex"
+#line 355 "calc.lex"
+
+
 

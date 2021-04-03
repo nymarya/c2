@@ -72,7 +72,10 @@
 int regs[26];
 int base;
 
-#line 76 "y.tab.c"
+int lin, col;
+
+
+#line 79 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -571,15 +574,15 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    37,    37,    38,    41,    42,    43,    46,    49,    51,
-      52,    55,    58,    61,    62,    65,    66,    69,    72,    75,
-      76,    79,    80,    83,    84,    85,    86,    87,    87,    87,
-      88,    91,    94,    95,    96,    97,    98,    99,   102,   103,
-     106,   107,   110,   113,   116,   119,   120,   123,   126,   129,
-     132,   133,   134,   135,   136,   137,   138,   139,   140,   141,
-     142,   143,   144,   145,   146,   147,   148,   151,   152,   153,
-     154,   157,   158,   159,   162,   163,   164,   165,   168,   169,
-     170,   175,   176,   177,   178,   179
+       0,    40,    40,    41,    44,    45,    46,    49,    52,    54,
+      55,    58,    61,    64,    65,    68,    69,    72,    75,    78,
+      79,    82,    83,    86,    87,    88,    89,    90,    90,    90,
+      91,    94,    97,    98,    99,   100,   101,   102,   105,   106,
+     109,   110,   113,   116,   119,   122,   123,   126,   129,   132,
+     135,   136,   137,   138,   139,   140,   141,   142,   143,   144,
+     145,   146,   147,   148,   149,   150,   151,   154,   155,   156,
+     157,   160,   161,   162,   165,   166,   167,   168,   171,   172,
+     173,   178,   179,   180,   181,   182
 };
 #endif
 
@@ -1504,7 +1507,7 @@ yyreduce:
   switch (yyn)
     {
 
-#line 1508 "y.tab.c"
+#line 1511 "y.tab.c"
 
       default: break;
     }
@@ -1736,11 +1739,12 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 182 "calc.yacc"
+#line 185 "calc.yacc"
+
 
 extern FILE *yyin;
 
-main (int argc, char *argv[])
+int main (int argc, char *argv[])
 {
   int x = yyparse(); 
   if (x == 0)
@@ -1749,12 +1753,12 @@ main (int argc, char *argv[])
     printf("Error!\n");
 
 }
-yyerror(s)
+int yyerror(s)
 char *s;
 {
-  fprintf(stderr, "%s\n",s);
+  fprintf(stderr, "%s at (%d,%d)\n",s,lin,col);
 }
-yywrap()
+int yywrap()
 {
   return(1);
 }
