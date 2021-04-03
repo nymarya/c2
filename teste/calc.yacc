@@ -65,7 +65,7 @@ expr : '(' expr ')'
      | expr '-' expr
      | expr OR expr
      | expr AND expr
-     | expr NOT expr
+     | NOT expr
      | expr EQUAL expr
      | expr DIFF expr
      | expr '<' expr
@@ -74,7 +74,7 @@ expr : '(' expr ')'
      | expr GEQ expr
      | '-' expr %prec UMINUS
      | simple_expr
-     | 
+     |                      /*É assim que define uma regra vazia?*/
      ;
 
 lval : ID
