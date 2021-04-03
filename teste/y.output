@@ -1,19 +1,22 @@
 Terminais sem uso na gramática
 
     CHAR_TYPE
+    EOFF
+    PROGRAM
 
 
 Gramática
 
-    0 $accept: program $end
+    0 $accept: pgrm $end
 
-    1 program: declaration program
-    2        | declaration
+    1 pgrm: program '*'
 
-    3 declaration: struct
-    4            | function
-    5            | global_statement
-    6            | EOFF
+    2 program: declaration program
+    3        | declaration
+
+    4 declaration: struct
+    5            | function
+    6            | global_statement
 
     7 struct: STRUCT ID struct_block
 
@@ -130,7 +133,7 @@ Terminais, com as regras onde eles aparecem
     '%' (37) 53
     '(' (40) 12 31 45 46 48 50
     ')' (41) 12 31 45 46 48 50
-    '*' (42) 51 70 80
+    '*' (42) 1 51 70 80
     '+' (43) 54
     ',' (44) 16 41
     '-' (45) 55 65
@@ -175,114 +178,119 @@ Terminais, com as regras onde eles aparecem
     BOOL (285) 77
     STRING (286) 76
     ID (287) 7 11 17 32 43 67 69 79
-    EOFF (288) 6
+    EOFF (288)
     UMINUS (289)
-    LOWER_THAN_ELSE (290)
-    LOWER_THAN_X (291)
+    LOWER_THAN_PROGRAM (290)
+    PROGRAM (291)
+    LOWER_THAN_ELSE (292)
+    LOWER_THAN_X (293)
 
 
 Não terminais com as regras onde eles aparecem
 
-    $accept (54)
+    $accept (56)
         à esquerda: 0
-    program (55)
-        à esquerda: 1 2
-        à direita: 0 1
-    declaration (56)
-        à esquerda: 3 4 5 6
+    pgrm (57)
+        à esquerda: 1
+        à direita: 0
+    program (58)
+        à esquerda: 2 3
         à direita: 1 2
-    struct (57)
+    declaration (59)
+        à esquerda: 4 5 6
+        à direita: 2 3
+    struct (60)
         à esquerda: 7
-        à direita: 3
-    struct_block (58)
+        à direita: 4
+    struct_block (61)
         à esquerda: 8
         à direita: 7
-    attributes (59)
+    attributes (62)
         à esquerda: 9 10
         à direita: 8 9
-    attribute (60)
+    attribute (63)
         à esquerda: 11
         à direita: 9
-    function (61)
+    function (64)
         à esquerda: 12
-        à direita: 4
-    opt_parameters (62)
+        à direita: 5
+    opt_parameters (65)
         à esquerda: 13 14
         à direita: 12
-    parameters (63)
+    parameters (66)
         à esquerda: 15 16
         à direita: 13 16
-    parameter (64)
+    parameter (67)
         à esquerda: 17
         à direita: 15 16
-    block (65)
+    block (68)
         à esquerda: 18
         à direita: 12 30 47
-    global_statement (66)
+    global_statement (69)
         à esquerda: 19 20
-        à direita: 5
-    statements (67)
+        à direita: 6
+    statements (70)
         à esquerda: 21 22
         à direita: 18 21
-    statement (68)
+    statement (71)
         à esquerda: 23 24 25 26 27 28 29 30
         à direita: 21 45 46
-    function_call_stmt (69)
+    function_call_stmt (72)
         à esquerda: 31
         à direita: 25 73
-    function_id (70)
+    function_id (73)
         à esquerda: 32 33 34 35 36 37
         à direita: 12 31
-    opt_arguments (71)
+    opt_arguments (74)
         à esquerda: 38 39
         à direita: 31
-    arguments (72)
+    arguments (75)
         à esquerda: 40 41
         à direita: 38 41
-    argument (73)
+    argument (76)
         à esquerda: 42
         à direita: 40 41
-    declaration_stmt (74)
+    declaration_stmt (77)
         à esquerda: 43
         à direita: 19 23
-    assign_stmt (75)
+    assign_stmt (78)
         à esquerda: 44
         à direita: 20 24
-    condition_stmt (76)
+    condition_stmt (79)
         à esquerda: 45 46
         à direita: 26
-    loop_stmt (77)
+    loop_stmt (80)
         à esquerda: 47
         à direita: 27
-    exit_stmt (78)
+    exit_stmt (81)
         à esquerda: 48
         à direita: 29
-    return_stmt (79)
+    return_stmt (82)
         à esquerda: 49
         à direita: 28
-    expr (80)
+    expr (83)
         à esquerda: 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66
         à direita: 42 44 45 46 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 68
-    lval (81)
+    lval (84)
         à esquerda: 67 68 69 70
         à direita: 44 68 69 70 72
-    simple_expr (82)
+    simple_expr (85)
         à esquerda: 71 72 73
         à direita: 66
-    literal (83)
+    literal (86)
         à esquerda: 74 75 76 77
         à direita: 71
-    type (84)
+    type (87)
         à esquerda: 78 79 80
         à direita: 11 12 17 43 80
-    primitive_type (85)
+    primitive_type (88)
         à esquerda: 81 82 83 84 85
         à direita: 78
 
 
 Estado 0
 
-    0 $accept: . program $end
+    0 $accept: . pgrm $end
 
     STRUCT       deslocar, e ir ao estado 1
     INT_TYPE     deslocar, e ir ao estado 2
@@ -291,9 +299,9 @@ Estado 0
     BOOL_TYPE    deslocar, e ir ao estado 5
     STRING_TYPE  deslocar, e ir ao estado 6
     ID           deslocar, e ir ao estado 7
-    EOFF         deslocar, e ir ao estado 8
-    '*'          deslocar, e ir ao estado 9
+    '*'          deslocar, e ir ao estado 8
 
+    pgrm              ir ao estado 9
     program           ir ao estado 10
     declaration       ir ao estado 11
     struct            ir ao estado 12
@@ -361,32 +369,32 @@ Estado 7
 
 Estado 8
 
-    6 declaration: EOFF .
-
-    $padrão  reduzir usando a regra 6 (declaration)
-
-
-Estado 9
-
    70 lval: '*' . lval
 
     ID   deslocar, e ir ao estado 21
-    '*'  deslocar, e ir ao estado 9
+    '*'  deslocar, e ir ao estado 8
 
     lval  ir ao estado 22
 
 
-Estado 10
+Estado 9
 
-    0 $accept: program . $end
+    0 $accept: pgrm . $end
 
     $end  deslocar, e ir ao estado 23
 
 
+Estado 10
+
+    1 pgrm: program . '*'
+
+    '*'  deslocar, e ir ao estado 24
+
+
 Estado 11
 
-    1 program: declaration . program
-    2        | declaration .
+    2 program: declaration . program
+    3        | declaration .
 
     STRUCT       deslocar, e ir ao estado 1
     INT_TYPE     deslocar, e ir ao estado 2
@@ -395,12 +403,10 @@ Estado 11
     BOOL_TYPE    deslocar, e ir ao estado 5
     STRING_TYPE  deslocar, e ir ao estado 6
     ID           deslocar, e ir ao estado 7
-    EOFF         deslocar, e ir ao estado 8
-    '*'          deslocar, e ir ao estado 9
 
-    $padrão  reduzir usando a regra 2 (program)
+    $padrão  reduzir usando a regra 3 (program)
 
-    program           ir ao estado 24
+    program           ir ao estado 25
     declaration       ir ao estado 11
     struct            ir ao estado 12
     function          ir ao estado 13
@@ -414,37 +420,37 @@ Estado 11
 
 Estado 12
 
-    3 declaration: struct .
-
-    $padrão  reduzir usando a regra 3 (declaration)
-
-
-Estado 13
-
-    4 declaration: function .
+    4 declaration: struct .
 
     $padrão  reduzir usando a regra 4 (declaration)
 
 
-Estado 14
+Estado 13
 
-    5 declaration: global_statement .
+    5 declaration: function .
 
     $padrão  reduzir usando a regra 5 (declaration)
+
+
+Estado 14
+
+    6 declaration: global_statement .
+
+    $padrão  reduzir usando a regra 6 (declaration)
 
 
 Estado 15
 
    19 global_statement: declaration_stmt . ';'
 
-    ';'  deslocar, e ir ao estado 25
+    ';'  deslocar, e ir ao estado 26
 
 
 Estado 16
 
    20 global_statement: assign_stmt . ';'
 
-    ';'  deslocar, e ir ao estado 26
+    ';'  deslocar, e ir ao estado 27
 
 
 Estado 17
@@ -453,9 +459,9 @@ Estado 17
    68 lval: lval . '[' expr ']'
    69     | lval . '.' ID
 
-    '['  deslocar, e ir ao estado 27
-    '.'  deslocar, e ir ao estado 28
-    '='  deslocar, e ir ao estado 29
+    '['  deslocar, e ir ao estado 28
+    '.'  deslocar, e ir ao estado 29
+    '='  deslocar, e ir ao estado 30
 
 
 Estado 18
@@ -464,15 +470,15 @@ Estado 18
    43 declaration_stmt: type . ID
    80 type: type . '*'
 
-    PRINT_FUNCTION   deslocar, e ir ao estado 30
-    INPUT_FUNCTION   deslocar, e ir ao estado 31
-    MALLOC_FUNCTION  deslocar, e ir ao estado 32
-    POW_FUNCTION     deslocar, e ir ao estado 33
-    FREE_FUNCTION    deslocar, e ir ao estado 34
-    ID               deslocar, e ir ao estado 35
-    '*'              deslocar, e ir ao estado 36
+    PRINT_FUNCTION   deslocar, e ir ao estado 31
+    INPUT_FUNCTION   deslocar, e ir ao estado 32
+    MALLOC_FUNCTION  deslocar, e ir ao estado 33
+    POW_FUNCTION     deslocar, e ir ao estado 34
+    FREE_FUNCTION    deslocar, e ir ao estado 35
+    ID               deslocar, e ir ao estado 36
+    '*'              deslocar, e ir ao estado 37
 
-    function_id  ir ao estado 37
+    function_id  ir ao estado 38
 
 
 Estado 19
@@ -486,9 +492,9 @@ Estado 20
 
     7 struct: STRUCT ID . struct_block
 
-    '{'  deslocar, e ir ao estado 38
+    '{'  deslocar, e ir ao estado 39
 
-    struct_block  ir ao estado 39
+    struct_block  ir ao estado 40
 
 
 Estado 21
@@ -504,137 +510,144 @@ Estado 22
    69     | lval . '.' ID
    70     | '*' lval .
 
-    '['  deslocar, e ir ao estado 27
-    '.'  deslocar, e ir ao estado 28
+    '['  deslocar, e ir ao estado 28
+    '.'  deslocar, e ir ao estado 29
 
     $padrão  reduzir usando a regra 70 (lval)
 
 
 Estado 23
 
-    0 $accept: program $end .
+    0 $accept: pgrm $end .
 
     $padrão  aceitar
 
 
 Estado 24
 
-    1 program: declaration program .
+    1 pgrm: program '*' .
 
-    $padrão  reduzir usando a regra 1 (program)
+    $padrão  reduzir usando a regra 1 (pgrm)
 
 
 Estado 25
+
+    2 program: declaration program .
+
+    $padrão  reduzir usando a regra 2 (program)
+
+
+Estado 26
 
    19 global_statement: declaration_stmt ';' .
 
     $padrão  reduzir usando a regra 19 (global_statement)
 
 
-Estado 26
+Estado 27
 
    20 global_statement: assign_stmt ';' .
 
     $padrão  reduzir usando a regra 20 (global_statement)
 
 
-Estado 27
+Estado 28
 
    68 lval: lval '[' . expr ']'
 
-    PRINT_FUNCTION   deslocar, e ir ao estado 30
-    INPUT_FUNCTION   deslocar, e ir ao estado 31
-    MALLOC_FUNCTION  deslocar, e ir ao estado 32
-    POW_FUNCTION     deslocar, e ir ao estado 33
-    FREE_FUNCTION    deslocar, e ir ao estado 34
-    NOT              deslocar, e ir ao estado 40
-    INT              deslocar, e ir ao estado 41
-    FLOAT            deslocar, e ir ao estado 42
-    BOOL             deslocar, e ir ao estado 43
-    STRING           deslocar, e ir ao estado 44
-    ID               deslocar, e ir ao estado 45
-    '-'              deslocar, e ir ao estado 46
-    '*'              deslocar, e ir ao estado 9
-    '('              deslocar, e ir ao estado 47
+    PRINT_FUNCTION   deslocar, e ir ao estado 31
+    INPUT_FUNCTION   deslocar, e ir ao estado 32
+    MALLOC_FUNCTION  deslocar, e ir ao estado 33
+    POW_FUNCTION     deslocar, e ir ao estado 34
+    FREE_FUNCTION    deslocar, e ir ao estado 35
+    NOT              deslocar, e ir ao estado 41
+    INT              deslocar, e ir ao estado 42
+    FLOAT            deslocar, e ir ao estado 43
+    BOOL             deslocar, e ir ao estado 44
+    STRING           deslocar, e ir ao estado 45
+    ID               deslocar, e ir ao estado 46
+    '-'              deslocar, e ir ao estado 47
+    '*'              deslocar, e ir ao estado 8
+    '('              deslocar, e ir ao estado 48
 
-    function_call_stmt  ir ao estado 48
-    function_id         ir ao estado 49
-    expr                ir ao estado 50
-    lval                ir ao estado 51
-    simple_expr         ir ao estado 52
-    literal             ir ao estado 53
-
-
-Estado 28
-
-   69 lval: lval '.' . ID
-
-    ID  deslocar, e ir ao estado 54
+    function_call_stmt  ir ao estado 49
+    function_id         ir ao estado 50
+    expr                ir ao estado 51
+    lval                ir ao estado 52
+    simple_expr         ir ao estado 53
+    literal             ir ao estado 54
 
 
 Estado 29
 
-   44 assign_stmt: lval '=' . expr
+   69 lval: lval '.' . ID
 
-    PRINT_FUNCTION   deslocar, e ir ao estado 30
-    INPUT_FUNCTION   deslocar, e ir ao estado 31
-    MALLOC_FUNCTION  deslocar, e ir ao estado 32
-    POW_FUNCTION     deslocar, e ir ao estado 33
-    FREE_FUNCTION    deslocar, e ir ao estado 34
-    NOT              deslocar, e ir ao estado 40
-    INT              deslocar, e ir ao estado 41
-    FLOAT            deslocar, e ir ao estado 42
-    BOOL             deslocar, e ir ao estado 43
-    STRING           deslocar, e ir ao estado 44
-    ID               deslocar, e ir ao estado 45
-    '-'              deslocar, e ir ao estado 46
-    '*'              deslocar, e ir ao estado 9
-    '('              deslocar, e ir ao estado 47
-
-    function_call_stmt  ir ao estado 48
-    function_id         ir ao estado 49
-    expr                ir ao estado 55
-    lval                ir ao estado 51
-    simple_expr         ir ao estado 52
-    literal             ir ao estado 53
+    ID  deslocar, e ir ao estado 55
 
 
 Estado 30
+
+   44 assign_stmt: lval '=' . expr
+
+    PRINT_FUNCTION   deslocar, e ir ao estado 31
+    INPUT_FUNCTION   deslocar, e ir ao estado 32
+    MALLOC_FUNCTION  deslocar, e ir ao estado 33
+    POW_FUNCTION     deslocar, e ir ao estado 34
+    FREE_FUNCTION    deslocar, e ir ao estado 35
+    NOT              deslocar, e ir ao estado 41
+    INT              deslocar, e ir ao estado 42
+    FLOAT            deslocar, e ir ao estado 43
+    BOOL             deslocar, e ir ao estado 44
+    STRING           deslocar, e ir ao estado 45
+    ID               deslocar, e ir ao estado 46
+    '-'              deslocar, e ir ao estado 47
+    '*'              deslocar, e ir ao estado 8
+    '('              deslocar, e ir ao estado 48
+
+    function_call_stmt  ir ao estado 49
+    function_id         ir ao estado 50
+    expr                ir ao estado 56
+    lval                ir ao estado 52
+    simple_expr         ir ao estado 53
+    literal             ir ao estado 54
+
+
+Estado 31
 
    33 function_id: PRINT_FUNCTION .
 
     $padrão  reduzir usando a regra 33 (function_id)
 
 
-Estado 31
+Estado 32
 
    34 function_id: INPUT_FUNCTION .
 
     $padrão  reduzir usando a regra 34 (function_id)
 
 
-Estado 32
+Estado 33
 
    35 function_id: MALLOC_FUNCTION .
 
     $padrão  reduzir usando a regra 35 (function_id)
 
 
-Estado 33
+Estado 34
 
    37 function_id: POW_FUNCTION .
 
     $padrão  reduzir usando a regra 37 (function_id)
 
 
-Estado 34
+Estado 35
 
    36 function_id: FREE_FUNCTION .
 
     $padrão  reduzir usando a regra 36 (function_id)
 
 
-Estado 35
+Estado 36
 
    32 function_id: ID .
    43 declaration_stmt: type ID .
@@ -643,21 +656,21 @@ Estado 35
     $padrão  reduzir usando a regra 32 (function_id)
 
 
-Estado 36
+Estado 37
 
    80 type: type '*' .
 
     $padrão  reduzir usando a regra 80 (type)
 
 
-Estado 37
+Estado 38
 
    12 function: type function_id . '(' opt_parameters ')' block
 
-    '('  deslocar, e ir ao estado 56
+    '('  deslocar, e ir ao estado 57
 
 
-Estado 38
+Estado 39
 
     8 struct_block: '{' . attributes '}'
 
@@ -666,79 +679,79 @@ Estado 38
     VOID_TYPE    deslocar, e ir ao estado 4
     BOOL_TYPE    deslocar, e ir ao estado 5
     STRING_TYPE  deslocar, e ir ao estado 6
-    ID           deslocar, e ir ao estado 57
+    ID           deslocar, e ir ao estado 58
 
     $padrão  reduzir usando a regra 10 (attributes)
 
-    attributes      ir ao estado 58
-    attribute       ir ao estado 59
-    type            ir ao estado 60
+    attributes      ir ao estado 59
+    attribute       ir ao estado 60
+    type            ir ao estado 61
     primitive_type  ir ao estado 19
 
 
-Estado 39
+Estado 40
 
     7 struct: STRUCT ID struct_block .
 
     $padrão  reduzir usando a regra 7 (struct)
 
 
-Estado 40
+Estado 41
 
    58 expr: NOT . expr
 
-    PRINT_FUNCTION   deslocar, e ir ao estado 30
-    INPUT_FUNCTION   deslocar, e ir ao estado 31
-    MALLOC_FUNCTION  deslocar, e ir ao estado 32
-    POW_FUNCTION     deslocar, e ir ao estado 33
-    FREE_FUNCTION    deslocar, e ir ao estado 34
-    NOT              deslocar, e ir ao estado 40
-    INT              deslocar, e ir ao estado 41
-    FLOAT            deslocar, e ir ao estado 42
-    BOOL             deslocar, e ir ao estado 43
-    STRING           deslocar, e ir ao estado 44
-    ID               deslocar, e ir ao estado 45
-    '-'              deslocar, e ir ao estado 46
-    '*'              deslocar, e ir ao estado 9
-    '('              deslocar, e ir ao estado 47
+    PRINT_FUNCTION   deslocar, e ir ao estado 31
+    INPUT_FUNCTION   deslocar, e ir ao estado 32
+    MALLOC_FUNCTION  deslocar, e ir ao estado 33
+    POW_FUNCTION     deslocar, e ir ao estado 34
+    FREE_FUNCTION    deslocar, e ir ao estado 35
+    NOT              deslocar, e ir ao estado 41
+    INT              deslocar, e ir ao estado 42
+    FLOAT            deslocar, e ir ao estado 43
+    BOOL             deslocar, e ir ao estado 44
+    STRING           deslocar, e ir ao estado 45
+    ID               deslocar, e ir ao estado 46
+    '-'              deslocar, e ir ao estado 47
+    '*'              deslocar, e ir ao estado 8
+    '('              deslocar, e ir ao estado 48
 
-    function_call_stmt  ir ao estado 48
-    function_id         ir ao estado 49
-    expr                ir ao estado 61
-    lval                ir ao estado 51
-    simple_expr         ir ao estado 52
-    literal             ir ao estado 53
+    function_call_stmt  ir ao estado 49
+    function_id         ir ao estado 50
+    expr                ir ao estado 62
+    lval                ir ao estado 52
+    simple_expr         ir ao estado 53
+    literal             ir ao estado 54
 
 
-Estado 41
+Estado 42
 
    74 literal: INT .
 
     $padrão  reduzir usando a regra 74 (literal)
 
 
-Estado 42
+Estado 43
 
    75 literal: FLOAT .
 
     $padrão  reduzir usando a regra 75 (literal)
 
 
-Estado 43
+Estado 44
 
    77 literal: BOOL .
 
     $padrão  reduzir usando a regra 77 (literal)
 
 
-Estado 44
+Estado 45
 
    76 literal: STRING .
 
     $padrão  reduzir usando a regra 76 (literal)
 
 
-Estado 45
+Estado 46
 
    32 function_id: ID .
    67 lval: ID .
@@ -747,75 +760,75 @@ Estado 45
     $padrão  reduzir usando a regra 67 (lval)
 
 
-Estado 46
+Estado 47
 
    65 expr: '-' . expr
 
-    PRINT_FUNCTION   deslocar, e ir ao estado 30
-    INPUT_FUNCTION   deslocar, e ir ao estado 31
-    MALLOC_FUNCTION  deslocar, e ir ao estado 32
-    POW_FUNCTION     deslocar, e ir ao estado 33
-    FREE_FUNCTION    deslocar, e ir ao estado 34
-    NOT              deslocar, e ir ao estado 40
-    INT              deslocar, e ir ao estado 41
-    FLOAT            deslocar, e ir ao estado 42
-    BOOL             deslocar, e ir ao estado 43
-    STRING           deslocar, e ir ao estado 44
-    ID               deslocar, e ir ao estado 45
-    '-'              deslocar, e ir ao estado 46
-    '*'              deslocar, e ir ao estado 9
-    '('              deslocar, e ir ao estado 47
+    PRINT_FUNCTION   deslocar, e ir ao estado 31
+    INPUT_FUNCTION   deslocar, e ir ao estado 32
+    MALLOC_FUNCTION  deslocar, e ir ao estado 33
+    POW_FUNCTION     deslocar, e ir ao estado 34
+    FREE_FUNCTION    deslocar, e ir ao estado 35
+    NOT              deslocar, e ir ao estado 41
+    INT              deslocar, e ir ao estado 42
+    FLOAT            deslocar, e ir ao estado 43
+    BOOL             deslocar, e ir ao estado 44
+    STRING           deslocar, e ir ao estado 45
+    ID               deslocar, e ir ao estado 46
+    '-'              deslocar, e ir ao estado 47
+    '*'              deslocar, e ir ao estado 8
+    '('              deslocar, e ir ao estado 48
 
-    function_call_stmt  ir ao estado 48
-    function_id         ir ao estado 49
-    expr                ir ao estado 62
-    lval                ir ao estado 51
-    simple_expr         ir ao estado 52
-    literal             ir ao estado 53
-
-
-Estado 47
-
-   50 expr: '(' . expr ')'
-
-    PRINT_FUNCTION   deslocar, e ir ao estado 30
-    INPUT_FUNCTION   deslocar, e ir ao estado 31
-    MALLOC_FUNCTION  deslocar, e ir ao estado 32
-    POW_FUNCTION     deslocar, e ir ao estado 33
-    FREE_FUNCTION    deslocar, e ir ao estado 34
-    NOT              deslocar, e ir ao estado 40
-    INT              deslocar, e ir ao estado 41
-    FLOAT            deslocar, e ir ao estado 42
-    BOOL             deslocar, e ir ao estado 43
-    STRING           deslocar, e ir ao estado 44
-    ID               deslocar, e ir ao estado 45
-    '-'              deslocar, e ir ao estado 46
-    '*'              deslocar, e ir ao estado 9
-    '('              deslocar, e ir ao estado 47
-
-    function_call_stmt  ir ao estado 48
-    function_id         ir ao estado 49
+    function_call_stmt  ir ao estado 49
+    function_id         ir ao estado 50
     expr                ir ao estado 63
-    lval                ir ao estado 51
-    simple_expr         ir ao estado 52
-    literal             ir ao estado 53
+    lval                ir ao estado 52
+    simple_expr         ir ao estado 53
+    literal             ir ao estado 54
 
 
 Estado 48
+
+   50 expr: '(' . expr ')'
+
+    PRINT_FUNCTION   deslocar, e ir ao estado 31
+    INPUT_FUNCTION   deslocar, e ir ao estado 32
+    MALLOC_FUNCTION  deslocar, e ir ao estado 33
+    POW_FUNCTION     deslocar, e ir ao estado 34
+    FREE_FUNCTION    deslocar, e ir ao estado 35
+    NOT              deslocar, e ir ao estado 41
+    INT              deslocar, e ir ao estado 42
+    FLOAT            deslocar, e ir ao estado 43
+    BOOL             deslocar, e ir ao estado 44
+    STRING           deslocar, e ir ao estado 45
+    ID               deslocar, e ir ao estado 46
+    '-'              deslocar, e ir ao estado 47
+    '*'              deslocar, e ir ao estado 8
+    '('              deslocar, e ir ao estado 48
+
+    function_call_stmt  ir ao estado 49
+    function_id         ir ao estado 50
+    expr                ir ao estado 64
+    lval                ir ao estado 52
+    simple_expr         ir ao estado 53
+    literal             ir ao estado 54
+
+
+Estado 49
 
    73 simple_expr: function_call_stmt .
 
     $padrão  reduzir usando a regra 73 (simple_expr)
 
 
-Estado 49
+Estado 50
 
    31 function_call_stmt: function_id . '(' opt_arguments ')'
 
-    '('  deslocar, e ir ao estado 64
+    '('  deslocar, e ir ao estado 65
 
 
-Estado 50
+Estado 51
 
    51 expr: expr . '*' expr
    52     | expr . '/' expr
@@ -832,56 +845,56 @@ Estado 50
    64     | expr . GEQ expr
    68 lval: lval '[' expr . ']'
 
-    GEQ    deslocar, e ir ao estado 65
-    LEQ    deslocar, e ir ao estado 66
-    EQUAL  deslocar, e ir ao estado 67
-    DIFF   deslocar, e ir ao estado 68
-    AND    deslocar, e ir ao estado 69
-    OR     deslocar, e ir ao estado 70
-    '<'    deslocar, e ir ao estado 71
-    '>'    deslocar, e ir ao estado 72
-    '+'    deslocar, e ir ao estado 73
-    '-'    deslocar, e ir ao estado 74
-    '*'    deslocar, e ir ao estado 75
-    '/'    deslocar, e ir ao estado 76
-    '%'    deslocar, e ir ao estado 77
-    ']'    deslocar, e ir ao estado 78
+    GEQ    deslocar, e ir ao estado 66
+    LEQ    deslocar, e ir ao estado 67
+    EQUAL  deslocar, e ir ao estado 68
+    DIFF   deslocar, e ir ao estado 69
+    AND    deslocar, e ir ao estado 70
+    OR     deslocar, e ir ao estado 71
+    '<'    deslocar, e ir ao estado 72
+    '>'    deslocar, e ir ao estado 73
+    '+'    deslocar, e ir ao estado 74
+    '-'    deslocar, e ir ao estado 75
+    '*'    deslocar, e ir ao estado 76
+    '/'    deslocar, e ir ao estado 77
+    '%'    deslocar, e ir ao estado 78
+    ']'    deslocar, e ir ao estado 79
 
 
-Estado 51
+Estado 52
 
    68 lval: lval . '[' expr ']'
    69     | lval . '.' ID
    72 simple_expr: lval .
 
-    '['  deslocar, e ir ao estado 27
-    '.'  deslocar, e ir ao estado 28
+    '['  deslocar, e ir ao estado 28
+    '.'  deslocar, e ir ao estado 29
 
     $padrão  reduzir usando a regra 72 (simple_expr)
 
 
-Estado 52
+Estado 53
 
    66 expr: simple_expr .
 
     $padrão  reduzir usando a regra 66 (expr)
 
 
-Estado 53
+Estado 54
 
    71 simple_expr: literal .
 
     $padrão  reduzir usando a regra 71 (simple_expr)
 
 
-Estado 54
+Estado 55
 
    69 lval: lval '.' ID .
 
     $padrão  reduzir usando a regra 69 (lval)
 
 
-Estado 55
+Estado 56
 
    44 assign_stmt: lval '=' expr .
    51 expr: expr . '*' expr
@@ -898,24 +911,24 @@ Estado 55
    63     | expr . LEQ expr
    64     | expr . GEQ expr
 
-    GEQ    deslocar, e ir ao estado 65
-    LEQ    deslocar, e ir ao estado 66
-    EQUAL  deslocar, e ir ao estado 67
-    DIFF   deslocar, e ir ao estado 68
-    AND    deslocar, e ir ao estado 69
-    OR     deslocar, e ir ao estado 70
-    '<'    deslocar, e ir ao estado 71
-    '>'    deslocar, e ir ao estado 72
-    '+'    deslocar, e ir ao estado 73
-    '-'    deslocar, e ir ao estado 74
-    '*'    deslocar, e ir ao estado 75
-    '/'    deslocar, e ir ao estado 76
-    '%'    deslocar, e ir ao estado 77
+    GEQ    deslocar, e ir ao estado 66
+    LEQ    deslocar, e ir ao estado 67
+    EQUAL  deslocar, e ir ao estado 68
+    DIFF   deslocar, e ir ao estado 69
+    AND    deslocar, e ir ao estado 70
+    OR     deslocar, e ir ao estado 71
+    '<'    deslocar, e ir ao estado 72
+    '>'    deslocar, e ir ao estado 73
+    '+'    deslocar, e ir ao estado 74
+    '-'    deslocar, e ir ao estado 75
+    '*'    deslocar, e ir ao estado 76
+    '/'    deslocar, e ir ao estado 77
+    '%'    deslocar, e ir ao estado 78
 
     $padrão  reduzir usando a regra 44 (assign_stmt)
 
 
-Estado 56
+Estado 57
 
    12 function: type function_id '(' . opt_parameters ')' block
 
@@ -924,32 +937,32 @@ Estado 56
     VOID_TYPE    deslocar, e ir ao estado 4
     BOOL_TYPE    deslocar, e ir ao estado 5
     STRING_TYPE  deslocar, e ir ao estado 6
-    ID           deslocar, e ir ao estado 57
+    ID           deslocar, e ir ao estado 58
 
     $padrão  reduzir usando a regra 14 (opt_parameters)
 
-    opt_parameters  ir ao estado 79
-    parameters      ir ao estado 80
-    parameter       ir ao estado 81
-    type            ir ao estado 82
+    opt_parameters  ir ao estado 80
+    parameters      ir ao estado 81
+    parameter       ir ao estado 82
+    type            ir ao estado 83
     primitive_type  ir ao estado 19
 
 
-Estado 57
+Estado 58
 
    79 type: ID .
 
     $padrão  reduzir usando a regra 79 (type)
 
 
-Estado 58
+Estado 59
 
     8 struct_block: '{' attributes . '}'
 
-    '}'  deslocar, e ir ao estado 83
+    '}'  deslocar, e ir ao estado 84
 
 
-Estado 59
+Estado 60
 
     9 attributes: attribute . attributes
 
@@ -958,26 +971,26 @@ Estado 59
     VOID_TYPE    deslocar, e ir ao estado 4
     BOOL_TYPE    deslocar, e ir ao estado 5
     STRING_TYPE  deslocar, e ir ao estado 6
-    ID           deslocar, e ir ao estado 57
+    ID           deslocar, e ir ao estado 58
 
     $padrão  reduzir usando a regra 10 (attributes)
 
-    attributes      ir ao estado 84
-    attribute       ir ao estado 59
-    type            ir ao estado 60
+    attributes      ir ao estado 85
+    attribute       ir ao estado 60
+    type            ir ao estado 61
     primitive_type  ir ao estado 19
 
 
-Estado 60
+Estado 61
 
    11 attribute: type . ID ';'
    80 type: type . '*'
 
-    ID   deslocar, e ir ao estado 85
-    '*'  deslocar, e ir ao estado 36
+    ID   deslocar, e ir ao estado 86
+    '*'  deslocar, e ir ao estado 37
 
 
-Estado 61
+Estado 62
 
    51 expr: expr . '*' expr
    52     | expr . '/' expr
@@ -994,22 +1007,22 @@ Estado 61
    63     | expr . LEQ expr
    64     | expr . GEQ expr
 
-    GEQ    deslocar, e ir ao estado 65
-    LEQ    deslocar, e ir ao estado 66
-    EQUAL  deslocar, e ir ao estado 67
-    DIFF   deslocar, e ir ao estado 68
-    '<'    deslocar, e ir ao estado 71
-    '>'    deslocar, e ir ao estado 72
-    '+'    deslocar, e ir ao estado 73
-    '-'    deslocar, e ir ao estado 74
-    '*'    deslocar, e ir ao estado 75
-    '/'    deslocar, e ir ao estado 76
-    '%'    deslocar, e ir ao estado 77
+    GEQ    deslocar, e ir ao estado 66
+    LEQ    deslocar, e ir ao estado 67
+    EQUAL  deslocar, e ir ao estado 68
+    DIFF   deslocar, e ir ao estado 69
+    '<'    deslocar, e ir ao estado 72
+    '>'    deslocar, e ir ao estado 73
+    '+'    deslocar, e ir ao estado 74
+    '-'    deslocar, e ir ao estado 75
+    '*'    deslocar, e ir ao estado 76
+    '/'    deslocar, e ir ao estado 77
+    '%'    deslocar, e ir ao estado 78
 
     $padrão  reduzir usando a regra 58 (expr)
 
 
-Estado 62
+Estado 63
 
    51 expr: expr . '*' expr
    52     | expr . '/' expr
@@ -1029,7 +1042,7 @@ Estado 62
     $padrão  reduzir usando a regra 65 (expr)
 
 
-Estado 63
+Estado 64
 
    50 expr: '(' expr . ')'
    51     | expr . '*' expr
@@ -1046,498 +1059,498 @@ Estado 63
    63     | expr . LEQ expr
    64     | expr . GEQ expr
 
-    GEQ    deslocar, e ir ao estado 65
-    LEQ    deslocar, e ir ao estado 66
-    EQUAL  deslocar, e ir ao estado 67
-    DIFF   deslocar, e ir ao estado 68
-    AND    deslocar, e ir ao estado 69
-    OR     deslocar, e ir ao estado 70
-    '<'    deslocar, e ir ao estado 71
-    '>'    deslocar, e ir ao estado 72
-    '+'    deslocar, e ir ao estado 73
-    '-'    deslocar, e ir ao estado 74
-    '*'    deslocar, e ir ao estado 75
-    '/'    deslocar, e ir ao estado 76
-    '%'    deslocar, e ir ao estado 77
-    ')'    deslocar, e ir ao estado 86
-
-
-Estado 64
-
-   31 function_call_stmt: function_id '(' . opt_arguments ')'
-
-    PRINT_FUNCTION   deslocar, e ir ao estado 30
-    INPUT_FUNCTION   deslocar, e ir ao estado 31
-    MALLOC_FUNCTION  deslocar, e ir ao estado 32
-    POW_FUNCTION     deslocar, e ir ao estado 33
-    FREE_FUNCTION    deslocar, e ir ao estado 34
-    NOT              deslocar, e ir ao estado 40
-    INT              deslocar, e ir ao estado 41
-    FLOAT            deslocar, e ir ao estado 42
-    BOOL             deslocar, e ir ao estado 43
-    STRING           deslocar, e ir ao estado 44
-    ID               deslocar, e ir ao estado 45
-    '-'              deslocar, e ir ao estado 46
-    '*'              deslocar, e ir ao estado 9
-    '('              deslocar, e ir ao estado 47
-
-    $padrão  reduzir usando a regra 39 (opt_arguments)
-
-    function_call_stmt  ir ao estado 48
-    function_id         ir ao estado 49
-    opt_arguments       ir ao estado 87
-    arguments           ir ao estado 88
-    argument            ir ao estado 89
-    expr                ir ao estado 90
-    lval                ir ao estado 51
-    simple_expr         ir ao estado 52
-    literal             ir ao estado 53
+    GEQ    deslocar, e ir ao estado 66
+    LEQ    deslocar, e ir ao estado 67
+    EQUAL  deslocar, e ir ao estado 68
+    DIFF   deslocar, e ir ao estado 69
+    AND    deslocar, e ir ao estado 70
+    OR     deslocar, e ir ao estado 71
+    '<'    deslocar, e ir ao estado 72
+    '>'    deslocar, e ir ao estado 73
+    '+'    deslocar, e ir ao estado 74
+    '-'    deslocar, e ir ao estado 75
+    '*'    deslocar, e ir ao estado 76
+    '/'    deslocar, e ir ao estado 77
+    '%'    deslocar, e ir ao estado 78
+    ')'    deslocar, e ir ao estado 87
 
 
 Estado 65
 
-   64 expr: expr GEQ . expr
+   31 function_call_stmt: function_id '(' . opt_arguments ')'
 
-    PRINT_FUNCTION   deslocar, e ir ao estado 30
-    INPUT_FUNCTION   deslocar, e ir ao estado 31
-    MALLOC_FUNCTION  deslocar, e ir ao estado 32
-    POW_FUNCTION     deslocar, e ir ao estado 33
-    FREE_FUNCTION    deslocar, e ir ao estado 34
-    NOT              deslocar, e ir ao estado 40
-    INT              deslocar, e ir ao estado 41
-    FLOAT            deslocar, e ir ao estado 42
-    BOOL             deslocar, e ir ao estado 43
-    STRING           deslocar, e ir ao estado 44
-    ID               deslocar, e ir ao estado 45
-    '-'              deslocar, e ir ao estado 46
-    '*'              deslocar, e ir ao estado 9
-    '('              deslocar, e ir ao estado 47
+    PRINT_FUNCTION   deslocar, e ir ao estado 31
+    INPUT_FUNCTION   deslocar, e ir ao estado 32
+    MALLOC_FUNCTION  deslocar, e ir ao estado 33
+    POW_FUNCTION     deslocar, e ir ao estado 34
+    FREE_FUNCTION    deslocar, e ir ao estado 35
+    NOT              deslocar, e ir ao estado 41
+    INT              deslocar, e ir ao estado 42
+    FLOAT            deslocar, e ir ao estado 43
+    BOOL             deslocar, e ir ao estado 44
+    STRING           deslocar, e ir ao estado 45
+    ID               deslocar, e ir ao estado 46
+    '-'              deslocar, e ir ao estado 47
+    '*'              deslocar, e ir ao estado 8
+    '('              deslocar, e ir ao estado 48
 
-    function_call_stmt  ir ao estado 48
-    function_id         ir ao estado 49
+    $padrão  reduzir usando a regra 39 (opt_arguments)
+
+    function_call_stmt  ir ao estado 49
+    function_id         ir ao estado 50
+    opt_arguments       ir ao estado 88
+    arguments           ir ao estado 89
+    argument            ir ao estado 90
     expr                ir ao estado 91
-    lval                ir ao estado 51
-    simple_expr         ir ao estado 52
-    literal             ir ao estado 53
+    lval                ir ao estado 52
+    simple_expr         ir ao estado 53
+    literal             ir ao estado 54
 
 
 Estado 66
 
-   63 expr: expr LEQ . expr
+   64 expr: expr GEQ . expr
 
-    PRINT_FUNCTION   deslocar, e ir ao estado 30
-    INPUT_FUNCTION   deslocar, e ir ao estado 31
-    MALLOC_FUNCTION  deslocar, e ir ao estado 32
-    POW_FUNCTION     deslocar, e ir ao estado 33
-    FREE_FUNCTION    deslocar, e ir ao estado 34
-    NOT              deslocar, e ir ao estado 40
-    INT              deslocar, e ir ao estado 41
-    FLOAT            deslocar, e ir ao estado 42
-    BOOL             deslocar, e ir ao estado 43
-    STRING           deslocar, e ir ao estado 44
-    ID               deslocar, e ir ao estado 45
-    '-'              deslocar, e ir ao estado 46
-    '*'              deslocar, e ir ao estado 9
-    '('              deslocar, e ir ao estado 47
+    PRINT_FUNCTION   deslocar, e ir ao estado 31
+    INPUT_FUNCTION   deslocar, e ir ao estado 32
+    MALLOC_FUNCTION  deslocar, e ir ao estado 33
+    POW_FUNCTION     deslocar, e ir ao estado 34
+    FREE_FUNCTION    deslocar, e ir ao estado 35
+    NOT              deslocar, e ir ao estado 41
+    INT              deslocar, e ir ao estado 42
+    FLOAT            deslocar, e ir ao estado 43
+    BOOL             deslocar, e ir ao estado 44
+    STRING           deslocar, e ir ao estado 45
+    ID               deslocar, e ir ao estado 46
+    '-'              deslocar, e ir ao estado 47
+    '*'              deslocar, e ir ao estado 8
+    '('              deslocar, e ir ao estado 48
 
-    function_call_stmt  ir ao estado 48
-    function_id         ir ao estado 49
+    function_call_stmt  ir ao estado 49
+    function_id         ir ao estado 50
     expr                ir ao estado 92
-    lval                ir ao estado 51
-    simple_expr         ir ao estado 52
-    literal             ir ao estado 53
+    lval                ir ao estado 52
+    simple_expr         ir ao estado 53
+    literal             ir ao estado 54
 
 
 Estado 67
 
-   59 expr: expr EQUAL . expr
+   63 expr: expr LEQ . expr
 
-    PRINT_FUNCTION   deslocar, e ir ao estado 30
-    INPUT_FUNCTION   deslocar, e ir ao estado 31
-    MALLOC_FUNCTION  deslocar, e ir ao estado 32
-    POW_FUNCTION     deslocar, e ir ao estado 33
-    FREE_FUNCTION    deslocar, e ir ao estado 34
-    NOT              deslocar, e ir ao estado 40
-    INT              deslocar, e ir ao estado 41
-    FLOAT            deslocar, e ir ao estado 42
-    BOOL             deslocar, e ir ao estado 43
-    STRING           deslocar, e ir ao estado 44
-    ID               deslocar, e ir ao estado 45
-    '-'              deslocar, e ir ao estado 46
-    '*'              deslocar, e ir ao estado 9
-    '('              deslocar, e ir ao estado 47
+    PRINT_FUNCTION   deslocar, e ir ao estado 31
+    INPUT_FUNCTION   deslocar, e ir ao estado 32
+    MALLOC_FUNCTION  deslocar, e ir ao estado 33
+    POW_FUNCTION     deslocar, e ir ao estado 34
+    FREE_FUNCTION    deslocar, e ir ao estado 35
+    NOT              deslocar, e ir ao estado 41
+    INT              deslocar, e ir ao estado 42
+    FLOAT            deslocar, e ir ao estado 43
+    BOOL             deslocar, e ir ao estado 44
+    STRING           deslocar, e ir ao estado 45
+    ID               deslocar, e ir ao estado 46
+    '-'              deslocar, e ir ao estado 47
+    '*'              deslocar, e ir ao estado 8
+    '('              deslocar, e ir ao estado 48
 
-    function_call_stmt  ir ao estado 48
-    function_id         ir ao estado 49
+    function_call_stmt  ir ao estado 49
+    function_id         ir ao estado 50
     expr                ir ao estado 93
-    lval                ir ao estado 51
-    simple_expr         ir ao estado 52
-    literal             ir ao estado 53
+    lval                ir ao estado 52
+    simple_expr         ir ao estado 53
+    literal             ir ao estado 54
 
 
 Estado 68
 
-   60 expr: expr DIFF . expr
+   59 expr: expr EQUAL . expr
 
-    PRINT_FUNCTION   deslocar, e ir ao estado 30
-    INPUT_FUNCTION   deslocar, e ir ao estado 31
-    MALLOC_FUNCTION  deslocar, e ir ao estado 32
-    POW_FUNCTION     deslocar, e ir ao estado 33
-    FREE_FUNCTION    deslocar, e ir ao estado 34
-    NOT              deslocar, e ir ao estado 40
-    INT              deslocar, e ir ao estado 41
-    FLOAT            deslocar, e ir ao estado 42
-    BOOL             deslocar, e ir ao estado 43
-    STRING           deslocar, e ir ao estado 44
-    ID               deslocar, e ir ao estado 45
-    '-'              deslocar, e ir ao estado 46
-    '*'              deslocar, e ir ao estado 9
-    '('              deslocar, e ir ao estado 47
+    PRINT_FUNCTION   deslocar, e ir ao estado 31
+    INPUT_FUNCTION   deslocar, e ir ao estado 32
+    MALLOC_FUNCTION  deslocar, e ir ao estado 33
+    POW_FUNCTION     deslocar, e ir ao estado 34
+    FREE_FUNCTION    deslocar, e ir ao estado 35
+    NOT              deslocar, e ir ao estado 41
+    INT              deslocar, e ir ao estado 42
+    FLOAT            deslocar, e ir ao estado 43
+    BOOL             deslocar, e ir ao estado 44
+    STRING           deslocar, e ir ao estado 45
+    ID               deslocar, e ir ao estado 46
+    '-'              deslocar, e ir ao estado 47
+    '*'              deslocar, e ir ao estado 8
+    '('              deslocar, e ir ao estado 48
 
-    function_call_stmt  ir ao estado 48
-    function_id         ir ao estado 49
+    function_call_stmt  ir ao estado 49
+    function_id         ir ao estado 50
     expr                ir ao estado 94
-    lval                ir ao estado 51
-    simple_expr         ir ao estado 52
-    literal             ir ao estado 53
+    lval                ir ao estado 52
+    simple_expr         ir ao estado 53
+    literal             ir ao estado 54
 
 
 Estado 69
 
-   57 expr: expr AND . expr
+   60 expr: expr DIFF . expr
 
-    PRINT_FUNCTION   deslocar, e ir ao estado 30
-    INPUT_FUNCTION   deslocar, e ir ao estado 31
-    MALLOC_FUNCTION  deslocar, e ir ao estado 32
-    POW_FUNCTION     deslocar, e ir ao estado 33
-    FREE_FUNCTION    deslocar, e ir ao estado 34
-    NOT              deslocar, e ir ao estado 40
-    INT              deslocar, e ir ao estado 41
-    FLOAT            deslocar, e ir ao estado 42
-    BOOL             deslocar, e ir ao estado 43
-    STRING           deslocar, e ir ao estado 44
-    ID               deslocar, e ir ao estado 45
-    '-'              deslocar, e ir ao estado 46
-    '*'              deslocar, e ir ao estado 9
-    '('              deslocar, e ir ao estado 47
+    PRINT_FUNCTION   deslocar, e ir ao estado 31
+    INPUT_FUNCTION   deslocar, e ir ao estado 32
+    MALLOC_FUNCTION  deslocar, e ir ao estado 33
+    POW_FUNCTION     deslocar, e ir ao estado 34
+    FREE_FUNCTION    deslocar, e ir ao estado 35
+    NOT              deslocar, e ir ao estado 41
+    INT              deslocar, e ir ao estado 42
+    FLOAT            deslocar, e ir ao estado 43
+    BOOL             deslocar, e ir ao estado 44
+    STRING           deslocar, e ir ao estado 45
+    ID               deslocar, e ir ao estado 46
+    '-'              deslocar, e ir ao estado 47
+    '*'              deslocar, e ir ao estado 8
+    '('              deslocar, e ir ao estado 48
 
-    function_call_stmt  ir ao estado 48
-    function_id         ir ao estado 49
+    function_call_stmt  ir ao estado 49
+    function_id         ir ao estado 50
     expr                ir ao estado 95
-    lval                ir ao estado 51
-    simple_expr         ir ao estado 52
-    literal             ir ao estado 53
+    lval                ir ao estado 52
+    simple_expr         ir ao estado 53
+    literal             ir ao estado 54
 
 
 Estado 70
 
-   56 expr: expr OR . expr
+   57 expr: expr AND . expr
 
-    PRINT_FUNCTION   deslocar, e ir ao estado 30
-    INPUT_FUNCTION   deslocar, e ir ao estado 31
-    MALLOC_FUNCTION  deslocar, e ir ao estado 32
-    POW_FUNCTION     deslocar, e ir ao estado 33
-    FREE_FUNCTION    deslocar, e ir ao estado 34
-    NOT              deslocar, e ir ao estado 40
-    INT              deslocar, e ir ao estado 41
-    FLOAT            deslocar, e ir ao estado 42
-    BOOL             deslocar, e ir ao estado 43
-    STRING           deslocar, e ir ao estado 44
-    ID               deslocar, e ir ao estado 45
-    '-'              deslocar, e ir ao estado 46
-    '*'              deslocar, e ir ao estado 9
-    '('              deslocar, e ir ao estado 47
+    PRINT_FUNCTION   deslocar, e ir ao estado 31
+    INPUT_FUNCTION   deslocar, e ir ao estado 32
+    MALLOC_FUNCTION  deslocar, e ir ao estado 33
+    POW_FUNCTION     deslocar, e ir ao estado 34
+    FREE_FUNCTION    deslocar, e ir ao estado 35
+    NOT              deslocar, e ir ao estado 41
+    INT              deslocar, e ir ao estado 42
+    FLOAT            deslocar, e ir ao estado 43
+    BOOL             deslocar, e ir ao estado 44
+    STRING           deslocar, e ir ao estado 45
+    ID               deslocar, e ir ao estado 46
+    '-'              deslocar, e ir ao estado 47
+    '*'              deslocar, e ir ao estado 8
+    '('              deslocar, e ir ao estado 48
 
-    function_call_stmt  ir ao estado 48
-    function_id         ir ao estado 49
+    function_call_stmt  ir ao estado 49
+    function_id         ir ao estado 50
     expr                ir ao estado 96
-    lval                ir ao estado 51
-    simple_expr         ir ao estado 52
-    literal             ir ao estado 53
+    lval                ir ao estado 52
+    simple_expr         ir ao estado 53
+    literal             ir ao estado 54
 
 
 Estado 71
 
-   61 expr: expr '<' . expr
+   56 expr: expr OR . expr
 
-    PRINT_FUNCTION   deslocar, e ir ao estado 30
-    INPUT_FUNCTION   deslocar, e ir ao estado 31
-    MALLOC_FUNCTION  deslocar, e ir ao estado 32
-    POW_FUNCTION     deslocar, e ir ao estado 33
-    FREE_FUNCTION    deslocar, e ir ao estado 34
-    NOT              deslocar, e ir ao estado 40
-    INT              deslocar, e ir ao estado 41
-    FLOAT            deslocar, e ir ao estado 42
-    BOOL             deslocar, e ir ao estado 43
-    STRING           deslocar, e ir ao estado 44
-    ID               deslocar, e ir ao estado 45
-    '-'              deslocar, e ir ao estado 46
-    '*'              deslocar, e ir ao estado 9
-    '('              deslocar, e ir ao estado 47
+    PRINT_FUNCTION   deslocar, e ir ao estado 31
+    INPUT_FUNCTION   deslocar, e ir ao estado 32
+    MALLOC_FUNCTION  deslocar, e ir ao estado 33
+    POW_FUNCTION     deslocar, e ir ao estado 34
+    FREE_FUNCTION    deslocar, e ir ao estado 35
+    NOT              deslocar, e ir ao estado 41
+    INT              deslocar, e ir ao estado 42
+    FLOAT            deslocar, e ir ao estado 43
+    BOOL             deslocar, e ir ao estado 44
+    STRING           deslocar, e ir ao estado 45
+    ID               deslocar, e ir ao estado 46
+    '-'              deslocar, e ir ao estado 47
+    '*'              deslocar, e ir ao estado 8
+    '('              deslocar, e ir ao estado 48
 
-    function_call_stmt  ir ao estado 48
-    function_id         ir ao estado 49
+    function_call_stmt  ir ao estado 49
+    function_id         ir ao estado 50
     expr                ir ao estado 97
-    lval                ir ao estado 51
-    simple_expr         ir ao estado 52
-    literal             ir ao estado 53
+    lval                ir ao estado 52
+    simple_expr         ir ao estado 53
+    literal             ir ao estado 54
 
 
 Estado 72
 
-   62 expr: expr '>' . expr
+   61 expr: expr '<' . expr
 
-    PRINT_FUNCTION   deslocar, e ir ao estado 30
-    INPUT_FUNCTION   deslocar, e ir ao estado 31
-    MALLOC_FUNCTION  deslocar, e ir ao estado 32
-    POW_FUNCTION     deslocar, e ir ao estado 33
-    FREE_FUNCTION    deslocar, e ir ao estado 34
-    NOT              deslocar, e ir ao estado 40
-    INT              deslocar, e ir ao estado 41
-    FLOAT            deslocar, e ir ao estado 42
-    BOOL             deslocar, e ir ao estado 43
-    STRING           deslocar, e ir ao estado 44
-    ID               deslocar, e ir ao estado 45
-    '-'              deslocar, e ir ao estado 46
-    '*'              deslocar, e ir ao estado 9
-    '('              deslocar, e ir ao estado 47
+    PRINT_FUNCTION   deslocar, e ir ao estado 31
+    INPUT_FUNCTION   deslocar, e ir ao estado 32
+    MALLOC_FUNCTION  deslocar, e ir ao estado 33
+    POW_FUNCTION     deslocar, e ir ao estado 34
+    FREE_FUNCTION    deslocar, e ir ao estado 35
+    NOT              deslocar, e ir ao estado 41
+    INT              deslocar, e ir ao estado 42
+    FLOAT            deslocar, e ir ao estado 43
+    BOOL             deslocar, e ir ao estado 44
+    STRING           deslocar, e ir ao estado 45
+    ID               deslocar, e ir ao estado 46
+    '-'              deslocar, e ir ao estado 47
+    '*'              deslocar, e ir ao estado 8
+    '('              deslocar, e ir ao estado 48
 
-    function_call_stmt  ir ao estado 48
-    function_id         ir ao estado 49
+    function_call_stmt  ir ao estado 49
+    function_id         ir ao estado 50
     expr                ir ao estado 98
-    lval                ir ao estado 51
-    simple_expr         ir ao estado 52
-    literal             ir ao estado 53
+    lval                ir ao estado 52
+    simple_expr         ir ao estado 53
+    literal             ir ao estado 54
 
 
 Estado 73
 
-   54 expr: expr '+' . expr
+   62 expr: expr '>' . expr
 
-    PRINT_FUNCTION   deslocar, e ir ao estado 30
-    INPUT_FUNCTION   deslocar, e ir ao estado 31
-    MALLOC_FUNCTION  deslocar, e ir ao estado 32
-    POW_FUNCTION     deslocar, e ir ao estado 33
-    FREE_FUNCTION    deslocar, e ir ao estado 34
-    NOT              deslocar, e ir ao estado 40
-    INT              deslocar, e ir ao estado 41
-    FLOAT            deslocar, e ir ao estado 42
-    BOOL             deslocar, e ir ao estado 43
-    STRING           deslocar, e ir ao estado 44
-    ID               deslocar, e ir ao estado 45
-    '-'              deslocar, e ir ao estado 46
-    '*'              deslocar, e ir ao estado 9
-    '('              deslocar, e ir ao estado 47
+    PRINT_FUNCTION   deslocar, e ir ao estado 31
+    INPUT_FUNCTION   deslocar, e ir ao estado 32
+    MALLOC_FUNCTION  deslocar, e ir ao estado 33
+    POW_FUNCTION     deslocar, e ir ao estado 34
+    FREE_FUNCTION    deslocar, e ir ao estado 35
+    NOT              deslocar, e ir ao estado 41
+    INT              deslocar, e ir ao estado 42
+    FLOAT            deslocar, e ir ao estado 43
+    BOOL             deslocar, e ir ao estado 44
+    STRING           deslocar, e ir ao estado 45
+    ID               deslocar, e ir ao estado 46
+    '-'              deslocar, e ir ao estado 47
+    '*'              deslocar, e ir ao estado 8
+    '('              deslocar, e ir ao estado 48
 
-    function_call_stmt  ir ao estado 48
-    function_id         ir ao estado 49
+    function_call_stmt  ir ao estado 49
+    function_id         ir ao estado 50
     expr                ir ao estado 99
-    lval                ir ao estado 51
-    simple_expr         ir ao estado 52
-    literal             ir ao estado 53
+    lval                ir ao estado 52
+    simple_expr         ir ao estado 53
+    literal             ir ao estado 54
 
 
 Estado 74
 
-   55 expr: expr '-' . expr
+   54 expr: expr '+' . expr
 
-    PRINT_FUNCTION   deslocar, e ir ao estado 30
-    INPUT_FUNCTION   deslocar, e ir ao estado 31
-    MALLOC_FUNCTION  deslocar, e ir ao estado 32
-    POW_FUNCTION     deslocar, e ir ao estado 33
-    FREE_FUNCTION    deslocar, e ir ao estado 34
-    NOT              deslocar, e ir ao estado 40
-    INT              deslocar, e ir ao estado 41
-    FLOAT            deslocar, e ir ao estado 42
-    BOOL             deslocar, e ir ao estado 43
-    STRING           deslocar, e ir ao estado 44
-    ID               deslocar, e ir ao estado 45
-    '-'              deslocar, e ir ao estado 46
-    '*'              deslocar, e ir ao estado 9
-    '('              deslocar, e ir ao estado 47
+    PRINT_FUNCTION   deslocar, e ir ao estado 31
+    INPUT_FUNCTION   deslocar, e ir ao estado 32
+    MALLOC_FUNCTION  deslocar, e ir ao estado 33
+    POW_FUNCTION     deslocar, e ir ao estado 34
+    FREE_FUNCTION    deslocar, e ir ao estado 35
+    NOT              deslocar, e ir ao estado 41
+    INT              deslocar, e ir ao estado 42
+    FLOAT            deslocar, e ir ao estado 43
+    BOOL             deslocar, e ir ao estado 44
+    STRING           deslocar, e ir ao estado 45
+    ID               deslocar, e ir ao estado 46
+    '-'              deslocar, e ir ao estado 47
+    '*'              deslocar, e ir ao estado 8
+    '('              deslocar, e ir ao estado 48
 
-    function_call_stmt  ir ao estado 48
-    function_id         ir ao estado 49
+    function_call_stmt  ir ao estado 49
+    function_id         ir ao estado 50
     expr                ir ao estado 100
-    lval                ir ao estado 51
-    simple_expr         ir ao estado 52
-    literal             ir ao estado 53
+    lval                ir ao estado 52
+    simple_expr         ir ao estado 53
+    literal             ir ao estado 54
 
 
 Estado 75
 
-   51 expr: expr '*' . expr
+   55 expr: expr '-' . expr
 
-    PRINT_FUNCTION   deslocar, e ir ao estado 30
-    INPUT_FUNCTION   deslocar, e ir ao estado 31
-    MALLOC_FUNCTION  deslocar, e ir ao estado 32
-    POW_FUNCTION     deslocar, e ir ao estado 33
-    FREE_FUNCTION    deslocar, e ir ao estado 34
-    NOT              deslocar, e ir ao estado 40
-    INT              deslocar, e ir ao estado 41
-    FLOAT            deslocar, e ir ao estado 42
-    BOOL             deslocar, e ir ao estado 43
-    STRING           deslocar, e ir ao estado 44
-    ID               deslocar, e ir ao estado 45
-    '-'              deslocar, e ir ao estado 46
-    '*'              deslocar, e ir ao estado 9
-    '('              deslocar, e ir ao estado 47
+    PRINT_FUNCTION   deslocar, e ir ao estado 31
+    INPUT_FUNCTION   deslocar, e ir ao estado 32
+    MALLOC_FUNCTION  deslocar, e ir ao estado 33
+    POW_FUNCTION     deslocar, e ir ao estado 34
+    FREE_FUNCTION    deslocar, e ir ao estado 35
+    NOT              deslocar, e ir ao estado 41
+    INT              deslocar, e ir ao estado 42
+    FLOAT            deslocar, e ir ao estado 43
+    BOOL             deslocar, e ir ao estado 44
+    STRING           deslocar, e ir ao estado 45
+    ID               deslocar, e ir ao estado 46
+    '-'              deslocar, e ir ao estado 47
+    '*'              deslocar, e ir ao estado 8
+    '('              deslocar, e ir ao estado 48
 
-    function_call_stmt  ir ao estado 48
-    function_id         ir ao estado 49
+    function_call_stmt  ir ao estado 49
+    function_id         ir ao estado 50
     expr                ir ao estado 101
-    lval                ir ao estado 51
-    simple_expr         ir ao estado 52
-    literal             ir ao estado 53
+    lval                ir ao estado 52
+    simple_expr         ir ao estado 53
+    literal             ir ao estado 54
 
 
 Estado 76
 
-   52 expr: expr '/' . expr
+   51 expr: expr '*' . expr
 
-    PRINT_FUNCTION   deslocar, e ir ao estado 30
-    INPUT_FUNCTION   deslocar, e ir ao estado 31
-    MALLOC_FUNCTION  deslocar, e ir ao estado 32
-    POW_FUNCTION     deslocar, e ir ao estado 33
-    FREE_FUNCTION    deslocar, e ir ao estado 34
-    NOT              deslocar, e ir ao estado 40
-    INT              deslocar, e ir ao estado 41
-    FLOAT            deslocar, e ir ao estado 42
-    BOOL             deslocar, e ir ao estado 43
-    STRING           deslocar, e ir ao estado 44
-    ID               deslocar, e ir ao estado 45
-    '-'              deslocar, e ir ao estado 46
-    '*'              deslocar, e ir ao estado 9
-    '('              deslocar, e ir ao estado 47
+    PRINT_FUNCTION   deslocar, e ir ao estado 31
+    INPUT_FUNCTION   deslocar, e ir ao estado 32
+    MALLOC_FUNCTION  deslocar, e ir ao estado 33
+    POW_FUNCTION     deslocar, e ir ao estado 34
+    FREE_FUNCTION    deslocar, e ir ao estado 35
+    NOT              deslocar, e ir ao estado 41
+    INT              deslocar, e ir ao estado 42
+    FLOAT            deslocar, e ir ao estado 43
+    BOOL             deslocar, e ir ao estado 44
+    STRING           deslocar, e ir ao estado 45
+    ID               deslocar, e ir ao estado 46
+    '-'              deslocar, e ir ao estado 47
+    '*'              deslocar, e ir ao estado 8
+    '('              deslocar, e ir ao estado 48
 
-    function_call_stmt  ir ao estado 48
-    function_id         ir ao estado 49
+    function_call_stmt  ir ao estado 49
+    function_id         ir ao estado 50
     expr                ir ao estado 102
-    lval                ir ao estado 51
-    simple_expr         ir ao estado 52
-    literal             ir ao estado 53
+    lval                ir ao estado 52
+    simple_expr         ir ao estado 53
+    literal             ir ao estado 54
 
 
 Estado 77
 
-   53 expr: expr '%' . expr
+   52 expr: expr '/' . expr
 
-    PRINT_FUNCTION   deslocar, e ir ao estado 30
-    INPUT_FUNCTION   deslocar, e ir ao estado 31
-    MALLOC_FUNCTION  deslocar, e ir ao estado 32
-    POW_FUNCTION     deslocar, e ir ao estado 33
-    FREE_FUNCTION    deslocar, e ir ao estado 34
-    NOT              deslocar, e ir ao estado 40
-    INT              deslocar, e ir ao estado 41
-    FLOAT            deslocar, e ir ao estado 42
-    BOOL             deslocar, e ir ao estado 43
-    STRING           deslocar, e ir ao estado 44
-    ID               deslocar, e ir ao estado 45
-    '-'              deslocar, e ir ao estado 46
-    '*'              deslocar, e ir ao estado 9
-    '('              deslocar, e ir ao estado 47
+    PRINT_FUNCTION   deslocar, e ir ao estado 31
+    INPUT_FUNCTION   deslocar, e ir ao estado 32
+    MALLOC_FUNCTION  deslocar, e ir ao estado 33
+    POW_FUNCTION     deslocar, e ir ao estado 34
+    FREE_FUNCTION    deslocar, e ir ao estado 35
+    NOT              deslocar, e ir ao estado 41
+    INT              deslocar, e ir ao estado 42
+    FLOAT            deslocar, e ir ao estado 43
+    BOOL             deslocar, e ir ao estado 44
+    STRING           deslocar, e ir ao estado 45
+    ID               deslocar, e ir ao estado 46
+    '-'              deslocar, e ir ao estado 47
+    '*'              deslocar, e ir ao estado 8
+    '('              deslocar, e ir ao estado 48
 
-    function_call_stmt  ir ao estado 48
-    function_id         ir ao estado 49
+    function_call_stmt  ir ao estado 49
+    function_id         ir ao estado 50
     expr                ir ao estado 103
-    lval                ir ao estado 51
-    simple_expr         ir ao estado 52
-    literal             ir ao estado 53
+    lval                ir ao estado 52
+    simple_expr         ir ao estado 53
+    literal             ir ao estado 54
 
 
 Estado 78
+
+   53 expr: expr '%' . expr
+
+    PRINT_FUNCTION   deslocar, e ir ao estado 31
+    INPUT_FUNCTION   deslocar, e ir ao estado 32
+    MALLOC_FUNCTION  deslocar, e ir ao estado 33
+    POW_FUNCTION     deslocar, e ir ao estado 34
+    FREE_FUNCTION    deslocar, e ir ao estado 35
+    NOT              deslocar, e ir ao estado 41
+    INT              deslocar, e ir ao estado 42
+    FLOAT            deslocar, e ir ao estado 43
+    BOOL             deslocar, e ir ao estado 44
+    STRING           deslocar, e ir ao estado 45
+    ID               deslocar, e ir ao estado 46
+    '-'              deslocar, e ir ao estado 47
+    '*'              deslocar, e ir ao estado 8
+    '('              deslocar, e ir ao estado 48
+
+    function_call_stmt  ir ao estado 49
+    function_id         ir ao estado 50
+    expr                ir ao estado 104
+    lval                ir ao estado 52
+    simple_expr         ir ao estado 53
+    literal             ir ao estado 54
+
+
+Estado 79
 
    68 lval: lval '[' expr ']' .
 
     $padrão  reduzir usando a regra 68 (lval)
 
 
-Estado 79
+Estado 80
 
    12 function: type function_id '(' opt_parameters . ')' block
 
-    ')'  deslocar, e ir ao estado 104
+    ')'  deslocar, e ir ao estado 105
 
 
-Estado 80
+Estado 81
 
    13 opt_parameters: parameters .
 
     $padrão  reduzir usando a regra 13 (opt_parameters)
 
 
-Estado 81
+Estado 82
 
    15 parameters: parameter .
    16           | parameter . ',' parameters
 
-    ','  deslocar, e ir ao estado 105
+    ','  deslocar, e ir ao estado 106
 
     $padrão  reduzir usando a regra 15 (parameters)
 
 
-Estado 82
+Estado 83
 
    17 parameter: type . ID
    80 type: type . '*'
 
-    ID   deslocar, e ir ao estado 106
-    '*'  deslocar, e ir ao estado 36
+    ID   deslocar, e ir ao estado 107
+    '*'  deslocar, e ir ao estado 37
 
 
-Estado 83
+Estado 84
 
     8 struct_block: '{' attributes '}' .
 
     $padrão  reduzir usando a regra 8 (struct_block)
 
 
-Estado 84
+Estado 85
 
     9 attributes: attribute attributes .
 
     $padrão  reduzir usando a regra 9 (attributes)
 
 
-Estado 85
+Estado 86
 
    11 attribute: type ID . ';'
 
-    ';'  deslocar, e ir ao estado 107
+    ';'  deslocar, e ir ao estado 108
 
 
-Estado 86
+Estado 87
 
    50 expr: '(' expr ')' .
 
     $padrão  reduzir usando a regra 50 (expr)
 
 
-Estado 87
+Estado 88
 
    31 function_call_stmt: function_id '(' opt_arguments . ')'
 
-    ')'  deslocar, e ir ao estado 108
+    ')'  deslocar, e ir ao estado 109
 
 
-Estado 88
+Estado 89
 
    38 opt_arguments: arguments .
 
     $padrão  reduzir usando a regra 38 (opt_arguments)
 
 
-Estado 89
+Estado 90
 
    40 arguments: argument .
    41          | argument . ',' arguments
 
-    ','  deslocar, e ir ao estado 109
+    ','  deslocar, e ir ao estado 110
 
     $padrão  reduzir usando a regra 40 (arguments)
 
 
-Estado 90
+Estado 91
 
    42 argument: expr .
    51 expr: expr . '*' expr
@@ -1554,47 +1567,21 @@ Estado 90
    63     | expr . LEQ expr
    64     | expr . GEQ expr
 
-    GEQ    deslocar, e ir ao estado 65
-    LEQ    deslocar, e ir ao estado 66
-    EQUAL  deslocar, e ir ao estado 67
-    DIFF   deslocar, e ir ao estado 68
-    AND    deslocar, e ir ao estado 69
-    OR     deslocar, e ir ao estado 70
-    '<'    deslocar, e ir ao estado 71
-    '>'    deslocar, e ir ao estado 72
-    '+'    deslocar, e ir ao estado 73
-    '-'    deslocar, e ir ao estado 74
-    '*'    deslocar, e ir ao estado 75
-    '/'    deslocar, e ir ao estado 76
-    '%'    deslocar, e ir ao estado 77
+    GEQ    deslocar, e ir ao estado 66
+    LEQ    deslocar, e ir ao estado 67
+    EQUAL  deslocar, e ir ao estado 68
+    DIFF   deslocar, e ir ao estado 69
+    AND    deslocar, e ir ao estado 70
+    OR     deslocar, e ir ao estado 71
+    '<'    deslocar, e ir ao estado 72
+    '>'    deslocar, e ir ao estado 73
+    '+'    deslocar, e ir ao estado 74
+    '-'    deslocar, e ir ao estado 75
+    '*'    deslocar, e ir ao estado 76
+    '/'    deslocar, e ir ao estado 77
+    '%'    deslocar, e ir ao estado 78
 
     $padrão  reduzir usando a regra 42 (argument)
-
-
-Estado 91
-
-   51 expr: expr . '*' expr
-   52     | expr . '/' expr
-   53     | expr . '%' expr
-   54     | expr . '+' expr
-   55     | expr . '-' expr
-   56     | expr . OR expr
-   57     | expr . AND expr
-   59     | expr . EQUAL expr
-   60     | expr . DIFF expr
-   61     | expr . '<' expr
-   62     | expr . '>' expr
-   63     | expr . LEQ expr
-   64     | expr . GEQ expr
-   64     | expr GEQ expr .
-
-    '+'  deslocar, e ir ao estado 73
-    '-'  deslocar, e ir ao estado 74
-    '*'  deslocar, e ir ao estado 75
-    '/'  deslocar, e ir ao estado 76
-    '%'  deslocar, e ir ao estado 77
-
-    $padrão  reduzir usando a regra 64 (expr)
 
 
 Estado 92
@@ -1611,19 +1598,45 @@ Estado 92
    61     | expr . '<' expr
    62     | expr . '>' expr
    63     | expr . LEQ expr
+   64     | expr . GEQ expr
+   64     | expr GEQ expr .
+
+    '+'  deslocar, e ir ao estado 74
+    '-'  deslocar, e ir ao estado 75
+    '*'  deslocar, e ir ao estado 76
+    '/'  deslocar, e ir ao estado 77
+    '%'  deslocar, e ir ao estado 78
+
+    $padrão  reduzir usando a regra 64 (expr)
+
+
+Estado 93
+
+   51 expr: expr . '*' expr
+   52     | expr . '/' expr
+   53     | expr . '%' expr
+   54     | expr . '+' expr
+   55     | expr . '-' expr
+   56     | expr . OR expr
+   57     | expr . AND expr
+   59     | expr . EQUAL expr
+   60     | expr . DIFF expr
+   61     | expr . '<' expr
+   62     | expr . '>' expr
+   63     | expr . LEQ expr
    63     | expr LEQ expr .
    64     | expr . GEQ expr
 
-    '+'  deslocar, e ir ao estado 73
-    '-'  deslocar, e ir ao estado 74
-    '*'  deslocar, e ir ao estado 75
-    '/'  deslocar, e ir ao estado 76
-    '%'  deslocar, e ir ao estado 77
+    '+'  deslocar, e ir ao estado 74
+    '-'  deslocar, e ir ao estado 75
+    '*'  deslocar, e ir ao estado 76
+    '/'  deslocar, e ir ao estado 77
+    '%'  deslocar, e ir ao estado 78
 
     $padrão  reduzir usando a regra 63 (expr)
 
 
-Estado 93
+Estado 94
 
    51 expr: expr . '*' expr
    52     | expr . '/' expr
@@ -1640,20 +1653,20 @@ Estado 93
    63     | expr . LEQ expr
    64     | expr . GEQ expr
 
-    GEQ  deslocar, e ir ao estado 65
-    LEQ  deslocar, e ir ao estado 66
-    '<'  deslocar, e ir ao estado 71
-    '>'  deslocar, e ir ao estado 72
-    '+'  deslocar, e ir ao estado 73
-    '-'  deslocar, e ir ao estado 74
-    '*'  deslocar, e ir ao estado 75
-    '/'  deslocar, e ir ao estado 76
-    '%'  deslocar, e ir ao estado 77
+    GEQ  deslocar, e ir ao estado 66
+    LEQ  deslocar, e ir ao estado 67
+    '<'  deslocar, e ir ao estado 72
+    '>'  deslocar, e ir ao estado 73
+    '+'  deslocar, e ir ao estado 74
+    '-'  deslocar, e ir ao estado 75
+    '*'  deslocar, e ir ao estado 76
+    '/'  deslocar, e ir ao estado 77
+    '%'  deslocar, e ir ao estado 78
 
     $padrão  reduzir usando a regra 59 (expr)
 
 
-Estado 94
+Estado 95
 
    51 expr: expr . '*' expr
    52     | expr . '/' expr
@@ -1670,20 +1683,20 @@ Estado 94
    63     | expr . LEQ expr
    64     | expr . GEQ expr
 
-    GEQ  deslocar, e ir ao estado 65
-    LEQ  deslocar, e ir ao estado 66
-    '<'  deslocar, e ir ao estado 71
-    '>'  deslocar, e ir ao estado 72
-    '+'  deslocar, e ir ao estado 73
-    '-'  deslocar, e ir ao estado 74
-    '*'  deslocar, e ir ao estado 75
-    '/'  deslocar, e ir ao estado 76
-    '%'  deslocar, e ir ao estado 77
+    GEQ  deslocar, e ir ao estado 66
+    LEQ  deslocar, e ir ao estado 67
+    '<'  deslocar, e ir ao estado 72
+    '>'  deslocar, e ir ao estado 73
+    '+'  deslocar, e ir ao estado 74
+    '-'  deslocar, e ir ao estado 75
+    '*'  deslocar, e ir ao estado 76
+    '/'  deslocar, e ir ao estado 77
+    '%'  deslocar, e ir ao estado 78
 
     $padrão  reduzir usando a regra 60 (expr)
 
 
-Estado 95
+Estado 96
 
    51 expr: expr . '*' expr
    52     | expr . '/' expr
@@ -1700,22 +1713,22 @@ Estado 95
    63     | expr . LEQ expr
    64     | expr . GEQ expr
 
-    GEQ    deslocar, e ir ao estado 65
-    LEQ    deslocar, e ir ao estado 66
-    EQUAL  deslocar, e ir ao estado 67
-    DIFF   deslocar, e ir ao estado 68
-    '<'    deslocar, e ir ao estado 71
-    '>'    deslocar, e ir ao estado 72
-    '+'    deslocar, e ir ao estado 73
-    '-'    deslocar, e ir ao estado 74
-    '*'    deslocar, e ir ao estado 75
-    '/'    deslocar, e ir ao estado 76
-    '%'    deslocar, e ir ao estado 77
+    GEQ    deslocar, e ir ao estado 66
+    LEQ    deslocar, e ir ao estado 67
+    EQUAL  deslocar, e ir ao estado 68
+    DIFF   deslocar, e ir ao estado 69
+    '<'    deslocar, e ir ao estado 72
+    '>'    deslocar, e ir ao estado 73
+    '+'    deslocar, e ir ao estado 74
+    '-'    deslocar, e ir ao estado 75
+    '*'    deslocar, e ir ao estado 76
+    '/'    deslocar, e ir ao estado 77
+    '%'    deslocar, e ir ao estado 78
 
     $padrão  reduzir usando a regra 57 (expr)
 
 
-Estado 96
+Estado 97
 
    51 expr: expr . '*' expr
    52     | expr . '/' expr
@@ -1732,23 +1745,23 @@ Estado 96
    63     | expr . LEQ expr
    64     | expr . GEQ expr
 
-    GEQ    deslocar, e ir ao estado 65
-    LEQ    deslocar, e ir ao estado 66
-    EQUAL  deslocar, e ir ao estado 67
-    DIFF   deslocar, e ir ao estado 68
-    AND    deslocar, e ir ao estado 69
-    '<'    deslocar, e ir ao estado 71
-    '>'    deslocar, e ir ao estado 72
-    '+'    deslocar, e ir ao estado 73
-    '-'    deslocar, e ir ao estado 74
-    '*'    deslocar, e ir ao estado 75
-    '/'    deslocar, e ir ao estado 76
-    '%'    deslocar, e ir ao estado 77
+    GEQ    deslocar, e ir ao estado 66
+    LEQ    deslocar, e ir ao estado 67
+    EQUAL  deslocar, e ir ao estado 68
+    DIFF   deslocar, e ir ao estado 69
+    AND    deslocar, e ir ao estado 70
+    '<'    deslocar, e ir ao estado 72
+    '>'    deslocar, e ir ao estado 73
+    '+'    deslocar, e ir ao estado 74
+    '-'    deslocar, e ir ao estado 75
+    '*'    deslocar, e ir ao estado 76
+    '/'    deslocar, e ir ao estado 77
+    '%'    deslocar, e ir ao estado 78
 
     $padrão  reduzir usando a regra 56 (expr)
 
 
-Estado 97
+Estado 98
 
    51 expr: expr . '*' expr
    52     | expr . '/' expr
@@ -1765,16 +1778,16 @@ Estado 97
    63     | expr . LEQ expr
    64     | expr . GEQ expr
 
-    '+'  deslocar, e ir ao estado 73
-    '-'  deslocar, e ir ao estado 74
-    '*'  deslocar, e ir ao estado 75
-    '/'  deslocar, e ir ao estado 76
-    '%'  deslocar, e ir ao estado 77
+    '+'  deslocar, e ir ao estado 74
+    '-'  deslocar, e ir ao estado 75
+    '*'  deslocar, e ir ao estado 76
+    '/'  deslocar, e ir ao estado 77
+    '%'  deslocar, e ir ao estado 78
 
     $padrão  reduzir usando a regra 61 (expr)
 
 
-Estado 98
+Estado 99
 
    51 expr: expr . '*' expr
    52     | expr . '/' expr
@@ -1791,16 +1804,16 @@ Estado 98
    63     | expr . LEQ expr
    64     | expr . GEQ expr
 
-    '+'  deslocar, e ir ao estado 73
-    '-'  deslocar, e ir ao estado 74
-    '*'  deslocar, e ir ao estado 75
-    '/'  deslocar, e ir ao estado 76
-    '%'  deslocar, e ir ao estado 77
+    '+'  deslocar, e ir ao estado 74
+    '-'  deslocar, e ir ao estado 75
+    '*'  deslocar, e ir ao estado 76
+    '/'  deslocar, e ir ao estado 77
+    '%'  deslocar, e ir ao estado 78
 
     $padrão  reduzir usando a regra 62 (expr)
 
 
-Estado 99
+Estado 100
 
    51 expr: expr . '*' expr
    52     | expr . '/' expr
@@ -1817,14 +1830,14 @@ Estado 99
    63     | expr . LEQ expr
    64     | expr . GEQ expr
 
-    '*'  deslocar, e ir ao estado 75
-    '/'  deslocar, e ir ao estado 76
-    '%'  deslocar, e ir ao estado 77
+    '*'  deslocar, e ir ao estado 76
+    '/'  deslocar, e ir ao estado 77
+    '%'  deslocar, e ir ao estado 78
 
     $padrão  reduzir usando a regra 54 (expr)
 
 
-Estado 100
+Estado 101
 
    51 expr: expr . '*' expr
    52     | expr . '/' expr
@@ -1841,14 +1854,14 @@ Estado 100
    63     | expr . LEQ expr
    64     | expr . GEQ expr
 
-    '*'  deslocar, e ir ao estado 75
-    '/'  deslocar, e ir ao estado 76
-    '%'  deslocar, e ir ao estado 77
+    '*'  deslocar, e ir ao estado 76
+    '/'  deslocar, e ir ao estado 77
+    '%'  deslocar, e ir ao estado 78
 
     $padrão  reduzir usando a regra 55 (expr)
 
 
-Estado 101
+Estado 102
 
    51 expr: expr . '*' expr
    51     | expr '*' expr .
@@ -1868,7 +1881,7 @@ Estado 101
     $padrão  reduzir usando a regra 51 (expr)
 
 
-Estado 102
+Estado 103
 
    51 expr: expr . '*' expr
    52     | expr . '/' expr
@@ -1888,7 +1901,7 @@ Estado 102
     $padrão  reduzir usando a regra 52 (expr)
 
 
-Estado 103
+Estado 104
 
    51 expr: expr . '*' expr
    52     | expr . '/' expr
@@ -1908,16 +1921,16 @@ Estado 103
     $padrão  reduzir usando a regra 53 (expr)
 
 
-Estado 104
+Estado 105
 
    12 function: type function_id '(' opt_parameters ')' . block
 
-    '{'  deslocar, e ir ao estado 110
+    '{'  deslocar, e ir ao estado 111
 
-    block  ir ao estado 111
+    block  ir ao estado 112
 
 
-Estado 105
+Estado 106
 
    16 parameters: parameter ',' . parameters
 
@@ -1926,177 +1939,177 @@ Estado 105
     VOID_TYPE    deslocar, e ir ao estado 4
     BOOL_TYPE    deslocar, e ir ao estado 5
     STRING_TYPE  deslocar, e ir ao estado 6
-    ID           deslocar, e ir ao estado 57
+    ID           deslocar, e ir ao estado 58
 
-    parameters      ir ao estado 112
-    parameter       ir ao estado 81
-    type            ir ao estado 82
+    parameters      ir ao estado 113
+    parameter       ir ao estado 82
+    type            ir ao estado 83
     primitive_type  ir ao estado 19
 
 
-Estado 106
+Estado 107
 
    17 parameter: type ID .
 
     $padrão  reduzir usando a regra 17 (parameter)
 
 
-Estado 107
+Estado 108
 
    11 attribute: type ID ';' .
 
     $padrão  reduzir usando a regra 11 (attribute)
 
 
-Estado 108
+Estado 109
 
    31 function_call_stmt: function_id '(' opt_arguments ')' .
 
     $padrão  reduzir usando a regra 31 (function_call_stmt)
 
 
-Estado 109
+Estado 110
 
    41 arguments: argument ',' . arguments
 
-    PRINT_FUNCTION   deslocar, e ir ao estado 30
-    INPUT_FUNCTION   deslocar, e ir ao estado 31
-    MALLOC_FUNCTION  deslocar, e ir ao estado 32
-    POW_FUNCTION     deslocar, e ir ao estado 33
-    FREE_FUNCTION    deslocar, e ir ao estado 34
-    NOT              deslocar, e ir ao estado 40
-    INT              deslocar, e ir ao estado 41
-    FLOAT            deslocar, e ir ao estado 42
-    BOOL             deslocar, e ir ao estado 43
-    STRING           deslocar, e ir ao estado 44
-    ID               deslocar, e ir ao estado 45
-    '-'              deslocar, e ir ao estado 46
-    '*'              deslocar, e ir ao estado 9
-    '('              deslocar, e ir ao estado 47
+    PRINT_FUNCTION   deslocar, e ir ao estado 31
+    INPUT_FUNCTION   deslocar, e ir ao estado 32
+    MALLOC_FUNCTION  deslocar, e ir ao estado 33
+    POW_FUNCTION     deslocar, e ir ao estado 34
+    FREE_FUNCTION    deslocar, e ir ao estado 35
+    NOT              deslocar, e ir ao estado 41
+    INT              deslocar, e ir ao estado 42
+    FLOAT            deslocar, e ir ao estado 43
+    BOOL             deslocar, e ir ao estado 44
+    STRING           deslocar, e ir ao estado 45
+    ID               deslocar, e ir ao estado 46
+    '-'              deslocar, e ir ao estado 47
+    '*'              deslocar, e ir ao estado 8
+    '('              deslocar, e ir ao estado 48
 
-    function_call_stmt  ir ao estado 48
-    function_id         ir ao estado 49
-    arguments           ir ao estado 113
-    argument            ir ao estado 89
-    expr                ir ao estado 90
-    lval                ir ao estado 51
-    simple_expr         ir ao estado 52
-    literal             ir ao estado 53
+    function_call_stmt  ir ao estado 49
+    function_id         ir ao estado 50
+    arguments           ir ao estado 114
+    argument            ir ao estado 90
+    expr                ir ao estado 91
+    lval                ir ao estado 52
+    simple_expr         ir ao estado 53
+    literal             ir ao estado 54
 
 
-Estado 110
+Estado 111
 
    18 block: '{' . statements '}'
 
-    IF               deslocar, e ir ao estado 114
-    RETURN           deslocar, e ir ao estado 115
-    LOOP             deslocar, e ir ao estado 116
-    BREAK            deslocar, e ir ao estado 117
-    PRINT_FUNCTION   deslocar, e ir ao estado 30
-    INPUT_FUNCTION   deslocar, e ir ao estado 31
-    MALLOC_FUNCTION  deslocar, e ir ao estado 32
-    POW_FUNCTION     deslocar, e ir ao estado 33
-    FREE_FUNCTION    deslocar, e ir ao estado 34
+    IF               deslocar, e ir ao estado 115
+    RETURN           deslocar, e ir ao estado 116
+    LOOP             deslocar, e ir ao estado 117
+    BREAK            deslocar, e ir ao estado 118
+    PRINT_FUNCTION   deslocar, e ir ao estado 31
+    INPUT_FUNCTION   deslocar, e ir ao estado 32
+    MALLOC_FUNCTION  deslocar, e ir ao estado 33
+    POW_FUNCTION     deslocar, e ir ao estado 34
+    FREE_FUNCTION    deslocar, e ir ao estado 35
     INT_TYPE         deslocar, e ir ao estado 2
     FLOAT_TYPE       deslocar, e ir ao estado 3
     VOID_TYPE        deslocar, e ir ao estado 4
     BOOL_TYPE        deslocar, e ir ao estado 5
     STRING_TYPE      deslocar, e ir ao estado 6
-    ID               deslocar, e ir ao estado 118
-    '*'              deslocar, e ir ao estado 9
-    '{'              deslocar, e ir ao estado 110
+    ID               deslocar, e ir ao estado 119
+    '*'              deslocar, e ir ao estado 8
+    '{'              deslocar, e ir ao estado 111
 
     $padrão  reduzir usando a regra 22 (statements)
 
-    block               ir ao estado 119
-    statements          ir ao estado 120
-    statement           ir ao estado 121
-    function_call_stmt  ir ao estado 122
-    function_id         ir ao estado 49
-    declaration_stmt    ir ao estado 123
-    assign_stmt         ir ao estado 124
-    condition_stmt      ir ao estado 125
-    loop_stmt           ir ao estado 126
-    exit_stmt           ir ao estado 127
-    return_stmt         ir ao estado 128
+    block               ir ao estado 120
+    statements          ir ao estado 121
+    statement           ir ao estado 122
+    function_call_stmt  ir ao estado 123
+    function_id         ir ao estado 50
+    declaration_stmt    ir ao estado 124
+    assign_stmt         ir ao estado 125
+    condition_stmt      ir ao estado 126
+    loop_stmt           ir ao estado 127
+    exit_stmt           ir ao estado 128
+    return_stmt         ir ao estado 129
     lval                ir ao estado 17
-    type                ir ao estado 129
+    type                ir ao estado 130
     primitive_type      ir ao estado 19
 
 
-Estado 111
+Estado 112
 
    12 function: type function_id '(' opt_parameters ')' block .
 
     $padrão  reduzir usando a regra 12 (function)
 
 
-Estado 112
+Estado 113
 
    16 parameters: parameter ',' parameters .
 
     $padrão  reduzir usando a regra 16 (parameters)
 
 
-Estado 113
+Estado 114
 
    41 arguments: argument ',' arguments .
 
     $padrão  reduzir usando a regra 41 (arguments)
 
 
-Estado 114
+Estado 115
 
    45 condition_stmt: IF . '(' expr ')' statement
    46               | IF . '(' expr ')' statement ELSE statement
 
-    '('  deslocar, e ir ao estado 130
-
-
-Estado 115
-
-   49 return_stmt: RETURN . expr
-
-    PRINT_FUNCTION   deslocar, e ir ao estado 30
-    INPUT_FUNCTION   deslocar, e ir ao estado 31
-    MALLOC_FUNCTION  deslocar, e ir ao estado 32
-    POW_FUNCTION     deslocar, e ir ao estado 33
-    FREE_FUNCTION    deslocar, e ir ao estado 34
-    NOT              deslocar, e ir ao estado 40
-    INT              deslocar, e ir ao estado 41
-    FLOAT            deslocar, e ir ao estado 42
-    BOOL             deslocar, e ir ao estado 43
-    STRING           deslocar, e ir ao estado 44
-    ID               deslocar, e ir ao estado 45
-    '-'              deslocar, e ir ao estado 46
-    '*'              deslocar, e ir ao estado 9
-    '('              deslocar, e ir ao estado 47
-
-    function_call_stmt  ir ao estado 48
-    function_id         ir ao estado 49
-    expr                ir ao estado 131
-    lval                ir ao estado 51
-    simple_expr         ir ao estado 52
-    literal             ir ao estado 53
+    '('  deslocar, e ir ao estado 131
 
 
 Estado 116
 
-   47 loop_stmt: LOOP . block
+   49 return_stmt: RETURN . expr
 
-    '{'  deslocar, e ir ao estado 110
+    PRINT_FUNCTION   deslocar, e ir ao estado 31
+    INPUT_FUNCTION   deslocar, e ir ao estado 32
+    MALLOC_FUNCTION  deslocar, e ir ao estado 33
+    POW_FUNCTION     deslocar, e ir ao estado 34
+    FREE_FUNCTION    deslocar, e ir ao estado 35
+    NOT              deslocar, e ir ao estado 41
+    INT              deslocar, e ir ao estado 42
+    FLOAT            deslocar, e ir ao estado 43
+    BOOL             deslocar, e ir ao estado 44
+    STRING           deslocar, e ir ao estado 45
+    ID               deslocar, e ir ao estado 46
+    '-'              deslocar, e ir ao estado 47
+    '*'              deslocar, e ir ao estado 8
+    '('              deslocar, e ir ao estado 48
 
-    block  ir ao estado 132
+    function_call_stmt  ir ao estado 49
+    function_id         ir ao estado 50
+    expr                ir ao estado 132
+    lval                ir ao estado 52
+    simple_expr         ir ao estado 53
+    literal             ir ao estado 54
 
 
 Estado 117
 
-   48 exit_stmt: BREAK . WHEN '(' expr ')'
+   47 loop_stmt: LOOP . block
 
-    WHEN  deslocar, e ir ao estado 133
+    '{'  deslocar, e ir ao estado 111
+
+    block  ir ao estado 133
 
 
 Estado 118
+
+   48 exit_stmt: BREAK . WHEN '(' expr ')'
+
+    WHEN  deslocar, e ir ao estado 134
+
+
+Estado 119
 
    32 function_id: ID .
    67 lval: ID .
@@ -2108,147 +2121,147 @@ Estado 118
     $padrão  reduzir usando a regra 67 (lval)
 
 
-Estado 119
+Estado 120
 
    30 statement: block .
 
     $padrão  reduzir usando a regra 30 (statement)
 
 
-Estado 120
+Estado 121
 
    18 block: '{' statements . '}'
 
-    '}'  deslocar, e ir ao estado 134
+    '}'  deslocar, e ir ao estado 135
 
 
-Estado 121
+Estado 122
 
    21 statements: statement . statements
 
-    IF               deslocar, e ir ao estado 114
-    RETURN           deslocar, e ir ao estado 115
-    LOOP             deslocar, e ir ao estado 116
-    BREAK            deslocar, e ir ao estado 117
-    PRINT_FUNCTION   deslocar, e ir ao estado 30
-    INPUT_FUNCTION   deslocar, e ir ao estado 31
-    MALLOC_FUNCTION  deslocar, e ir ao estado 32
-    POW_FUNCTION     deslocar, e ir ao estado 33
-    FREE_FUNCTION    deslocar, e ir ao estado 34
+    IF               deslocar, e ir ao estado 115
+    RETURN           deslocar, e ir ao estado 116
+    LOOP             deslocar, e ir ao estado 117
+    BREAK            deslocar, e ir ao estado 118
+    PRINT_FUNCTION   deslocar, e ir ao estado 31
+    INPUT_FUNCTION   deslocar, e ir ao estado 32
+    MALLOC_FUNCTION  deslocar, e ir ao estado 33
+    POW_FUNCTION     deslocar, e ir ao estado 34
+    FREE_FUNCTION    deslocar, e ir ao estado 35
     INT_TYPE         deslocar, e ir ao estado 2
     FLOAT_TYPE       deslocar, e ir ao estado 3
     VOID_TYPE        deslocar, e ir ao estado 4
     BOOL_TYPE        deslocar, e ir ao estado 5
     STRING_TYPE      deslocar, e ir ao estado 6
-    ID               deslocar, e ir ao estado 118
-    '*'              deslocar, e ir ao estado 9
-    '{'              deslocar, e ir ao estado 110
+    ID               deslocar, e ir ao estado 119
+    '*'              deslocar, e ir ao estado 8
+    '{'              deslocar, e ir ao estado 111
 
     $padrão  reduzir usando a regra 22 (statements)
 
-    block               ir ao estado 119
-    statements          ir ao estado 135
-    statement           ir ao estado 121
-    function_call_stmt  ir ao estado 122
-    function_id         ir ao estado 49
-    declaration_stmt    ir ao estado 123
-    assign_stmt         ir ao estado 124
-    condition_stmt      ir ao estado 125
-    loop_stmt           ir ao estado 126
-    exit_stmt           ir ao estado 127
-    return_stmt         ir ao estado 128
+    block               ir ao estado 120
+    statements          ir ao estado 136
+    statement           ir ao estado 122
+    function_call_stmt  ir ao estado 123
+    function_id         ir ao estado 50
+    declaration_stmt    ir ao estado 124
+    assign_stmt         ir ao estado 125
+    condition_stmt      ir ao estado 126
+    loop_stmt           ir ao estado 127
+    exit_stmt           ir ao estado 128
+    return_stmt         ir ao estado 129
     lval                ir ao estado 17
-    type                ir ao estado 129
+    type                ir ao estado 130
     primitive_type      ir ao estado 19
-
-
-Estado 122
-
-   25 statement: function_call_stmt . ';'
-
-    ';'  deslocar, e ir ao estado 136
 
 
 Estado 123
 
-   23 statement: declaration_stmt . ';'
+   25 statement: function_call_stmt . ';'
 
     ';'  deslocar, e ir ao estado 137
 
 
 Estado 124
 
-   24 statement: assign_stmt . ';'
+   23 statement: declaration_stmt . ';'
 
     ';'  deslocar, e ir ao estado 138
 
 
 Estado 125
 
+   24 statement: assign_stmt . ';'
+
+    ';'  deslocar, e ir ao estado 139
+
+
+Estado 126
+
    26 statement: condition_stmt .
 
     $padrão  reduzir usando a regra 26 (statement)
 
 
-Estado 126
+Estado 127
 
    27 statement: loop_stmt .
 
     $padrão  reduzir usando a regra 27 (statement)
 
 
-Estado 127
-
-   29 statement: exit_stmt . ';'
-
-    ';'  deslocar, e ir ao estado 139
-
-
 Estado 128
 
-   28 statement: return_stmt . ';'
+   29 statement: exit_stmt . ';'
 
     ';'  deslocar, e ir ao estado 140
 
 
 Estado 129
 
-   43 declaration_stmt: type . ID
-   80 type: type . '*'
+   28 statement: return_stmt . ';'
 
-    ID   deslocar, e ir ao estado 141
-    '*'  deslocar, e ir ao estado 36
+    ';'  deslocar, e ir ao estado 141
 
 
 Estado 130
 
-   45 condition_stmt: IF '(' . expr ')' statement
-   46               | IF '(' . expr ')' statement ELSE statement
+   43 declaration_stmt: type . ID
+   80 type: type . '*'
 
-    PRINT_FUNCTION   deslocar, e ir ao estado 30
-    INPUT_FUNCTION   deslocar, e ir ao estado 31
-    MALLOC_FUNCTION  deslocar, e ir ao estado 32
-    POW_FUNCTION     deslocar, e ir ao estado 33
-    FREE_FUNCTION    deslocar, e ir ao estado 34
-    NOT              deslocar, e ir ao estado 40
-    INT              deslocar, e ir ao estado 41
-    FLOAT            deslocar, e ir ao estado 42
-    BOOL             deslocar, e ir ao estado 43
-    STRING           deslocar, e ir ao estado 44
-    ID               deslocar, e ir ao estado 45
-    '-'              deslocar, e ir ao estado 46
-    '*'              deslocar, e ir ao estado 9
-    '('              deslocar, e ir ao estado 47
-
-    function_call_stmt  ir ao estado 48
-    function_id         ir ao estado 49
-    expr                ir ao estado 142
-    lval                ir ao estado 51
-    simple_expr         ir ao estado 52
-    literal             ir ao estado 53
+    ID   deslocar, e ir ao estado 142
+    '*'  deslocar, e ir ao estado 37
 
 
 Estado 131
+
+   45 condition_stmt: IF '(' . expr ')' statement
+   46               | IF '(' . expr ')' statement ELSE statement
+
+    PRINT_FUNCTION   deslocar, e ir ao estado 31
+    INPUT_FUNCTION   deslocar, e ir ao estado 32
+    MALLOC_FUNCTION  deslocar, e ir ao estado 33
+    POW_FUNCTION     deslocar, e ir ao estado 34
+    FREE_FUNCTION    deslocar, e ir ao estado 35
+    NOT              deslocar, e ir ao estado 41
+    INT              deslocar, e ir ao estado 42
+    FLOAT            deslocar, e ir ao estado 43
+    BOOL             deslocar, e ir ao estado 44
+    STRING           deslocar, e ir ao estado 45
+    ID               deslocar, e ir ao estado 46
+    '-'              deslocar, e ir ao estado 47
+    '*'              deslocar, e ir ao estado 8
+    '('              deslocar, e ir ao estado 48
+
+    function_call_stmt  ir ao estado 49
+    function_id         ir ao estado 50
+    expr                ir ao estado 143
+    lval                ir ao estado 52
+    simple_expr         ir ao estado 53
+    literal             ir ao estado 54
+
+
+Estado 132
 
    49 return_stmt: RETURN expr .
    51 expr: expr . '*' expr
@@ -2265,94 +2278,94 @@ Estado 131
    63     | expr . LEQ expr
    64     | expr . GEQ expr
 
-    GEQ    deslocar, e ir ao estado 65
-    LEQ    deslocar, e ir ao estado 66
-    EQUAL  deslocar, e ir ao estado 67
-    DIFF   deslocar, e ir ao estado 68
-    AND    deslocar, e ir ao estado 69
-    OR     deslocar, e ir ao estado 70
-    '<'    deslocar, e ir ao estado 71
-    '>'    deslocar, e ir ao estado 72
-    '+'    deslocar, e ir ao estado 73
-    '-'    deslocar, e ir ao estado 74
-    '*'    deslocar, e ir ao estado 75
-    '/'    deslocar, e ir ao estado 76
-    '%'    deslocar, e ir ao estado 77
+    GEQ    deslocar, e ir ao estado 66
+    LEQ    deslocar, e ir ao estado 67
+    EQUAL  deslocar, e ir ao estado 68
+    DIFF   deslocar, e ir ao estado 69
+    AND    deslocar, e ir ao estado 70
+    OR     deslocar, e ir ao estado 71
+    '<'    deslocar, e ir ao estado 72
+    '>'    deslocar, e ir ao estado 73
+    '+'    deslocar, e ir ao estado 74
+    '-'    deslocar, e ir ao estado 75
+    '*'    deslocar, e ir ao estado 76
+    '/'    deslocar, e ir ao estado 77
+    '%'    deslocar, e ir ao estado 78
 
     $padrão  reduzir usando a regra 49 (return_stmt)
 
 
-Estado 132
+Estado 133
 
    47 loop_stmt: LOOP block .
 
     $padrão  reduzir usando a regra 47 (loop_stmt)
 
 
-Estado 133
+Estado 134
 
    48 exit_stmt: BREAK WHEN . '(' expr ')'
 
-    '('  deslocar, e ir ao estado 143
+    '('  deslocar, e ir ao estado 144
 
 
-Estado 134
+Estado 135
 
    18 block: '{' statements '}' .
 
     $padrão  reduzir usando a regra 18 (block)
 
 
-Estado 135
+Estado 136
 
    21 statements: statement statements .
 
     $padrão  reduzir usando a regra 21 (statements)
 
 
-Estado 136
+Estado 137
 
    25 statement: function_call_stmt ';' .
 
     $padrão  reduzir usando a regra 25 (statement)
 
 
-Estado 137
+Estado 138
 
    23 statement: declaration_stmt ';' .
 
     $padrão  reduzir usando a regra 23 (statement)
 
 
-Estado 138
+Estado 139
 
    24 statement: assign_stmt ';' .
 
     $padrão  reduzir usando a regra 24 (statement)
 
 
-Estado 139
+Estado 140
 
    29 statement: exit_stmt ';' .
 
     $padrão  reduzir usando a regra 29 (statement)
 
 
-Estado 140
+Estado 141
 
    28 statement: return_stmt ';' .
 
     $padrão  reduzir usando a regra 28 (statement)
 
 
-Estado 141
+Estado 142
 
    43 declaration_stmt: type ID .
 
     $padrão  reduzir usando a regra 43 (declaration_stmt)
 
 
-Estado 142
+Estado 143
 
    45 condition_stmt: IF '(' expr . ')' statement
    46               | IF '(' expr . ')' statement ELSE statement
@@ -2370,88 +2383,88 @@ Estado 142
    63     | expr . LEQ expr
    64     | expr . GEQ expr
 
-    GEQ    deslocar, e ir ao estado 65
-    LEQ    deslocar, e ir ao estado 66
-    EQUAL  deslocar, e ir ao estado 67
-    DIFF   deslocar, e ir ao estado 68
-    AND    deslocar, e ir ao estado 69
-    OR     deslocar, e ir ao estado 70
-    '<'    deslocar, e ir ao estado 71
-    '>'    deslocar, e ir ao estado 72
-    '+'    deslocar, e ir ao estado 73
-    '-'    deslocar, e ir ao estado 74
-    '*'    deslocar, e ir ao estado 75
-    '/'    deslocar, e ir ao estado 76
-    '%'    deslocar, e ir ao estado 77
-    ')'    deslocar, e ir ao estado 144
-
-
-Estado 143
-
-   48 exit_stmt: BREAK WHEN '(' . expr ')'
-
-    PRINT_FUNCTION   deslocar, e ir ao estado 30
-    INPUT_FUNCTION   deslocar, e ir ao estado 31
-    MALLOC_FUNCTION  deslocar, e ir ao estado 32
-    POW_FUNCTION     deslocar, e ir ao estado 33
-    FREE_FUNCTION    deslocar, e ir ao estado 34
-    NOT              deslocar, e ir ao estado 40
-    INT              deslocar, e ir ao estado 41
-    FLOAT            deslocar, e ir ao estado 42
-    BOOL             deslocar, e ir ao estado 43
-    STRING           deslocar, e ir ao estado 44
-    ID               deslocar, e ir ao estado 45
-    '-'              deslocar, e ir ao estado 46
-    '*'              deslocar, e ir ao estado 9
-    '('              deslocar, e ir ao estado 47
-
-    function_call_stmt  ir ao estado 48
-    function_id         ir ao estado 49
-    expr                ir ao estado 145
-    lval                ir ao estado 51
-    simple_expr         ir ao estado 52
-    literal             ir ao estado 53
+    GEQ    deslocar, e ir ao estado 66
+    LEQ    deslocar, e ir ao estado 67
+    EQUAL  deslocar, e ir ao estado 68
+    DIFF   deslocar, e ir ao estado 69
+    AND    deslocar, e ir ao estado 70
+    OR     deslocar, e ir ao estado 71
+    '<'    deslocar, e ir ao estado 72
+    '>'    deslocar, e ir ao estado 73
+    '+'    deslocar, e ir ao estado 74
+    '-'    deslocar, e ir ao estado 75
+    '*'    deslocar, e ir ao estado 76
+    '/'    deslocar, e ir ao estado 77
+    '%'    deslocar, e ir ao estado 78
+    ')'    deslocar, e ir ao estado 145
 
 
 Estado 144
 
+   48 exit_stmt: BREAK WHEN '(' . expr ')'
+
+    PRINT_FUNCTION   deslocar, e ir ao estado 31
+    INPUT_FUNCTION   deslocar, e ir ao estado 32
+    MALLOC_FUNCTION  deslocar, e ir ao estado 33
+    POW_FUNCTION     deslocar, e ir ao estado 34
+    FREE_FUNCTION    deslocar, e ir ao estado 35
+    NOT              deslocar, e ir ao estado 41
+    INT              deslocar, e ir ao estado 42
+    FLOAT            deslocar, e ir ao estado 43
+    BOOL             deslocar, e ir ao estado 44
+    STRING           deslocar, e ir ao estado 45
+    ID               deslocar, e ir ao estado 46
+    '-'              deslocar, e ir ao estado 47
+    '*'              deslocar, e ir ao estado 8
+    '('              deslocar, e ir ao estado 48
+
+    function_call_stmt  ir ao estado 49
+    function_id         ir ao estado 50
+    expr                ir ao estado 146
+    lval                ir ao estado 52
+    simple_expr         ir ao estado 53
+    literal             ir ao estado 54
+
+
+Estado 145
+
    45 condition_stmt: IF '(' expr ')' . statement
    46               | IF '(' expr ')' . statement ELSE statement
 
-    IF               deslocar, e ir ao estado 114
-    RETURN           deslocar, e ir ao estado 115
-    LOOP             deslocar, e ir ao estado 116
-    BREAK            deslocar, e ir ao estado 117
-    PRINT_FUNCTION   deslocar, e ir ao estado 30
-    INPUT_FUNCTION   deslocar, e ir ao estado 31
-    MALLOC_FUNCTION  deslocar, e ir ao estado 32
-    POW_FUNCTION     deslocar, e ir ao estado 33
-    FREE_FUNCTION    deslocar, e ir ao estado 34
+    IF               deslocar, e ir ao estado 115
+    RETURN           deslocar, e ir ao estado 116
+    LOOP             deslocar, e ir ao estado 117
+    BREAK            deslocar, e ir ao estado 118
+    PRINT_FUNCTION   deslocar, e ir ao estado 31
+    INPUT_FUNCTION   deslocar, e ir ao estado 32
+    MALLOC_FUNCTION  deslocar, e ir ao estado 33
+    POW_FUNCTION     deslocar, e ir ao estado 34
+    FREE_FUNCTION    deslocar, e ir ao estado 35
     INT_TYPE         deslocar, e ir ao estado 2
     FLOAT_TYPE       deslocar, e ir ao estado 3
     VOID_TYPE        deslocar, e ir ao estado 4
     BOOL_TYPE        deslocar, e ir ao estado 5
     STRING_TYPE      deslocar, e ir ao estado 6
-    ID               deslocar, e ir ao estado 118
-    '*'              deslocar, e ir ao estado 9
-    '{'              deslocar, e ir ao estado 110
+    ID               deslocar, e ir ao estado 119
+    '*'              deslocar, e ir ao estado 8
+    '{'              deslocar, e ir ao estado 111
 
-    block               ir ao estado 119
-    statement           ir ao estado 146
-    function_call_stmt  ir ao estado 122
-    function_id         ir ao estado 49
-    declaration_stmt    ir ao estado 123
-    assign_stmt         ir ao estado 124
-    condition_stmt      ir ao estado 125
-    loop_stmt           ir ao estado 126
-    exit_stmt           ir ao estado 127
-    return_stmt         ir ao estado 128
+    block               ir ao estado 120
+    statement           ir ao estado 147
+    function_call_stmt  ir ao estado 123
+    function_id         ir ao estado 50
+    declaration_stmt    ir ao estado 124
+    assign_stmt         ir ao estado 125
+    condition_stmt      ir ao estado 126
+    loop_stmt           ir ao estado 127
+    exit_stmt           ir ao estado 128
+    return_stmt         ir ao estado 129
     lval                ir ao estado 17
-    type                ir ao estado 129
+    type                ir ao estado 130
     primitive_type      ir ao estado 19
 
 
-Estado 145
+Estado 146
 
    48 exit_stmt: BREAK WHEN '(' expr . ')'
    51 expr: expr . '*' expr
@@ -2468,77 +2481,77 @@ Estado 145
    63     | expr . LEQ expr
    64     | expr . GEQ expr
 
-    GEQ    deslocar, e ir ao estado 65
-    LEQ    deslocar, e ir ao estado 66
-    EQUAL  deslocar, e ir ao estado 67
-    DIFF   deslocar, e ir ao estado 68
-    AND    deslocar, e ir ao estado 69
-    OR     deslocar, e ir ao estado 70
-    '<'    deslocar, e ir ao estado 71
-    '>'    deslocar, e ir ao estado 72
-    '+'    deslocar, e ir ao estado 73
-    '-'    deslocar, e ir ao estado 74
-    '*'    deslocar, e ir ao estado 75
-    '/'    deslocar, e ir ao estado 76
-    '%'    deslocar, e ir ao estado 77
-    ')'    deslocar, e ir ao estado 147
+    GEQ    deslocar, e ir ao estado 66
+    LEQ    deslocar, e ir ao estado 67
+    EQUAL  deslocar, e ir ao estado 68
+    DIFF   deslocar, e ir ao estado 69
+    AND    deslocar, e ir ao estado 70
+    OR     deslocar, e ir ao estado 71
+    '<'    deslocar, e ir ao estado 72
+    '>'    deslocar, e ir ao estado 73
+    '+'    deslocar, e ir ao estado 74
+    '-'    deslocar, e ir ao estado 75
+    '*'    deslocar, e ir ao estado 76
+    '/'    deslocar, e ir ao estado 77
+    '%'    deslocar, e ir ao estado 78
+    ')'    deslocar, e ir ao estado 148
 
 
-Estado 146
+Estado 147
 
    45 condition_stmt: IF '(' expr ')' statement .
    46               | IF '(' expr ')' statement . ELSE statement
 
-    ELSE  deslocar, e ir ao estado 148
+    ELSE  deslocar, e ir ao estado 149
 
     $padrão  reduzir usando a regra 45 (condition_stmt)
 
 
-Estado 147
+Estado 148
 
    48 exit_stmt: BREAK WHEN '(' expr ')' .
 
     $padrão  reduzir usando a regra 48 (exit_stmt)
 
 
-Estado 148
+Estado 149
 
    46 condition_stmt: IF '(' expr ')' statement ELSE . statement
 
-    IF               deslocar, e ir ao estado 114
-    RETURN           deslocar, e ir ao estado 115
-    LOOP             deslocar, e ir ao estado 116
-    BREAK            deslocar, e ir ao estado 117
-    PRINT_FUNCTION   deslocar, e ir ao estado 30
-    INPUT_FUNCTION   deslocar, e ir ao estado 31
-    MALLOC_FUNCTION  deslocar, e ir ao estado 32
-    POW_FUNCTION     deslocar, e ir ao estado 33
-    FREE_FUNCTION    deslocar, e ir ao estado 34
+    IF               deslocar, e ir ao estado 115
+    RETURN           deslocar, e ir ao estado 116
+    LOOP             deslocar, e ir ao estado 117
+    BREAK            deslocar, e ir ao estado 118
+    PRINT_FUNCTION   deslocar, e ir ao estado 31
+    INPUT_FUNCTION   deslocar, e ir ao estado 32
+    MALLOC_FUNCTION  deslocar, e ir ao estado 33
+    POW_FUNCTION     deslocar, e ir ao estado 34
+    FREE_FUNCTION    deslocar, e ir ao estado 35
     INT_TYPE         deslocar, e ir ao estado 2
     FLOAT_TYPE       deslocar, e ir ao estado 3
     VOID_TYPE        deslocar, e ir ao estado 4
     BOOL_TYPE        deslocar, e ir ao estado 5
     STRING_TYPE      deslocar, e ir ao estado 6
-    ID               deslocar, e ir ao estado 118
-    '*'              deslocar, e ir ao estado 9
-    '{'              deslocar, e ir ao estado 110
+    ID               deslocar, e ir ao estado 119
+    '*'              deslocar, e ir ao estado 8
+    '{'              deslocar, e ir ao estado 111
 
-    block               ir ao estado 119
-    statement           ir ao estado 149
-    function_call_stmt  ir ao estado 122
-    function_id         ir ao estado 49
-    declaration_stmt    ir ao estado 123
-    assign_stmt         ir ao estado 124
-    condition_stmt      ir ao estado 125
-    loop_stmt           ir ao estado 126
-    exit_stmt           ir ao estado 127
-    return_stmt         ir ao estado 128
+    block               ir ao estado 120
+    statement           ir ao estado 150
+    function_call_stmt  ir ao estado 123
+    function_id         ir ao estado 50
+    declaration_stmt    ir ao estado 124
+    assign_stmt         ir ao estado 125
+    condition_stmt      ir ao estado 126
+    loop_stmt           ir ao estado 127
+    exit_stmt           ir ao estado 128
+    return_stmt         ir ao estado 129
     lval                ir ao estado 17
-    type                ir ao estado 129
+    type                ir ao estado 130
     primitive_type      ir ao estado 19
 
 
-Estado 149
+Estado 150
 
    46 condition_stmt: IF '(' expr ')' statement ELSE statement .
 

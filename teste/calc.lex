@@ -247,7 +247,7 @@ return ID;}
 
 <<EOF>> {yycol = coluna;
 coluna+=yyleng;
-return EOFF;}
+return 0;}
 
 . {printf("(%d,%d,LEXICAL_ERROR,\"%s\")\n",yylineno,coluna,yytext); return 0;}
 

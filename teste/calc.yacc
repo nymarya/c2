@@ -21,6 +21,8 @@ int base;
 %left '*' '/' '%'
 %left UMINUS 
 
+%nonassoc LOWER_THAN_PROGRAM
+%nonassoc PROGRAM
 
 %nonassoc LOWER_THAN_ELSE
 %nonassoc ELSE
@@ -32,15 +34,13 @@ int base;
 %start program
 %%     
 
-
 program : declaration program
-        | declaration
+        | declaration %prec LOWER_THAN_PROGRAM
         ;
 
 declaration : struct
             | function
             | global_statement
-            | EOFF
             ;
 
 struct : STRUCT ID struct_block
@@ -180,9 +180,16 @@ primitive_type : INT_TYPE
                ;
 
 %%
-main() 
+extern FILE *yyin;
+
+main (int argc, char *argv[])
 {
- return(yyparse());
+  int x = yyparse(); 
+  if (x == 0)
+    printf("Sucess!\n");
+  else
+    printf("Error!\n");
+
 }
 yyerror(s)
 char *s;

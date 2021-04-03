@@ -1227,7 +1227,7 @@ case YY_STATE_EOF(INITIAL):
 #line 248 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
-return EOFF;}
+return 0;}
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
