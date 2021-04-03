@@ -12,7 +12,7 @@ void main (int x){
 
   int a;
 
-  a = pow a,2;
+  a = pow(a,2);
 
   if (a){}
   else{int b;}

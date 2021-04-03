@@ -1171,7 +1171,7 @@ YY_RULE_SETUP
 #line 216 "calc.lex"
 {yycol = coluna;
 coluna+=yyleng;
-return '}';}
+return '{';}
 	YY_BREAK
 case 46:
 YY_RULE_SETUP

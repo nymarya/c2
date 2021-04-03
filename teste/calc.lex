@@ -215,7 +215,7 @@ return ']';}
 
 "{" {yycol = coluna;
 coluna+=yyleng;
-return '}';}
+return '{';}
 
 "}" {yycol = coluna;
 coluna+=yyleng;

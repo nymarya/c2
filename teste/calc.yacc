@@ -21,6 +21,7 @@ int base;
 %left '*' '/' '%'
 %left UMINUS 
 
+%start program
 %%     
 
 lines : lines expr ';'
@@ -28,7 +29,53 @@ lines : lines expr ';'
       | /* empty */
       ;
 
-statements : statement statements | /* empty */ ;
+program : declaration program
+        | declaration
+        | EOFF
+        ;
+
+declaration : struct
+            | function
+            | global_statement
+            ;
+
+struct : STRUCT ID struct_block
+       ;
+
+struct_block : '{' attributes '}'
+
+attributes : attribute attributes
+           | /* empty */
+           ;
+
+attribute : type ID ';'
+          ;
+
+function : type function_id '(' opt_parameters ')' block
+         ;
+
+opt_parameters : parameters
+               | /* empty */
+               ;
+
+parameters : parameter
+           | parameter ',' parameters
+           ;
+
+parameter : type ID
+          ;
+
+block : '{' statements '}'
+      ;
+
+global_statement :  declaration_stmt ';'
+                 | assign_stmt ';'
+                 ;
+
+statements : statement statements 
+           | /* empty */ 
+           ;
+
 statement  : declaration_stmt ';'
            | assign_stmt ';'
            | function_call_stmt ';'
@@ -36,21 +83,48 @@ statement  : declaration_stmt ';'
            | loop_stmt | return_stmt ';' | exit_stmt ';' 
            | block /* precisa? */
            ;
-function_call_stmt : function_id '(' opt_arguments ')';
-function_id : ID | PRINT_FUNCTION | INPUT_FUNCTION | MALLOC_FUNCTION | FREE_FUNCTION
-            | FREE_FUNCTION | POW_FUNCTION ;
-      
-opt_arguments : arguments | /* empty */ ;
-arguments : argument | argument ',' arguments;
-argument : expr ; /* precisa? */
 
-declaration_stmt : type ID ;
-assign_stmt : lval '=' expr ;
-condition_stmt : IF '(' expr ')' block | IF '(' expr ')' block ELSE block;
-condition_stmt_opt : ELSE block | /*empty*/ ;
-loop_stmt : LOOP block ;
-exit_stmt : BREAK WHEN '(' expr ')' ;
-return_stmt : RETURN expr;
+function_call_stmt : function_id '(' opt_arguments ')'
+                   ;
+
+function_id : ID 
+            | PRINT_FUNCTION 
+            | INPUT_FUNCTION 
+            | MALLOC_FUNCTION 
+            | FREE_FUNCTION 
+            | FREE_FUNCTION 
+            | POW_FUNCTION 
+            ;
+      
+opt_arguments : arguments 
+              | /* empty */ 
+              ;
+
+arguments : argument 
+          | argument ',' arguments
+          ;
+
+argument : expr 
+         ; /* precisa? */
+
+declaration_stmt : type ID 
+                 ;
+
+assign_stmt : lval '=' expr 
+            ;
+
+condition_stmt : IF '(' expr ')' statement 
+               | IF '(' expr ')' statement ELSE statement
+               ;
+
+loop_stmt : LOOP block 
+          ;
+
+exit_stmt : BREAK WHEN '(' expr ')' 
+          ;
+
+return_stmt : RETURN expr
+            ;
 
 expr : '(' expr ')'
      | expr '*' expr
@@ -69,7 +143,6 @@ expr : '(' expr ')'
      | expr GEQ expr
      | '-' expr %prec UMINUS
      | simple_expr
-     |                      /*É assim que define uma regra vazia?*/
      ;
 
 lval : ID
@@ -78,13 +151,30 @@ lval : ID
      | '*' lval
      ;
 
-simple_expr : INT
-            | FLOAT 
-            | STRING
-            | BOOL /*Isso deveria ser trocado para type, n?*/
+simple_expr : literal
             | lval
             | function_call_stmt /*Deixar assim ou substituir pelos nomes das funções?*/
             ;
+
+literal : INT
+        | FLOAT 
+        | STRING
+        | BOOL
+        ;
+
+type : primitive_type
+     | ID
+     | type '*'
+     | type '[' ']'
+     ;
+
+primitive_type : INT_TYPE
+               | FLOAT_TYPE
+               | BOOL_TYPE
+               | VOID_TYPE
+               | STRING_TYPE
+               ;
+
 %%
 main() 
 {
