@@ -29,29 +29,24 @@ lines : lines expr ';'
       ;
 
 statements : statement statements | /* empty */ ;
-statement  : type ID ';'
-           | ID id_stmt
-           | '*' ID lval '=' expr ';'
-           | PRINT_FUNCTION '(' opt_arguments ')' ':'
-           | INPUT_FUNCTION '(' opt_arguments ')' ';'
-           | MALLOC_FUNCTION '(' opt_arguments ')' ';'
-           | FREE_FUNCTION '(' opt_arguments ')' ';'
-           | POW_FUNCTION '(' opt_arguments ')' ';'
-           | condition_stmt | loop_stmt | return_stmt ';' | exit_stmt ';' 
+statement  : declaration_stmt ';'
+           | assign_stmt ';'
+           | function_call_stmt ';'
+           | condition_stmt
+           | loop_stmt | return_stmt ';' | exit_stmt ';' 
            | block /* precisa? */
            ;
-
-id_stmt : lval '=' expr ';' 
-        | '(' opt_arguments ')' ';'
-        | ID ';'
-        ;
+function_call_stmt : function_id '(' opt_arguments ')';
+function_id : ID | PRINT_FUNCTION | INPUT_FUNCTION | MALLOC_FUNCTION | FREE_FUNCTION
+            | FREE_FUNCTION | POW_FUNCTION ;
       
 opt_arguments : arguments | /* empty */ ;
-arguments : argument opt_argument;
-opt_argument : ',' argument | /* empty */ ;
+arguments : argument | argument ',' arguments;
 argument : expr ; /* precisa? */
 
-condition_stmt : IF '(' expr ')' block condition_stmt_opt ;
+declaration_stmt : type ID ;
+assign_stmt : lval '=' expr ;
+condition_stmt : IF '(' expr ')' block | IF '(' expr ')' block ELSE block;
 condition_stmt_opt : ELSE block | /*empty*/ ;
 loop_stmt : LOOP block ;
 exit_stmt : BREAK WHEN '(' expr ')' ;
