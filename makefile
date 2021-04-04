@@ -2,6 +2,9 @@ FILES = lexical/mlex.c
 CC = g++
 CFLAGS = -lfl
 
+Left: y.tab.c lex.yy.c
+	@cc y.tab.c lex.yy.c
+
 Recursivo: lexical/lexer.l
 	@make Lexer.c
 	$(CC) $(CFLAGS) $(FILES) -D Recursivo -o Sintatico.bin
@@ -10,19 +13,16 @@ Tabela: lexical/lexer.l
 	@make Lexer.c
 	$(CC) $(CFLAGS) $(FILES) -D Tabela -o Sintatico.bin
 
-Left: y.tab.c lex.yy.c
-	@cc y.tab.c lex.yy.c
+lex.yy.c: bottom_up/calc.lex
+	@lex bottom_up/calc.lex
 
-lex.yy.c: Left/calc.lex
-	@lex Left/calc.lex
-
-y.tab.c: Left/calc.yacc
-	@yacc -d Left/calc.yacc
+y.tab.c: bottom_up/calc.yacc
+	@yacc -d bottom_up/calc.yacc
 
 Lexer.c: lexical/lexer.l
 	flex lexical/lexer.l
 
-run_left:
+run_bottom_up:
 	@./a.out < $(file)
 
 run:
