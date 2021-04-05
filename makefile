@@ -3,7 +3,7 @@ CC = g++
 CFLAGS = -lfl
 
 Left: y.tab.c lex.yy.c
-	@cc y.tab.c lex.yy.c
+	@cc y.tab.c lex.yy.c -w
 
 Recursivo: lexical/lexer.l
 	@make Lexer.c
