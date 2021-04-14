@@ -5,6 +5,13 @@ int base;
 
 int lin, col;
 
+/*
+struct code{
+  char* text;
+  code * next;
+}
+*/
+
 %}
 
 /* https://cse.iitkgp.ac.in/~goutam/compiler/lect/lect8.pdf */
@@ -37,19 +44,20 @@ int lin, col;
 %start program
 %%     
 
-program : declaration program
-        | declaration %prec LOWER_THAN_PROGRAM
+
+program : declaration program                   /* program1.cs := declaration.cs || program2.cs */
+        | declaration %prec LOWER_THAN_PROGRAM  /* program1.cs := declaration.cs */
         ;
 
-declaration : struct
-            | function
-            | global_statement
+declaration : struct            /* declaration.cs := stuct.cs */
+            | function          /* declaration.cs := function.cs */
+            | global_statement  /* declaration.cs := global_statement.cs */
             ;
 
-struct : STRUCT ID struct_block
+struct : STRUCT ID struct_block /* struct.cs := STRUCT || ID || struct_block.cs */
        ;
 
-struct_block : '{' attributes '}'
+struct_block : '{' attributes '}' /* struct_block.cs := '{' || attributes.cs || '}' */
 
 attributes : attribute attributes
            | /* empty */
@@ -72,7 +80,7 @@ parameters : parameter
 parameter : type ID
           ;
 
-block : '{' statements '}'
+block : '{' statements '}' /* statements.ss = block.sh + 1; block.cs =  '{' || statements.cs || '}' */
       ;
 
 global_statement : declaration_stmt ';'
@@ -111,7 +119,7 @@ arguments : argument
           ;
 
 argument : expr 
-         ; /* precisa? */
+         ; /* empty */
 
 declaration_stmt : type ID 
                  ;
@@ -159,7 +167,7 @@ lval : ID
 
 simple_expr : literal
             | lval
-            | function_call_stmt /*Deixar assim ou substituir pelos nomes das funções?*/
+            | function_call_stmt
             ;
 
 literal : INT
@@ -175,7 +183,7 @@ type : primitive_type
 
 
 
-primitive_type : INT_TYPE
+primitive_type : INT_TYPE { printf("oi"); }
                | FLOAT_TYPE
                | BOOL_TYPE
                | VOID_TYPE

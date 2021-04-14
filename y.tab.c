@@ -1509,8 +1509,14 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
+  case 81:
+#line 178 "bottom_up/calc.yacc"
+                          { printf("oi"); }
+#line 1516 "y.tab.c"
+    break;
 
-#line 1514 "y.tab.c"
+
+#line 1520 "y.tab.c"
 
       default: break;
     }
