@@ -220,40 +220,40 @@ exit_stmt : BREAK WHEN '(' expr ')'
 return_stmt : RETURN expr
             ;
 
-expr : '(' {addl(cts('('));} expr ')'        {addl(cts(')')); $$ = concat(3,cts('('),$3,cts(')'));}
-     | expr '*' {addl(cts('*'));} expr       {$$ = concat(3,$1,cts('*'),$4);}
-     | expr '/' {addl(cts('/'));} expr       {$$ = concat(3,$1,cts('/'),$4);}
-     | expr '%' {addl(cts('%'));} expr       {$$ = concat(3,$1,cts('%'),$4);}      
-     | expr '+' {addl(cts('+'));} expr       {$$ = concat(3,$1,cts('%'),$4);}      
-     | expr '-' {addl(cts('-'));} expr       {$$ = concat(3,$1,cts('-'),$4);}      
-     | expr OR {addl($2);} expr              {$$ = concat(3,$1,$2,$4);}
-     | expr AND {addl($2);} expr             {$$ = concat(3,$1,$2,$4);}
-     | NOT expr                  
-     | expr EQUAL expr           
-     | expr DIFF expr            
-     | expr '<' expr             
-     | expr '>' expr             
-     | expr LEQ expr             
-     | expr GEQ expr             
-     | '-' expr %prec UMINUS     
-     | simple_expr               
+expr : '(' {addl(cts('('));} expr ')'          {addl(cts(')')); $$ = concat(3,cts('('),$3,cts(')'));}
+     | expr '*' {addl(cts('*'));} expr         {$$ = concat(3,$1,cts('*'),$4);}
+     | expr '/' {addl(cts('/'));} expr         {$$ = concat(3,$1,cts('/'),$4);}
+     | expr '%' {addl(cts('%'));} expr         {$$ = concat(3,$1,cts('%'),$4);}      
+     | expr '+' {addl(cts('+'));} expr         {$$ = concat(3,$1,cts('%'),$4);}      
+     | expr '-' {addl(cts('-'));} expr         {$$ = concat(3,$1,cts('-'),$4);}      
+     | expr OR {addl($2);} expr                {$$ = concat(3,$1,$2,$4);}
+     | expr AND {addl($2);} expr               {$$ = concat(3,$1,$2,$4);}
+     | NOT {addl($1);} expr                    {$$ = concat(2,$1,$3);}
+     | expr EQUAL {addl($2);} expr             {$$ = concat(3,$1,$2,$4);}
+     | expr DIFF {addl($2);} expr              {$$ = concat(3,$1,$2,$4);}
+     | expr '<' {addl(cts('<'));} expr         {$$ = concat(3,$1,cts('<'),$4);}
+     | expr '>' {addl(cts('>'));} expr         {$$ = concat(3,$1,cts('>'),$4);}      
+     | expr LEQ {addl($2);} expr               {$$ = concat(3,$1,$2,$4);}
+     | expr GEQ {addl($2);} expr               {$$ = concat(3,$1,$2,$4);}
+     | '-' {addl(cts('-'));} expr %prec UMINUS {$$ = concat(2,cts('-'),$3);}   
+     | simple_expr                             {$$ = $1;}             
      ;
 
-lval : ID                                      {$$ = $1; addl($1);}
-//     | lval '[' expr ']' %prec LOWER_THAN_X
-     | lval '.' ID                            
-     | '*' lval                               
+lval : ID                                                      {$$ = $1; addl($1);}
+     | lval '[' {addl(cts('['));} expr ']' %prec LOWER_THAN_X  {addl(cts(']')); $$ = concat(4,$1,cts('['),$4,cts(']'));}
+     | lval '.' {addl(cts('.'));} ID                           {addl($4); $$ = concat(3,$1,cts('.'),$4);} 
+     | '*' {addl(cts('*'));} lval                              {$$ = concat(2,cts('*'),$3);}
      ;
 
-simple_expr : literal               
-            | lval                  
-            | function_call_stmt    
+simple_expr : literal                  {$$ = $1;}    
+            | lval                     {$$ = $1;}
+            | function_call_stmt       {$$ = $1;}
             ;
 
-literal : INT                     
-        | FLOAT    
-        | STRING   
-        | BOOL     
+literal : INT        {$$ = $1; addl($1);}                              
+        | FLOAT      {$$ = $1; addl($1);}
+        | STRING     {$$ = $1; addl($1);}
+        | BOOL       {$$ = $1; addl($1);}
         ;
 
 type : primitive_type
