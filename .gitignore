@@ -1,1 +1,5 @@
 *.bin
+/*.tab.c
+/*.tab.h
+/*.yy.c
+/a.out

@@ -92,13 +92,15 @@ char* concat(int size, ...){
 }
 /* https://cse.iitkgp.ac.in/~goutam/compiler/lect/lect8.pdf */
 
-%token ELSE IF RETURN LOOP BREAK WHEN STRUCT
-%token PRINT_FUNCTION INPUT_FUNCTION MALLOC_FUNCTION POW_FUNCTION FREE_FUNCTION
-%token INT_TYPE FLOAT_TYPE CHAR_TYPE VOID_TYPE BOOL_TYPE STRING_TYPE
+%token <value> ELSE <value> IF <value> RETURN <value> LOOP <value> BREAK <value> WHEN <value> STRUCT
+%token <value> PRINT_FUNCTION <value> INPUT_FUNCTION <value> MALLOC_FUNCTION <value> POW_FUNCTION <value> FREE_FUNCTION
+%token <value> INT_TYPE <value> FLOAT_TYPE <value> CHAR_TYPE <value> VOID_TYPE <value> BOOL_TYPE <value> STRING_TYPE
 %token <value> GEQ <value> LEQ <value> EQUAL <value> DIFF <value> AND <value> OR <value> NOT
 %token <value> INT <value> FLOAT <value> BOOL <value> STRING <value> ID EOFF
 
-%type <value> expr lval simple_expr literal function_call_stmt
+%type <value>  program declaration struct struct_block attributes attribute function opt_parameters parameters parameter block global_statement 
+%type <value> statements statement function_call_stmt function_id opt_arguments arguments argument declaration_stmt assign_stmt condition_stmt loop_stmt exit_stmt return_stmt 
+%type <value> expr lval simple_expr literal type primitive_type
 
 %left OR
 %left AND
@@ -123,8 +125,8 @@ char* concat(int size, ...){
 %%     
 
 
-program : declaration program                   /* program1.cs := declaration.cs || program2.cs */
-        | declaration %prec LOWER_THAN_PROGRAM  /* program1.cs := declaration.cs */
+program : declaration program                   { $$ = concat(2,$1,$2); }
+        | declaration %prec LOWER_THAN_PROGRAM  { $$ = $1; }
         ;
 
 declaration : struct            /* declaration.cs := stuct.cs */

@@ -51,72 +51,108 @@ else {yycol = coluna;
 coluna+=yyleng;
 lin = yylineno;
 col = coluna;
+char * copy = malloc(strlen(yytext) + 1); 
+strcpy(copy, yytext);
+yylval.value = copy;
 return ELSE;} 
 
 if {yycol = coluna;
 coluna+=yyleng;
 lin = yylineno;
 col = coluna;
+char * copy = malloc(strlen(yytext) + 1); 
+strcpy(copy, yytext);
+yylval.value = copy;
 return IF;} 
 
 return {yycol = coluna;
 coluna+=yyleng;
 lin = yylineno;
 col = coluna;
+char * copy = malloc(strlen(yytext) + 1); 
+strcpy(copy, yytext);
+yylval.value = copy;
 return RETURN;} 
 
 loop {yycol = coluna;
 coluna+=yyleng;
 lin = yylineno;
 col = coluna;
+char * copy = malloc(strlen(yytext) + 1); 
+strcpy(copy, yytext);
+yylval.value = copy;
 return LOOP;} 
 
 break {yycol = coluna;
 coluna+=yyleng;
 lin = yylineno;
 col = coluna;
+char * copy = malloc(strlen(yytext) + 1); 
+strcpy(copy, yytext);
+yylval.value = copy;
 return BREAK;} 
 
 when {yycol = coluna;
 coluna+=yyleng;
 lin = yylineno;
 col = coluna;
+char * copy = malloc(strlen(yytext) + 1); 
+strcpy(copy, yytext);
+yylval.value = copy;
 return WHEN;} 
 
 struct {yycol = coluna;
 coluna+=yyleng;
 lin = yylineno;
 col = coluna;
+char * copy = malloc(strlen(yytext) + 1); 
+strcpy(copy, yytext);
+yylval.value = copy;
 return STRUCT;}
 
 print {yycol = coluna;
 coluna+=yyleng;
 lin = yylineno;
 col = coluna;
+char * copy = malloc(strlen(yytext) + 1); 
+strcpy(copy, yytext);
+yylval.value = copy;
 return PRINT_FUNCTION;}
 
 input {yycol = coluna;
 coluna+=yyleng;
 lin = yylineno;
 col = coluna;
+char * copy = malloc(strlen(yytext) + 1); 
+strcpy(copy, yytext);
+yylval.value = copy;
 return INPUT_FUNCTION;}
 
 malloc {yycol = coluna;
 coluna+=yyleng;
 lin = yylineno;
 col = coluna;
+char * copy = malloc(strlen(yytext) + 1); 
+strcpy(copy, yytext);
+yylval.value = copy;
 return MALLOC_FUNCTION;} 
 
 pow {yycol = coluna;
 coluna+=yyleng;
 lin = yylineno;
 col = coluna;
+char * copy = malloc(strlen(yytext) + 1); 
+strcpy(copy, yytext);
+yylval.value = copy;
 return POW_FUNCTION;}
 
 free {yycol = coluna;
 coluna+=yyleng;
 lin = yylineno;
 col = coluna;
+char * copy = malloc(strlen(yytext) + 1); 
+strcpy(copy, yytext);
+yylval.value = copy;
 return FREE_FUNCTION;} 
 
 
@@ -126,36 +162,54 @@ int {yycol = coluna;
 coluna+=yyleng;
 lin = yylineno;
 col = coluna;
+char * copy = malloc(strlen(yytext) + 1); 
+strcpy(copy, yytext);
+yylval.value = copy;
 return INT_TYPE;}
 
 float {yycol = coluna;
 coluna+=yyleng;
 lin = yylineno;
 col = coluna;
+char * copy = malloc(strlen(yytext) + 1); 
+strcpy(copy, yytext);
+yylval.value = copy;
 return FLOAT_TYPE;}
 
 char {yycol = coluna;
 coluna+=yyleng;
 lin = yylineno;
 col = coluna;
+char * copy = malloc(strlen(yytext) + 1); 
+strcpy(copy, yytext);
+yylval.value = copy;
 return CHAR_TYPE;}
 
 void {yycol = coluna;
 coluna+=yyleng;
 lin = yylineno;
 col = coluna;
+char * copy = malloc(strlen(yytext) + 1); 
+strcpy(copy, yytext);
+yylval.value = copy;
 return VOID_TYPE;}
 
 bool {yycol = coluna;
 coluna+=yyleng;
 lin = yylineno;
 col = coluna;
+char * copy = malloc(strlen(yytext) + 1); 
+strcpy(copy, yytext);
+yylval.value = copy;
 return BOOL_TYPE;}
 
 "string" {yycol = coluna;
 coluna+=yyleng;
 lin = yylineno;
 col = coluna;
+char * copy = malloc(strlen(yytext) + 1); 
+strcpy(copy, yytext);
+yylval.value = copy;
 return STRING_TYPE;}
 
      /* OPERADORES */
