@@ -218,14 +218,14 @@ exit_stmt : BREAK WHEN '(' expr ')'
 return_stmt : RETURN expr
             ;
 
-expr : '(' expr ')'              
-     | expr '*' expr             {$$ = concat(3,$1,cts('*'),$3); addl($$);}
-     | expr '/' expr             
-     | expr '%' expr             
-     | expr '+' expr             
-     | expr '-' expr             
-     | expr OR expr              
-     | expr AND expr             
+expr : '(' {addl(cts('('));} expr ')'        {addl(cts(')')); $$ = concat(3,cts('('),$3,cts(')'));}
+     | expr '*' {addl(cts('*'));} expr       {$$ = concat(3,$1,cts('*'),$4);}
+     | expr '/' {addl(cts('/'));} expr       {$$ = concat(3,$1,cts('/'),$4);}
+     | expr '%' {addl(cts('%'));} expr       {$$ = concat(3,$1,cts('%'),$4);}      
+     | expr '+' {addl(cts('+'));} expr       {$$ = concat(3,$1,cts('%'),$4);}      
+     | expr '-' {addl(cts('-'));} expr       {$$ = concat(3,$1,cts('-'),$4);}      
+     | expr OR {addl($2);} expr              {$$ = concat(3,$1,$2,$4);}
+     | expr AND {addl($2);} expr             {$$ = concat(3,$1,$2,$4);}
      | NOT expr                  
      | expr EQUAL expr           
      | expr DIFF expr            
@@ -237,7 +237,7 @@ expr : '(' expr ')'
      | simple_expr               
      ;
 
-lval : ID                                      {$$ = $1;}
+lval : ID                                      {$$ = $1; addl($1);}
 //     | lval '[' expr ']' %prec LOWER_THAN_X
      | lval '.' ID                            
      | '*' lval                               
