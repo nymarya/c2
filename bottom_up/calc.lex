@@ -196,6 +196,9 @@ return '%';}
 coluna+=yyleng;
 lin = yylineno;
 col = coluna;
+char * copy = malloc(strlen(yytext) + 1); 
+strcpy(copy, yytext);
+yylval.value = copy;
 return LEQ;}
 
 "<" {yycol = coluna;
@@ -208,6 +211,9 @@ return '<';}
 coluna+=yyleng;
 lin = yylineno;
 col = coluna;
+char * copy = malloc(strlen(yytext) + 1); 
+strcpy(copy, yytext);
+yylval.value = copy;
 return GEQ;}
 
 ">" {yycol = coluna;
@@ -220,12 +226,18 @@ return '>';}
 coluna+=yyleng;
 lin = yylineno;
 col = coluna;
+char * copy = malloc(strlen(yytext) + 1); 
+strcpy(copy, yytext);
+yylval.value = copy;
 return EQUAL;}
 
 "!=" {yycol = coluna;
 coluna+=yyleng;
 lin = yylineno;
 col = coluna;
+char * copy = malloc(strlen(yytext) + 1); 
+strcpy(copy, yytext);
+yylval.value = copy;
 return DIFF;}
 
 "=" {yycol = coluna;
@@ -238,18 +250,27 @@ return '=';}
 coluna+=yyleng;
 lin = yylineno;
 col = coluna;
+char * copy = malloc(strlen(yytext) + 1); 
+strcpy(copy, yytext);
+yylval.value = copy;
 return AND;}
 
 "||" {yycol = coluna;
 coluna+=yyleng;
 lin = yylineno;
 col = coluna;
+char * copy = malloc(strlen(yytext) + 1); 
+strcpy(copy, yytext);
+yylval.value = copy;
 return OR;}
 
 "!" {yycol = coluna;
 coluna+=yyleng;
 lin = yylineno;
 col = coluna;
+char * copy = malloc(strlen(yytext) + 1); 
+strcpy(copy, yytext);
+yylval.value = copy;
 return NOT;}
 
     /* SÍMBOLOS */
@@ -318,30 +339,45 @@ col = coluna;}
 coluna+=yyleng;
 lin = yylineno;
 col = coluna;
+char * copy = malloc(strlen(yytext) + 1); 
+strcpy(copy, yytext);
+yylval.value = copy;
 return INT;}
 
 {float} {yycol = coluna;
 coluna+=yyleng;
 lin = yylineno;
 col = coluna;
+char * copy = malloc(strlen(yytext) + 1); 
+strcpy(copy, yytext);
+yylval.value = copy;
 return FLOAT;}
 
 {bool} {yycol = coluna;
 coluna+=yyleng;
 lin = yylineno;
 col = coluna;
+char * copy = malloc(strlen(yytext) + 1); 
+strcpy(copy, yytext);
+yylval.value = copy;
 return BOOL;}
 
 {STR} {yycol = coluna;
 coluna+=yyleng;
 lin = yylineno;
 col = coluna;
+char * copy = malloc(strlen(yytext) + 1); 
+strcpy(copy, yytext);
+yylval.value = copy;
 return STRING;}
 
 {ID} {yycol = coluna;
 coluna+=yyleng;
 lin = yylineno;
 col = coluna;
+char * copy = malloc(strlen(yytext) + 1); 
+strcpy(copy, yytext);
+yylval.value = copy;
 return ID;}
 
 <<EOF>> {yycol = coluna;

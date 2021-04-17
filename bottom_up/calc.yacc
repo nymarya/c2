@@ -1,26 +1,69 @@
 %{
 #include <stdio.h>
+#include <string.h>//necessário para strcat
 int regs[26];
 int base;
 
 int lin, col;
 
-/*
-struct code{
+typedef struct Code{
   char* text;
-  code * next;
+  struct Code * next;
+}Code;
+
+Code* begin_list;
+
+Code* current;
+
+void addList(Code* curr, char* word)
+{
+  if(begin_list == NULL)
+  {
+    Code* novo_code = (Code *) malloc(sizeof(struct Code));
+    novo_code->text = word;
+
+    begin_list = novo_code;
+    current = novo_code;
+  }
+  else
+  {
+    Code* new_code = (Code *) malloc(sizeof(struct Code));
+    new_code->text = word;
+
+    curr->next = new_code;
+    current = curr->next;
+  }
 }
-*/
+
+
+void printList()
+{
+  Code* iter = begin_list;
+
+  printf("Printing list: [ ");
+  while(iter != NULL)
+  {
+    printf("%s ", iter->text);
+    iter = iter->next;
+  }
+  printf("]\n");
+}
 
 %}
 
+%union  
+{
+  char* value;
+}
 /* https://cse.iitkgp.ac.in/~goutam/compiler/lect/lect8.pdf */
 
 %token ELSE IF RETURN LOOP BREAK WHEN STRUCT
 %token PRINT_FUNCTION INPUT_FUNCTION MALLOC_FUNCTION POW_FUNCTION FREE_FUNCTION
 %token INT_TYPE FLOAT_TYPE CHAR_TYPE VOID_TYPE BOOL_TYPE STRING_TYPE
-%token GEQ LEQ EQUAL DIFF AND OR NOT
-%token INT FLOAT BOOL STRING ID EOFF
+%token <value> GEQ <value> LEQ <value> EQUAL <value> DIFF <value> AND <value> OR <value> NOT
+%token <value> INT <value> FLOAT <value> BOOL <value> STRING <value> ID EOFF
+
+%type <value> expr lval simple_expr literal function_call_stmt
 
 %left OR
 %left AND
@@ -140,40 +183,40 @@ exit_stmt : BREAK WHEN '(' expr ')'
 return_stmt : RETURN expr
             ;
 
-expr : '(' expr ')'
-     | expr '*' expr
-     | expr '/' expr
-     | expr '%' expr
-     | expr '+' expr
-     | expr '-' expr
-     | expr OR expr
-     | expr AND expr
-     | NOT expr
-     | expr EQUAL expr
-     | expr DIFF expr
-     | expr '<' expr
-     | expr '>' expr
-     | expr LEQ expr
-     | expr GEQ expr
-     | '-' expr %prec UMINUS
-     | simple_expr
+expr : '(' expr ')'              
+     | expr '*' expr             {$$ = malloc(sizeof('*') + sizeof($1) + sizeof($3)); strcat($$,$1); char *b = malloc(sizeof('*')); *b = '*'; strcat($$,b); strcat($$,$3); addList(current,$$);}
+     | expr '/' expr             
+     | expr '%' expr             
+     | expr '+' expr             
+     | expr '-' expr             
+     | expr OR expr              
+     | expr AND expr             
+     | NOT expr                  
+     | expr EQUAL expr           
+     | expr DIFF expr            
+     | expr '<' expr             
+     | expr '>' expr             
+     | expr LEQ expr             
+     | expr GEQ expr             
+     | '-' expr %prec UMINUS     
+     | simple_expr               
      ;
 
-lval : ID
-     | lval '[' expr ']' %prec LOWER_THAN_X
-     | lval '.' ID
-     | '*' lval
+lval : ID                                      {$$ = $1;}
+//     | lval '[' expr ']' %prec LOWER_THAN_X
+     | lval '.' ID                            
+     | '*' lval                               
      ;
 
-simple_expr : literal
-            | lval
-            | function_call_stmt
+simple_expr : literal               
+            | lval                  
+            | function_call_stmt    
             ;
 
-literal : INT
-        | FLOAT 
-        | STRING
-        | BOOL
+literal : INT                     
+        | FLOAT    
+        | STRING   
+        | BOOL     
         ;
 
 type : primitive_type
