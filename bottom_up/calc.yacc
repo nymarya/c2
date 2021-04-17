@@ -1,6 +1,7 @@
 %{
 #include <stdio.h>
 #include <string.h>//necessário para strcat
+#include <stdarg.h>
 int regs[26];
 int base;
 
@@ -14,6 +15,8 @@ typedef struct Code{
 Code* begin_list;
 
 Code* current;
+
+
 
 void addList(Code* curr, char* word)
 {
@@ -35,6 +38,9 @@ void addList(Code* curr, char* word)
   }
 }
 
+void addl(char * word){
+  addList(current,word);
+}
 
 void printList()
 {
@@ -47,6 +53,35 @@ void printList()
     iter = iter->next;
   }
   printf("]\n");
+}
+
+char* cts(char c){
+  char *b = malloc(sizeof(c)); 
+  *b = c;
+  return b;
+}
+
+char* concat(int size, ...){
+  va_list valist;
+  va_start(valist, size);
+
+  int out_size = 0;
+  char* outv;
+
+  for (int i = 0; i < size; i++) {
+    out_size += sizeof(va_arg(valist, char *));
+  }
+
+  outv = malloc(out_size);
+
+  for (int i = 0; i < size; i++) {
+    strcat(outv,va_arg(valist, char *));
+  }
+
+
+  va_end(valist);
+
+  return outv;
 }
 
 %}
@@ -184,7 +219,7 @@ return_stmt : RETURN expr
             ;
 
 expr : '(' expr ')'              
-     | expr '*' expr             {$$ = malloc(sizeof('*') + sizeof($1) + sizeof($3)); strcat($$,$1); char *b = malloc(sizeof('*')); *b = '*'; strcat($$,b); strcat($$,$3); addList(current,$$);}
+     | expr '*' expr             {$$ = concat(3,$1,cts('*'),$3); addl($$);}
      | expr '/' expr             
      | expr '%' expr             
      | expr '+' expr             
@@ -240,8 +275,10 @@ extern FILE *yyin;
 int main (int argc, char *argv[])
 {
   int x = yyparse(); 
-  if (x == 0)
+  if (x == 0){
     printf("Sucess!\n");
+    printList();
+  }
   else
     printf("Error!\n");
 
@@ -255,7 +292,3 @@ int yywrap()
 {
   return(1);
 }
-
-
-
-
