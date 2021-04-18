@@ -1,0 +1,22 @@
+
+
+int main(){
+	int * v;
+	v = malloc(8*3);
+	v[0] = 1;
+	v[1] = 2;
+	v[2] = 3;
+
+	int i;
+	i = 0;
+
+	loop{
+		break when (i == 3);
+
+		print("%d\n", v[i]);
+
+		i = i+1;
+	}
+
+	return 0;
+}

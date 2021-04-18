@@ -5,6 +5,8 @@
 int regs[26];
 int base;
 
+FILE *cfile;
+
 int lin, col;
 
 typedef struct Code{
@@ -44,15 +46,18 @@ void addl(char * word){
 
 void printList()
 {
+  cfile = fopen("./compiled.c", "w+");
+
   Code* iter = begin_list;
 
-  printf("Printing list: [ ");
+  //printf("Printing list: [ ");
   while(iter != NULL)
   {
-    printf("%s ", iter->text);
+    //printf("%s", iter->text);
+    fprintf(cfile," %s", iter->text);
     iter = iter->next;
   }
-  printf("]\n");
+  //printf("]\n");
 }
 
 char* cts(char c){
