@@ -1,69 +1,100 @@
-void intercala (int p, int q, int r, int *v) 
-{
-   int *w;                                
-   w = malloc ((r-p) * 8); 
+void mergesort(int *v, int n);
+int sort(int *v, int *c, int i, int f);
+void merge(int *v, int *c, int i, int m, int f);
 
-   int i;
-   i = p; 
-   int j;
-   j = q;                       
-   int k;
-   k = 0;                              
+int main () {
+  int i;
+  int * v;
+  v = malloc(4*8);
+  v[0] = 0;
+  v[1] = 100;
+  v[2] = 20;
+  v[3] = 312;
+  v[4] = 21;
+  v[5] = 15;
+  v[6] = 17;
+  v[7] = 21;
 
-   loop
-   {
-      if(v[i] <= v[j])
-      {
-         w[k] = v[i];
-         k=k+1;
-         i=i+1;
-      }
-      else
-      {
-         w[k] = v[j];
-         k=k+1;
-         j=j+1;
-      }
+  mergesort(v, 8);
 
-      break when(i < q && j < r);
-   }
+  i = 0;
+  loop{
+    break when(!(i<8));
+    print("%d ", v[i]);
+    i = i+1;
+  }
 
-   loop
-   {
-      w[k] = v[i];
-      k=k+1;
-      i=i+1;
-      break when(i < q);
-   }
-
-   loop
-   {
-      w[k] = v[j];
-      k=k+1;
-      i=i+1;
-      break when(j < r);
-   }
-
-   i = p;
-
-   loop
-   {
-      v[i] = w[i-p];
-      i = i + 1;
-
-      break when(i < r);
-   }     
-
-   free(w);                          
+  return 0;
 }
 
-void mergesort (int p, int r, int *v)
-{
-   if (p < r-1) {                 
-      int q;
-      q = (p + r)/2;          
-      mergesort (p, q, v);        
-      mergesort (q, r, v);        
-      intercala (p, q, r, v);     
-   }
+
+void mergesort(int *v, int n) {
+  int *c;
+  c = malloc(4 * n);
+  sort(v, c, 0, n - 1);
+  free(c);
+}
+
+
+int sort(int *v, int *c, int i, int f) {
+  if (i >= f) return 0;
+
+  int m;
+  m = (i + f) / 2;
+
+  sort(v, c, i, m);
+  sort(v, c, m + 1, f);
+
+  if (v[m] <= v[m + 1]) return 0;
+
+  merge(v, c, i, m, f);
+}
+
+
+void merge(int *v, int *c, int i, int m, int f) {
+  int z;
+  int iv;
+  int ic;
+  iv = i;
+  ic = m+1;
+
+  z = i;
+
+  loop{
+    break when(!(z<=f));
+    c[z] = v[z];
+    z = z+1;
+  }
+
+  z = i;
+
+  loop{
+    break when (!(iv <= m && ic <= f));
+   
+    if (c[iv] < c[ic]) {
+      v[z] = c[iv];
+      z = z+1;
+      iv = iv+1;
+    }
+    else {
+      v[z] = c[ic];
+      z = z+1;
+      ic = ic+1;
+    }
+  }
+
+  loop{
+    break when (!(iv <= m));
+    v[z] = c[iv];
+    z = z+1;
+    iv = iv+1;
+  }
+  
+  loop{
+    break when (!(ic <= f));
+    v[z] = c[ic];
+    z = z+1;
+    ic = ic+1;
+  }
+
 }
