@@ -113,9 +113,6 @@ int next_valid_label = 0;
 %token <value> GEQ <value> LEQ <value> EQUAL <value> DIFF <value> AND <value> OR <value> NOT
 %token <value> INT <value> FLOAT <value> BOOL <value> STRING <value> ID EOFF
 
-%type <value>  program declaration struct struct_block attributes attribute function opt_parameters parameters parameter block global_statement opt_function_block
-%type <value> statements statement function_call_stmt function_id opt_arguments arguments argument declaration_stmt assign_stmt condition_stmt loop_stmt exit_stmt return_stmt 
-%type <value> expr lval simple_expr literal type primitive_type
 
 %left OR
 %left AND
@@ -140,60 +137,60 @@ int next_valid_label = 0;
 %%     
 
 
-program : declaration program                   { $$ = concat(2,$1,$2); printf("%s\n", $$); }
-        | declaration %prec LOWER_THAN_PROGRAM  { $$ = $1; printf("%s\n", $$);}
+program : declaration program                   
+        | declaration %prec LOWER_THAN_PROGRAM 
         ;
 
-declaration : struct            {$$ = $1;}
-            | function          {$$ = $1;}
-            | global_statement  {$$ = $1;} 
+declaration : struct            
+            | function          
+            | global_statement 
             ;
 
-struct : STRUCT ID {addl($1); addl($2);} struct_block {$$ = concat(3,$1,$2,$4);};
+struct : STRUCT ID {addl($1); addl($2);} struct_block
        ;
 
-struct_block : '{' {addl(cts('{'));} attributes '}' {$$ = concat(4,cts('{'), $3,cts('}'),cts(';')); addl(cts('}')); addl(cts(';'));} 
+struct_block : '{' {addl(cts('{'));} attributes '}' {addl(cts('}')); addl(cts(';'));} 
 
-attributes : attribute attributes {$$ = concat(2,$1,$2);}
-           | /* empty */ {$$;}
+attributes : attribute attributes
+           | /* empty */
            ;
 
-attribute : type ID {addl($2);} ';' {$$ = concat(3,$1,$2,cts(';')); addl(cts(';'));}
+attribute : type ID {addl($2);} ';' {addl(cts(';'));}
           ;
 
-function : type function_id '(' {addl(cts('('));} opt_parameters ')' {addl(cts(')'));} opt_function_block {$$ = concat(6,$1,$2,cts('('),$5,cts(')'),$8 );}
+function : type function_id '(' {addl(cts('('));} opt_parameters ')' {addl(cts(')'));} opt_function_block
          ;
 
-opt_function_block : block {$$ = $1;}
-                   | ';' {$$ = cts(';'); addl(cts(';'));}
+opt_function_block : block
+                   | ';' {addl(cts(';'));}
                    ;
 
-opt_parameters : parameters {$$ = $1;}
-               | /* empty */ {$$;}
+opt_parameters : parameters
+               | /* empty */
                ;
 
-parameters : parameter {$$ = $1;}
-           | parameter ',' {addl(cts(','));} parameters {$$ = concat(3,$1,cts(','),$4);}
+parameters : parameter
+           | parameter ',' {addl(cts(','));} parameters
            ;
 
-parameter : type ID {$$ = concat(2,$1,$2); addl($2);}
+parameter : type ID {addl($2);}
           ;
 
-block : '{' {addl(cts('{'));} statements '}' {$$ = concat(3,cts('{'), $3, cts('}'));  addl(cts('}'));} 
+block : '{' {addl(cts('{'));} statements '}' {addl(cts('}'));} 
       ;
 
-global_statement : declaration_stmt ';' {$$ = concat(2,$1, cts(';')); addl(cts(';'));}
-                 | assign_stmt ';'  {$$ = concat(2,$1, cts(';')); addl(cts(';'));}
+global_statement : declaration_stmt ';' {addl(cts(';'));}
+                 | assign_stmt ';'  {addl(cts(';'));}
                  ;
 
-statements : statement statements {$$ = concat(2, $1, $2);}
-           | /* empty */ {$$;}
+statements : statement statements
+           | /* empty */
            ;
 
-statement  : declaration_stmt ';'   {$$ = concat(2,$1, cts(';')); addl(cts(';'));}
-           | assign_stmt ';'        {$$ = concat(2,$1, cts(';')); addl(cts(';'));}
-           | function_call_stmt ';' {$$ = concat(2,$1, cts(';')); addl(cts(';'));}
-           | condition_stmt         {$$ = $1;}
+statement  : declaration_stmt ';'   {addl(cts(';'));}
+           | assign_stmt ';'        {addl(cts(';'));}
+           | function_call_stmt ';' {addl(cts(';'));}
+           | condition_stmt         
            | {  int label = next_valid_label; 
                 next_valid_label += 1;
 
@@ -203,38 +200,38 @@ statement  : declaration_stmt ';'   {$$ = concat(2,$1, cts(';')); addl(cts(';'))
 
                 char * blabel= malloc(1024);
                 sprintf(blabel, "b%d:;", label);
-                addl(blabel); } loop_stmt {$$ = $2;}
-           | return_stmt ';'        {$$ = concat(2,$1, cts(';')); addl(cts(';'));}
-           | exit_stmt ';'          {$$ = concat(2,$1, cts(';')); addl(cts(';'));}
-           | block                  {$$ = $1;}
+                addl(blabel); } loop_stmt
+           | return_stmt ';'        {addl(cts(';')); printList();}
+           | exit_stmt ';'          {addl(cts(';'));}
+           | block
            ;
 
-function_call_stmt : function_id '(' {addl(cts('('));} opt_arguments ')'     {addl(cts(')')); $$ = concat(4,$1,cts('('),$4,cts(')'));}
+function_call_stmt : function_id '(' {addl(cts('('));} opt_arguments ')'     {addl(cts(')'));}
                    ;
 
-function_id : ID                      {$$ = $1; addl($1);}
-            | PRINT_FUNCTION          {$$ = $1; addl($1);}
-            | INPUT_FUNCTION          {$$ = $1; addl($1);}
-            | MALLOC_FUNCTION         {$$ = $1; addl($1);}
-            | FREE_FUNCTION           {$$ = $1; addl($1);}
-            | POW_FUNCTION            {$$ = $1; addl($1);}
+function_id : ID                      {addl($1);}
+            | PRINT_FUNCTION          {addl("printf");}
+            | INPUT_FUNCTION          {addl("scanf");}
+            | MALLOC_FUNCTION         {addl($1);}
+            | FREE_FUNCTION           {addl($1);}
+            | POW_FUNCTION            {addl($1);}
             ;
       
-opt_arguments : arguments   {$$ = $1;}
-              | /* empty */ {$$;}
+opt_arguments : arguments
+              | /* empty */
               ;
 
-arguments : argument                                      {$$ = $1;}
-          | argument ',' {addl(cts(','));} arguments      {$$ = concat(3,$1,cts(','),$4);}
+arguments : argument                                      
+          | argument ',' {addl(cts(','));} arguments
           ;
 
-argument : expr {$$ = $1;}
+argument : expr
          ; 
 
-declaration_stmt : type ID   {addl($2); $$ = concat(2,$1,$2);}
+declaration_stmt : type ID   {addl($2);}
                  ;
 
-assign_stmt : lval '=' {addl(cts('='));} expr  {$$ = concat(3,$1,cts('='),$4);}
+assign_stmt : lval '=' {addl(cts('='));} expr
             ;
 
 condition_stmt : IF '(' expr ')' statement %prec LOWER_THAN_ELSE
@@ -255,8 +252,7 @@ loop_stmt : LOOP  block { int label = ll[cur_label];
                     addl(cts(';'));
 
 
-                    cur_label -= 1;
-                    $$;}
+                    cur_label -= 1;}
           ;
 exit_stmt : BREAK WHEN { addl("if ("); } '(' expr ')' { 
                                                         addl(") goto");
@@ -265,61 +261,62 @@ exit_stmt : BREAK WHEN { addl("if ("); } '(' expr ')' {
 
                                                         sprintf(elabel, "e%d", label);
                                                         addl(elabel);
-                                                        //addl(cts(';')); 
-                                                        $$;}
+                                                        //addl(cts(';'));
+                                                        }
           ;
 
-return_stmt : RETURN {addl($1);} expr {$$ = concat(2,$1,$3);}
+return_stmt : RETURN {addl($1);} expr
             ;
 
-expr : '(' {addl(cts('('));} expr ')'          {addl(cts(')')); $$ = concat(3,cts('('),$3,cts(')'));}
-     | expr '*' {addl(cts('*'));} expr         {$$ = concat(3,$1,cts('*'),$4);}
-     | expr '/' {addl(cts('/'));} expr         {$$ = concat(3,$1,cts('/'),$4);}
-     | expr '%' {addl(cts('%'));} expr         {$$ = concat(3,$1,cts('%'),$4);}      
-     | expr '+' {addl(cts('+'));} expr         {$$ = concat(3,$1,cts('%'),$4);}      
-     | expr '-' {addl(cts('-'));} expr         {$$ = concat(3,$1,cts('-'),$4);}      
-     | expr OR {addl($2);} expr                {$$ = concat(3,$1,$2,$4);}
-     | expr AND {addl($2);} expr               {$$ = concat(3,$1,$2,$4);}
-     | NOT {addl($1);} expr                    {$$ = concat(2,$1,$3);}
-     | expr EQUAL {addl($2);} expr             {$$ = concat(3,$1,$2,$4);}
-     | expr DIFF {addl($2);} expr              {$$ = concat(3,$1,$2,$4);}
-     | expr '<' {addl(cts('<'));} expr         {$$ = concat(3,$1,cts('<'),$4);}
-     | expr '>' {addl(cts('>'));} expr         {$$ = concat(3,$1,cts('>'),$4);}      
-     | expr LEQ {addl($2);} expr               {$$ = concat(3,$1,$2,$4);}
-     | expr GEQ {addl($2);} expr               {$$ = concat(3,$1,$2,$4);}
-     | '-' {addl(cts('-'));} expr %prec UMINUS {$$ = concat(2,cts('-'),$3);}   
-     | simple_expr                             {$$ = $1;}             
+expr : '(' {addl(cts('('));} expr ')'          {addl(cts(')'));}
+     | expr '*' {addl(cts('*'));} expr         
+     | expr '/' {addl(cts('/'));} expr         
+     | expr '%' {addl(cts('%'));} expr             
+     | expr '+' {addl(cts('+'));} expr              
+     | expr '-' {addl(cts('-'));} expr              
+     | expr OR {addl($2);} expr                
+     | expr AND {addl($2);} expr               
+     | NOT {addl($1);} expr                    
+     | expr EQUAL {addl($2);} expr             
+     | expr DIFF {addl($2);} expr              
+     | expr '<' {addl(cts('<'));} expr         
+     | expr '>' {addl(cts('>'));} expr              
+     | expr LEQ {addl($2);} expr               
+     | expr GEQ {addl($2);} expr               
+     | '-' {addl(cts('-'));} expr %prec UMINUS   
+     | simple_expr                                         
      ;
 
-lval : ID                                                      {$$ = $1; addl($1);}
-     | lval '[' {addl(cts('['));} expr ']' %prec LOWER_THAN_X  {addl(cts(']')); $$ = concat(4,$1,cts('['),$4,cts(']'));}
-     | lval '.' {addl(cts('.'));} ID                           {addl($4); $$ = concat(3,$1,cts('.'),$4);} 
-     | '*' {addl(cts('*'));} lval                              {$$ = concat(2,cts('*'),$3);}
+lval : ID                                                      {addl($1);}
+     | lval '[' {addl(cts('['));} expr ']' %prec LOWER_THAN_X  {addl(cts(']'));}
+     | lval '.' {addl(cts('.'));} ID                           {addl($4);} 
+     | '*' {addl(cts('*'));} lval
+     | '&' {addl(cts('&'));} ID                                {addl($3);}
      ;
 
-simple_expr : literal                  {$$ = $1;}    
-            | lval                     {$$ = $1;}
-            | function_call_stmt       {$$ = $1;}
+simple_expr : literal                     
+            | lval                     
+            | function_call_stmt       
             ;
 
-literal : INT        {$$ = $1; addl($1);}                              
-        | FLOAT      {$$ = $1; addl($1);}
-        | STRING     {$$ = $1; addl($1);}
-        | BOOL       {$$ = $1; addl($1);}
+literal : INT        {addl($1);}                              
+        | FLOAT      {addl($1);}
+        | STRING     {addl($1);}
+        | BOOL       {addl($1);}
         ;
 
-type : primitive_type {$$ = $1;}
-     | ID {$$ = $1; addl($1);}  
-     | type '*' {$$ = concat(2,$1,cts('*')); addl(cts('*'));}
+type : primitive_type
+     | ID {addl($1);}  
+     | type '*' {addl(cts('*'));}
      ;
 
 
 
-primitive_type : INT_TYPE {$$ = $1; addl($1);}  
-               | FLOAT_TYPE {$$ = $1; addl($1);}  
-               | BOOL_TYPE {$$ = $1; addl($1);}  
-               | VOID_TYPE {$$ = $1; addl($1);}  
-               | STRING_TYPE {$$ = $1; addl($1);}  
+primitive_type : INT_TYPE {addl($1);}  
+               | FLOAT_TYPE {addl($1);}  
+               | BOOL_TYPE {addl($1);}  
+               | VOID_TYPE {addl($1);}  
+               | STRING_TYPE {addl($1);}  
                ;
 
 %%

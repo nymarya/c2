@@ -221,6 +221,13 @@ col = coluna;
 //yylval='+';
 return '+';}
 
+"&" {yycol = coluna;
+coluna+=yyleng;
+lin = yylineno;
+col = coluna;
+//yylval='+';
+return '&';}
+
 "-" {yycol = coluna;
 coluna+=yyleng;
 lin = yylineno;
