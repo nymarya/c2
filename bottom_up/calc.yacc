@@ -98,7 +98,7 @@ char* concat(int size, ...){
 %token <value> GEQ <value> LEQ <value> EQUAL <value> DIFF <value> AND <value> OR <value> NOT
 %token <value> INT <value> FLOAT <value> BOOL <value> STRING <value> ID EOFF
 
-%type <value>  program declaration struct struct_block attributes attribute function opt_parameters parameters parameter block global_statement 
+%type <value>  program declaration struct struct_block attributes attribute function opt_parameters parameters parameter block global_statement opt_function_block
 %type <value> statements statement function_call_stmt function_id opt_arguments arguments argument declaration_stmt assign_stmt condition_stmt loop_stmt exit_stmt return_stmt 
 %type <value> expr lval simple_expr literal type primitive_type
 
@@ -146,8 +146,12 @@ attributes : attribute attributes {$$ = concat(2,$1,$2);}
 attribute : type ID {addl($2);} ';' {$$ = concat(3,$1,$2,cts(';')); addl(cts(';'));}
           ;
 
-function : type function_id '(' {addl(cts('('));} opt_parameters ')' {addl(cts(')'));} block {$$ = concat(6,$1,$2,cts('('),$5,cts(')'),$8 );}
+function : type function_id '(' {addl(cts('('));} opt_parameters ')' {addl(cts(')'));} opt_function_block {$$ = concat(6,$1,$2,cts('('),$5,cts(')'),$8 );}
          ;
+
+opt_function_block : block {$$ = $1;}
+                   | ';' {$$ = cts(';'); addl(cts(';'));}
+                   ;
 
 opt_parameters : parameters {$$ = $1;}
                | /* empty */ {$$;}
