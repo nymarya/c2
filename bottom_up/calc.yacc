@@ -201,7 +201,7 @@ statement  : declaration_stmt ';'   {addl(cts(';'));}
                 char * blabel= malloc(1024);
                 sprintf(blabel, "b%d:;", label);
                 addl(blabel); } loop_stmt
-           | return_stmt ';'        {addl(cts(';')); printList();}
+           | return_stmt ';'        {addl(cts(';'));}
            | exit_stmt ';'          {addl(cts(';'));}
            | block
            ;
