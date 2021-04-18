@@ -61,6 +61,15 @@ char* cts(char c){
   return b;
 }
 
+char* sts(const char * s){
+  char * b = malloc(sizeof(s));
+  int sz = sizeof(s)/sizeof(char*);
+  for (int i = 0; i < sz; i++){
+    strcat(b,cts(s[i]));
+  }
+  return b;
+}
+
 char* concat(int size, ...){
   va_list valist;
   va_start(valist, size);
@@ -125,8 +134,8 @@ char* concat(int size, ...){
 %%     
 
 
-program : declaration program                   { $$ = concat(2,$1,$2); }
-        | declaration %prec LOWER_THAN_PROGRAM  { $$ = $1; }
+program : declaration program                   { $$ = concat(2,$1,$2); printf("%s\n", $$); }
+        | declaration %prec LOWER_THAN_PROGRAM  { $$ = $1; printf("%s\n", $$);}
         ;
 
 declaration : struct            {$$ = $1;}
@@ -267,7 +276,7 @@ type : primitive_type {$$ = $1;}
 
 
 
-primitive_type : INT_TYPE {$$ = $1; addl($1);}  
+primitive_type : INT_TYPE {$$ = "$1"; addl($1);}  
                | FLOAT_TYPE {$$ = $1; addl($1);}  
                | BOOL_TYPE {$$ = $1; addl($1);}  
                | VOID_TYPE {$$ = $1; addl($1);}  
