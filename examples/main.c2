@@ -6,7 +6,7 @@ int main (){
   int a;
 
 
-  if(a > 9){
+  if(a < 9){
     a = (4 + 5) * 3;
   }
   print("%d\n",a);
@@ -19,7 +19,7 @@ int main (){
 
     print("%d\n",a);
   	break when (a < 2);
-    a = a+1;
+    a = a-1;
 
   }
 

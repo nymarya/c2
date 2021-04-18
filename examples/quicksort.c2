@@ -9,10 +9,13 @@ int divide(int *v, int p, int r){
   j = p;
   int k;
   k = p;
+  int t;
+  int c;
 
   /* separa vetor de forma que v[p..j-1] <= v[j] < v[j+1..r] */
   loop {
     break when ( k >= r);
+    c = v[r];
     if (v[k] <= c) {
       /* troca elementos */
       i = v[j];
@@ -38,7 +41,7 @@ void quicksort (int *v, int p, int r) {
 }
 
 
-void main(void x){
+void main(){
   int* v;
 
   v = malloc (8 * 8);
@@ -53,5 +56,14 @@ void main(void x){
   v[7] = 7;
 
   quicksort(v, 0, 7);
-  print(v);
+
+  int i;
+  i = 0;
+
+  loop{
+    print("%d ", v[i]);
+    break when(i == 7);
+    i = i +1;
+  }
+  print("\n"); 
 }
