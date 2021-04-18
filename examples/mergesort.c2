@@ -1,69 +1,139 @@
-void intercala (int p, int q, int r, int *v) 
+void merge(int* arr, int l, int m, int r)
 {
-   int *w;                                
-   w = malloc ((r-p) * 8); 
+    int i;
+    int j;
+    int k;
 
-   int i;
-   i = p; 
-   int j;
-   j = q;                       
-   int k;
-   k = 0;                              
+    int n1;
+    n1 = m - l + 1;
+    int n2;
+    n2 = r - m;
+ 
+    
+    int* L;
+    L = malloc(4*n1);
+    int* R;
+    R = malloc(4*n2);
+ 
+    
+    i = 0;
 
-   loop
-   {
-      if(v[i] <= v[j])
-      {
-         w[k] = v[i];
-         k=k+1;
-         i=i+1;
-      }
-      else
-      {
-         w[k] = v[j];
-         k=k+1;
-         j=j+1;
-      }
-
-      break when(i < q && j < r);
-   }
-
-   loop
-   {
-      w[k] = v[i];
-      k=k+1;
-      i=i+1;
-      break when(i < q);
-   }
-
-   loop
-   {
-      w[k] = v[j];
-      k=k+1;
-      i=i+1;
-      break when(j < r);
-   }
-
-   i = p;
-
-   loop
-   {
-      v[i] = w[i-p];
+    loop
+    {
+      break when ( i >= n1);
+      L[i] = arr[l + i];
       i = i + 1;
+    }
 
-      break when(i < r);
-   }     
+    
+    loop
+    {
+      break when ( j >= n2);
+      R[j] = arr[m + 1 + j];
+      j = j+1;
+    }
 
-   free(w);                          
+
+    i = 0;
+    j = 0;
+    k = l;
+
+    loop
+    {
+      break when ( !(i < n1 && j < n2) );
+      if (L[i] <= R[j]) 
+      {
+         arr[k] = L[i];
+         i = i+1;
+      }
+      else 
+      {
+         arr[k] = R[j];
+         j = j+1;
+      }
+      k = k+1;
+    }
+ 
+    loop
+    {
+      break when ( !(i < n1) );
+      arr[k] = L[i];
+      i = i+1;
+      k = k+1;
+    }
+
+    loop
+    {
+      break when (!( j < n2 ));
+      arr[k] = R[j];
+      j = j+1;
+      k = k+1;
+    }
 }
+ 
 
-void mergesort (int p, int r, int *v)
+void mergeSort(int* arr, int l, int r)
 {
-   if (p < r-1) {                 
-      int q;
-      q = (p + r)/2;          
-      mergesort (p, q, v);        
-      mergesort (q, r, v);        
-      intercala (p, q, r, v);     
-   }
+    if (l < r) 
+    {
+      int m;
+      m = l + (r - l) / 2;
+ 
+      mergeSort(arr, l, m);
+      mergeSort(arr, m + 1, r);
+ 
+      merge(arr, l, m, r);
+    }
+}
+ 
+
+int main()
+{
+    int* arr;
+    int* backup;
+
+    arr = malloc (4*6);
+    backup = arr;
+
+    arr[0] = 12;
+    arr[1] = 11;
+    arr[2] = 13;
+    arr[3] = 5;
+    arr[4] = 6;
+    arr[5] = 7;
+
+    int arrsize;
+    arrsize = 6;
+ 
+    int i;
+    i = 0;
+
+    print("Printando array: [ ");
+
+    loop
+    {
+      break when (!(i<arrsize));
+      print("%d ", arr[i]);
+      i = i+1;
+    }
+
+    print("]\n");
+ 
+    mergeSort(arr, 0, arrsize - 1);
+ 
+    
+    i = 0;
+
+    print("Printando array: [ ");
+
+    loop
+    {
+      break when (!(i<arrsize));
+      print("%d ", backup[i]);
+      i = i+1;
+    }
+
+    print("]\n");
+
+    return 0;
 }

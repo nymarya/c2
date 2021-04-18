@@ -22,6 +22,10 @@ y.tab.c: bottom_up/calc.yacc
 Lexer.c: lexical/lexer.l
 	flex lexical/lexer.l
 
+run_semantic:
+	@./a.out < examples/$(file).c2
+	@gcc compiled.c -o $(file).out
+
 run_bottom_up:
 	@./a.out < $(file)
 
