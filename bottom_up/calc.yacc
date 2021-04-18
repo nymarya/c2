@@ -93,6 +93,12 @@ char* concat(int size, ...){
   return outv;
 }
 
+
+// loop label
+int ll[100];
+int cur_label = 0;
+int next_valid_label = 0;
+
 %}
 
 %union  
@@ -180,16 +186,27 @@ global_statement : declaration_stmt ';' {$$ = concat(2,$1, cts(';')); addl(cts('
                  | assign_stmt ';'  {$$ = concat(2,$1, cts(';')); addl(cts(';'));}
                  ;
 
-statements : statement statements 
+statements : statement statements {$$ = concat(2, $1, $2);}
            | /* empty */ {$$;}
            ;
 
-statement  : declaration_stmt ';'
-           | assign_stmt ';'
-           | function_call_stmt ';'
-           | condition_stmt
-           | loop_stmt | return_stmt ';' | exit_stmt ';' 
-           | block /* precisa? */
+statement  : declaration_stmt ';'   {$$ = concat(2,$1, cts(';')); addl(cts(';'));}
+           | assign_stmt ';'        {$$ = concat(2,$1, cts(';')); addl(cts(';'));}
+           | function_call_stmt ';' {$$ = concat(2,$1, cts(';')); addl(cts(';'));}
+           | condition_stmt         {$$ = $1;}
+           | {  int label = next_valid_label; 
+                next_valid_label += 1;
+
+                cur_label += 1;
+                ll[cur_label] = label;
+                
+
+                char * blabel= malloc(1024);
+                sprintf(blabel, "b%d:;", label);
+                addl(blabel); } loop_stmt {$$ = $2;}
+           | return_stmt ';'        {$$ = concat(2,$1, cts(';')); addl(cts(';'));}
+           | exit_stmt ';'          {$$ = concat(2,$1, cts(';')); addl(cts(';'));}
+           | block                  {$$ = $1;}
            ;
 
 function_call_stmt : function_id '(' {addl(cts('('));} opt_arguments ')'     {addl(cts(')')); $$ = concat(4,$1,cts('('),$4,cts(')'));}
@@ -224,13 +241,35 @@ condition_stmt : IF '(' expr ')' statement %prec LOWER_THAN_ELSE
                | IF '(' expr ')' statement ELSE statement
                ;
 
-loop_stmt : LOOP block 
+loop_stmt : LOOP  block { int label = ll[cur_label];
+                    char * blabel= malloc(1024);
+                    char * elabel= malloc(1024);
+
+                    addl("goto");
+                    sprintf(blabel, "b%d", label);
+                    addl(blabel);
+                    addl(cts(';'));
+                    sprintf(elabel, "e%d:", label);
+                    addl(elabel);
+
+                    addl(cts(';'));
+
+
+                    cur_label -= 1;
+                    $$;}
+          ;
+exit_stmt : BREAK WHEN { addl("if ("); } '(' expr ')' { 
+                                                        addl(") goto");
+                                                        int label = ll[cur_label];
+                                                        char * elabel= malloc(1024);
+
+                                                        sprintf(elabel, "e%d", label);
+                                                        addl(elabel);
+                                                        //addl(cts(';')); 
+                                                        $$;}
           ;
 
-exit_stmt : BREAK WHEN '(' expr ')' 
-          ;
-
-return_stmt : RETURN expr
+return_stmt : RETURN {addl($1);} expr {$$ = concat(2,$1,$3);}
             ;
 
 expr : '(' {addl(cts('('));} expr ')'          {addl(cts(')')); $$ = concat(3,cts('('),$3,cts(')'));}
@@ -276,7 +315,7 @@ type : primitive_type {$$ = $1;}
 
 
 
-primitive_type : INT_TYPE {$$ = "$1"; addl($1);}  
+primitive_type : INT_TYPE {$$ = $1; addl($1);}  
                | FLOAT_TYPE {$$ = $1; addl($1);}  
                | BOOL_TYPE {$$ = $1; addl($1);}  
                | VOID_TYPE {$$ = $1; addl($1);}  

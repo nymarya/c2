@@ -1,0 +1,19 @@
+int main(){
+	int x;
+	x = 0;
+
+	loop{
+		x = x + 1;
+		int y;
+		y = x;
+
+		
+
+		break when(x == 2);
+	}
+
+	loop{
+	
+	}
+
+}
