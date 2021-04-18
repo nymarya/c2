@@ -2,4 +2,4 @@
  #include<stdlib.h>
  #include<math.h>
  typedef enum { false = 0, true = 1} bool;
- struct user { int a ; } ; int main ( ) { int a ; if(!( a > 9 )) goto  a0; { a = ( 4 + 5 ) * 3 ; } a0:; printf ( "%d\n" , a ) ; if(!( a > 0 )) goto  a1; { } goto b1; a1:; { int b ; } b1:; b2:; { printf ( "%d\n" , a ) ; if ( a < 2 ) goto e2 ; a = a + 1 ; } goto b2 ; e2: ; float b ; b = 1.0 ; return 0 ; }
+ int main ( ) { int * v ; v = malloc ( 8 * 3 ) ; v [ 0 ] = 1 ; v [ 1 ] = 2 ; v [ 2 ] = 3 ; int i ; i = 0 ; b0:; { if ( i == 3 ) goto e0 ; printf ( "%d\n" , v [ i ] ) ; i = i + 1 ; } goto b0 ; e0: ; return 0 ; }
