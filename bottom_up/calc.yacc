@@ -192,32 +192,32 @@ statement  : declaration_stmt ';'
            | block /* precisa? */
            ;
 
-function_call_stmt : function_id '(' opt_arguments ')'
+function_call_stmt : function_id '(' {addl(cts('('));} opt_arguments ')'     {addl(cts(')')); $$ = concat(4,$1,cts('('),$4,cts(')'));}
                    ;
 
-function_id : ID {$$ = $1; addl($1);}
-            | PRINT_FUNCTION 
-            | INPUT_FUNCTION 
-            | MALLOC_FUNCTION 
-            | FREE_FUNCTION 
-            | POW_FUNCTION 
+function_id : ID                      {$$ = $1; addl($1);}
+            | PRINT_FUNCTION          {$$ = $1; addl($1);}
+            | INPUT_FUNCTION          {$$ = $1; addl($1);}
+            | MALLOC_FUNCTION         {$$ = $1; addl($1);}
+            | FREE_FUNCTION           {$$ = $1; addl($1);}
+            | POW_FUNCTION            {$$ = $1; addl($1);}
             ;
       
-opt_arguments : arguments 
+opt_arguments : arguments   {$$ = $1;}
               | /* empty */ {$$;}
               ;
 
-arguments : argument 
-          | argument ',' arguments
+arguments : argument                                      {$$ = $1;}
+          | argument ',' {addl(cts(','));} arguments      {$$ = concat(3,$1,cts(','),$4);}
           ;
 
-argument : expr 
+argument : expr {$$ = $1;}
          ; 
 
-declaration_stmt : type ID 
+declaration_stmt : type ID   {addl($2); $$ = concat(2,$1,$2);}
                  ;
 
-assign_stmt : lval '=' expr 
+assign_stmt : lval '=' {addl(cts('='));} expr  {$$ = concat(3,$1,cts('='),$4);}
             ;
 
 condition_stmt : IF '(' expr ')' statement %prec LOWER_THAN_ELSE
