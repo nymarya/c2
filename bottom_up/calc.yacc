@@ -133,9 +133,13 @@ int next_valid_label = 0;
 %nonassoc '['
 %nonassoc '.'
 
-%start program
+%start meta_program
 %%     
 
+meta_program : {
+                  addl("#include<stdio.h>\n");
+                  addl("#include<math.h>\n");
+                } program ;
 
 program : declaration program                   
         | declaration %prec LOWER_THAN_PROGRAM 
@@ -191,16 +195,7 @@ statement  : declaration_stmt ';'   {addl(cts(';'));}
            | assign_stmt ';'        {addl(cts(';'));}
            | function_call_stmt ';' {addl(cts(';'));}
            | condition_stmt         
-           | {  int label = next_valid_label; 
-                next_valid_label += 1;
-
-                cur_label += 1;
-                ll[cur_label] = label;
-                
-
-                char * blabel= malloc(1024);
-                sprintf(blabel, "b%d:;", label);
-                addl(blabel); } loop_stmt
+           | loop_stmt
            | return_stmt ';'        {addl(cts(';'));}
            | exit_stmt ';'          {addl(cts(';'));}
            | block
@@ -238,7 +233,19 @@ condition_stmt : IF '(' expr ')' statement %prec LOWER_THAN_ELSE
                | IF '(' expr ')' statement ELSE statement
                ;
 
-loop_stmt : LOOP  block { int label = ll[cur_label];
+loop_stmt : LOOP  {  
+                    int label = next_valid_label; 
+                    next_valid_label += 1;
+
+                    cur_label += 1;
+                    ll[cur_label] = label;
+                    
+                    char * blabel= malloc(1024);
+                    sprintf(blabel, "b%d:;", label);
+                    addl(blabel); 
+                  } 
+            block { 
+                    int label = ll[cur_label];
                     char * blabel= malloc(1024);
                     char * elabel= malloc(1024);
 
@@ -251,8 +258,8 @@ loop_stmt : LOOP  block { int label = ll[cur_label];
 
                     addl(cts(';'));
 
-
-                    cur_label -= 1;}
+                    cur_label -= 1;
+                  }
           ;
 exit_stmt : BREAK WHEN { addl("if ("); } '(' expr ')' { 
                                                         addl(") goto");
