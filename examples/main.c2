@@ -1,33 +1,31 @@
-struct a{
+struct user{
   int a;
 }
 
-void main (int x){
+int main (){
   int a;
 
-  a = "";
+
   if(a > 9){
     a = (4 + 5) * 3;
   }
+  print("%d\n",a);
+  
 
-  int a;
-
-
-  a = pow(a,2);
-
-  if (a){}
+  if (a > 0){}
   else{int b;}
 
   loop{
 
-  	print(a);
+    print("%d\n",a);
   	break when (a < 2);
+    a = a+1;
 
   }
 
   float b;
   b = 1.0;
 
-  bool c;
-  c = false;
+
+  return 0;
 }

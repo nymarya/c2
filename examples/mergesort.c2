@@ -1,4 +1,4 @@
-void intercala1 (int p, int q, int r, int *v) 
+void intercala (int p, int q, int r, int *v) 
 {
    int *w;                                
    w = malloc ((r-p) * 8); 

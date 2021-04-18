@@ -1,13 +1,18 @@
 int main(){
+	
 	int x;
 	x = 0;
+	if (x==0){
+		
+		print("x=0\n");
+	} else if (x==1) {
+		print("x=1\n");
 
-	loop{
-		x = x + 1;
-
-		break when(x == 2);
+		x = x+1;
+		if (x == 2) print("parabens\n");
+	} else {
+		print("false\n");
 	}
 
-	print("%d\n",x);
-
+	print("fim\n");
 }

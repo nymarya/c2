@@ -99,6 +99,9 @@ int ll[100];
 int cur_label = 0;
 int next_valid_label = 0;
 
+int cl[100];
+int clabel = 0;
+
 %}
 
 %union  
@@ -138,7 +141,9 @@ int next_valid_label = 0;
 
 meta_program : {
                   addl("#include<stdio.h>\n");
+                  addl("#include<stdlib.h>\n");
                   addl("#include<math.h>\n");
+                  addl("typedef enum { false = 0, true = 1} bool;\n");
                 } program ;
 
 program : declaration program                   
@@ -229,9 +234,48 @@ declaration_stmt : type ID   {addl($2);}
 assign_stmt : lval '=' {addl(cts('='));} expr
             ;
 
-condition_stmt : IF '(' expr ')' statement %prec LOWER_THAN_ELSE
-               | IF '(' expr ')' statement ELSE statement
+condition_stmt : IF '(' {addl("if(!(");} expr ')' 
+                  { addl("))");
+                    int label = next_valid_label; 
+                    next_valid_label += 1;
+
+                    clabel += 1;
+                    cl[clabel] = label;
+                    addl("goto ");
+
+                    char * elabel= malloc(1024);
+                    sprintf(elabel, "a%d;", label);
+
+                    addl(elabel);
+                  } 
+                  statement opt_else
+               
                ;
+
+opt_else : /* empty */ { int label = cl[clabel];
+                    char * elabel= malloc(1024);
+                    sprintf(elabel, "a%d:;", label);
+                    addl(elabel); 
+
+                    clabel -= 1;} %prec LOWER_THAN_ELSE
+         | ELSE  {  int label = cl[clabel];
+              char * blabel= malloc(1024);
+              sprintf(blabel, "goto b%d;", label);
+              addl(blabel);
+              char * alabel= malloc(1024);
+              sprintf(alabel, "a%d:;", label);
+              addl(alabel);
+            } statement 
+            {
+              int label = cl[clabel];
+              char * blabel= malloc(1024);
+              sprintf(blabel, "b%d:;", label);
+              addl(blabel);
+
+              clabel -= 1;
+            }
+         ;
+
 
 loop_stmt : LOOP  {  
                     int label = next_valid_label; 
