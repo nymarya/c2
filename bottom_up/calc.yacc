@@ -129,46 +129,46 @@ program : declaration program                   { $$ = concat(2,$1,$2); }
         | declaration %prec LOWER_THAN_PROGRAM  { $$ = $1; }
         ;
 
-declaration : struct            /* declaration.cs := stuct.cs */
-            | function          /* declaration.cs := function.cs */
-            | global_statement  /* declaration.cs := global_statement.cs */
+declaration : struct            {$$ = $1;}
+            | function          {$$ = $1;}
+            | global_statement  {$$ = $1;} 
             ;
 
-struct : STRUCT ID struct_block /* struct.cs := STRUCT || ID || struct_block.cs */
+struct : STRUCT ID {addl($1); addl($2);} struct_block {$$ = concat(3,$1,$2,$4);};
        ;
 
-struct_block : '{' attributes '}' /* struct_block.cs := '{' || attributes.cs || '}' */
+struct_block : '{' {addl(cts('{'));} attributes '}' {$$ = concat(4,cts('{'), $3,cts('}'),cts(';')); addl(cts('}')); addl(cts(';'));} 
 
-attributes : attribute attributes
-           | /* empty */
+attributes : attribute attributes {$$ = concat(2,$1,$2);}
+           | /* empty */ {$$;}
            ;
 
-attribute : type ID ';'
+attribute : type ID {addl($2);} ';' {$$ = concat(3,$1,$2,cts(';')); addl(cts(';'));}
           ;
 
-function : type function_id '(' opt_parameters ')' block
+function : type function_id '(' {addl(cts('('));} opt_parameters ')' {addl(cts(')'));} block {$$ = concat(6,$1,$2,cts('('),$5,cts(')'),$8 );}
          ;
 
-opt_parameters : parameters
-               | /* empty */
+opt_parameters : parameters {$$ = $1;}
+               | /* empty */ {$$;}
                ;
 
-parameters : parameter
-           | parameter ',' parameters
+parameters : parameter {$$ = $1;}
+           | parameter ',' {addl(cts(','));} parameters {$$ = concat(3,$1,cts(','),$4);}
            ;
 
-parameter : type ID
+parameter : type ID {$$ = concat(2,$1,$2); addl($2);}
           ;
 
-block : '{' statements '}' /* statements.ss = block.sh + 1; block.cs =  '{' || statements.cs || '}' */
+block : '{' {addl(cts('{'));} statements '}' {$$ = concat(3,cts('{'), $3, cts('}'));  addl(cts('}'));} 
       ;
 
-global_statement : declaration_stmt ';'
-                 | assign_stmt ';'
+global_statement : declaration_stmt ';' {$$ = concat(2,$1, cts(';')); addl(cts(';'));}
+                 | assign_stmt ';'  {$$ = concat(2,$1, cts(';')); addl(cts(';'));}
                  ;
 
 statements : statement statements 
-           | /* empty */ 
+           | /* empty */ {$$;}
            ;
 
 statement  : declaration_stmt ';'
@@ -182,7 +182,7 @@ statement  : declaration_stmt ';'
 function_call_stmt : function_id '(' opt_arguments ')'
                    ;
 
-function_id : ID 
+function_id : ID {$$ = $1; addl($1);}
             | PRINT_FUNCTION 
             | INPUT_FUNCTION 
             | MALLOC_FUNCTION 
@@ -191,7 +191,7 @@ function_id : ID
             ;
       
 opt_arguments : arguments 
-              | /* empty */ 
+              | /* empty */ {$$;}
               ;
 
 arguments : argument 
@@ -199,7 +199,7 @@ arguments : argument
           ;
 
 argument : expr 
-         ; /* empty */
+         ; 
 
 declaration_stmt : type ID 
                  ;
@@ -256,18 +256,18 @@ literal : INT        {$$ = $1; addl($1);}
         | BOOL       {$$ = $1; addl($1);}
         ;
 
-type : primitive_type
-     | ID
-     | type '*'
+type : primitive_type {$$ = $1;}
+     | ID {$$ = $1; addl($1);}  
+     | type '*' {$$ = concat(2,$1,cts('*')); addl(cts('*'));}
      ;
 
 
 
-primitive_type : INT_TYPE { printf("oi"); }
-               | FLOAT_TYPE
-               | BOOL_TYPE
-               | VOID_TYPE
-               | STRING_TYPE
+primitive_type : INT_TYPE {$$ = $1; addl($1);}  
+               | FLOAT_TYPE {$$ = $1; addl($1);}  
+               | BOOL_TYPE {$$ = $1; addl($1);}  
+               | VOID_TYPE {$$ = $1; addl($1);}  
+               | STRING_TYPE {$$ = $1; addl($1);}  
                ;
 
 %%
